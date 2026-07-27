@@ -16,7 +16,6 @@ import 'features/auth/presentation/view_model/register_cubit.dart';
 import 'features/auth/data/repos_impl/auth_repo_impl.dart';
 import 'features/auth/data/repos_impl/register_repo_impl.dart';
 import 'features/auth/data/repos/auth_repo.dart';
-import 'firebase_options.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -27,7 +26,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+
   );
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
