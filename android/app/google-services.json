@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "598817484348",
+    "project_id": "nabd-alattaa",
+    "storage_bucket": "nabd-alattaa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:598817484348:android:515c9d3152dc81430ddd39",
+        "android_client_info": {
+          "package_name": "com.zerobugs.nabd_alattaa_team"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcnMHsxjKV3xY5LZADff2yJsjtemi9frk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
