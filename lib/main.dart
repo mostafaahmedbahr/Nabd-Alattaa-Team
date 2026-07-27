@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'core/utils/app_bloc_observer.dart';
@@ -10,8 +11,9 @@ import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
 import 'core/constants/app_strings.dart';
 import 'features/auth/presentation/view_model/auth_bloc.dart';
-import 'features/auth/data/repos_impl/auth_repo_impl.dart';
 import 'features/auth/presentation/view_model/auth_event.dart';
+import 'features/auth/data/repos_impl/auth_repo_impl.dart';
+import 'features/auth/data/repos/auth_repo.dart';
 import 'firebase_options.dart';
 
 @pragma('vm:entry-point')
@@ -56,8 +58,8 @@ class NabdAlAtaaApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (_) => AuthBloc(
-            authRepository: di.sl<AuthRepoImpl>(),
-          )..add(const CheckAuthStatusEvent()),
+            authRepository: di.sl<AuthRepository>(),
+          )..add(CheckAuthStatusEvent()),
         ),
       ],
       child: MaterialApp.router(
@@ -69,6 +71,11 @@ class NabdAlAtaaApp extends StatelessWidget {
         supportedLocales: const [
           Locale('ar', 'SA'),
           Locale('en', 'US'),
+        ],
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
         ],
       ),
     );
