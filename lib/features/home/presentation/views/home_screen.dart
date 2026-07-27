@@ -50,38 +50,53 @@ class HomeScreen extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [
             AppColors.primary,
-            AppColors.primary.withOpacity(0.8),
+            AppColors.primaryDark,
           ],
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
         ),
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Text(
-            'مرحباً بك،',
-            style: AppTextStyles.bodyLarge.copyWith(
-              color: Colors.white70,
+          ClipOval(
+            child: Image.asset(
+              'assets/images/logo.jpg',
+              width: 60,
+              height: 60,
+              fit: BoxFit.cover,
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            'أحمد محمد',
-            style: AppTextStyles.labelLarge.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'نتمنى لك يوماً موفقاً',
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: Colors.white60,
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'مرحباً بك،',
+                  style: AppTextStyles.bodyLarge.copyWith(
+                    color: Colors.white70,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'أحمد محمد',
+                  style: AppTextStyles.labelLarge.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'نتمنى لك يوماً موفقاً',
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: Colors.white60,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
