@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
@@ -13,33 +12,21 @@ import '../widgets/profile_header.dart';
 import 'edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final String userId;
-
-  const ProfileScreen({super.key, required this.userId});
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String _appVersion = '';
-
   @override
   void initState() {
     super.initState();
     _loadProfile();
-    _loadAppVersion();
   }
 
   void _loadProfile() {
-    context.read<ProfileCubit>().loadProfile(widget.userId);
-  }
-
-  Future<void> _loadAppVersion() async {
-    final info = await PackageInfo.fromPlatform();
-    setState(() {
-      _appVersion = '${info.version}+${info.buildNumber}';
-    });
+    context.read<ProfileCubit>().loadProfile('current_user');
   }
 
   @override
@@ -101,8 +88,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _buildInfoSection(profile),
           const SizedBox(height: 16),
           _buildSettingsSection(),
-          const SizedBox(height: 16),
-          _buildVersionInfo(),
           const SizedBox(height: 32),
         ],
       ),
@@ -184,7 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: const Text(AppStrings.editProfile),
               trailing: const Icon(Icons.arrow_forward_ios, size: 16),
               onTap: () {
-                context.push('/edit-profile/${widget.userId}');
+                context.push('/edit-profile');
               },
             ),
             const Divider(height: 1),
@@ -208,19 +193,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildVersionInfo() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Text(
-        '${AppStrings.appName} $_appVersion',
-        style: const TextStyle(
-          fontSize: 12,
-          color: AppColors.textHint,
         ),
       ),
     );

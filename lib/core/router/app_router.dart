@@ -106,9 +106,7 @@ class AppRouter {
           ),
           GoRoute(
             path: '/profile',
-            builder: (context, state) =>   ProfileScreen(
-              userId: state.pathParameters['userId']!,
-            ),
+            builder: (context, state) => const ProfileScreen(),
           ),
           GoRoute(
             path: '/admin',
