@@ -1,104 +1,111 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../constants/app_colors.dart';
 
 class AppTextStyles {
   AppTextStyles._();
 
-  // Headers
-  static TextStyle h1 = GoogleFonts.cairo(
+  static TextStyle h1 = const TextStyle(
     fontSize: 28,
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
+    fontFamily: 'Cairo',
   );
 
-  static TextStyle h2 = GoogleFonts.cairo(
+  static TextStyle h2 = const TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
+    fontFamily: 'Cairo',
   );
 
-  static TextStyle h3 = GoogleFonts.cairo(
+  static TextStyle h3 = const TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
+    fontFamily: 'Cairo',
   );
 
-  // Body
-  static TextStyle bodyLarge = GoogleFonts.cairo(
+  static TextStyle bodyLarge = const TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.normal,
     color: AppColors.textPrimary,
+    fontFamily: 'Cairo',
   );
 
-  static TextStyle bodyMedium = GoogleFonts.cairo(
+  static TextStyle bodyMedium = const TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.normal,
     color: AppColors.textPrimary,
+    fontFamily: 'Cairo',
   );
 
-  static TextStyle bodySmall = GoogleFonts.cairo(
+  static TextStyle bodySmall = const TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.normal,
     color: AppColors.textSecondary,
+    fontFamily: 'Cairo',
   );
 
-  // Labels
-  static TextStyle labelLarge = GoogleFonts.cairo(
+  static TextStyle labelLarge = const TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
+    fontFamily: 'Cairo',
   );
 
-  static TextStyle labelMedium = GoogleFonts.cairo(
+  static TextStyle labelMedium = const TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w500,
     color: AppColors.textSecondary,
+    fontFamily: 'Cairo',
   );
 
-  static TextStyle labelSmall = GoogleFonts.cairo(
+  static TextStyle labelSmall = const TextStyle(
     fontSize: 10,
     fontWeight: FontWeight.w500,
     color: AppColors.textHint,
+    fontFamily: 'Cairo',
   );
 
-  // Button
-  static TextStyle button = GoogleFonts.cairo(
+  static TextStyle button = const TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w600,
     color: AppColors.textWhite,
+    fontFamily: 'Cairo',
   );
 
-  // Title Card
-  static TextStyle titleCard = GoogleFonts.cairo(
+  static TextStyle titleCard = const TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
+    fontFamily: 'Cairo',
   );
 
-  // Subtitle
-  static TextStyle subtitle = GoogleFonts.cairo(
+  static TextStyle subtitle = const TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w500,
     color: AppColors.textSecondary,
+    fontFamily: 'Cairo',
   );
 
-  // White Text Styles
-  static TextStyle h1White = GoogleFonts.cairo(
+  static TextStyle h1White = const TextStyle(
     fontSize: 28,
     fontWeight: FontWeight.bold,
     color: AppColors.textWhite,
+    fontFamily: 'Cairo',
   );
 
-  static TextStyle h2White = GoogleFonts.cairo(
+  static TextStyle h2White = const TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.bold,
     color: AppColors.textWhite,
+    fontFamily: 'Cairo',
   );
 
-  static TextStyle bodyWhite = GoogleFonts.cairo(
+  static TextStyle bodyWhite = const TextStyle(
     fontSize: 14,
     color: AppColors.textWhite,
+    fontFamily: 'Cairo',
   );
 }

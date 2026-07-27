@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../constants/app_colors.dart';
 
@@ -69,11 +68,25 @@ class CustomButton extends StatelessWidget {
         children: [
           Icon(icon, size: 20),
           const SizedBox(width: 8),
-          Text(text, style: GoogleFonts.cairo(fontSize: 16, fontWeight: FontWeight.w600)),
+          Text(
+            text,
+            style: const TextStyle(
+              fontFamily: 'Cairo',
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ],
       );
     }
 
-    return Text(text, style: GoogleFonts.cairo(fontSize: 16, fontWeight: FontWeight.w600));
+    return Text(
+      text,
+      style: const TextStyle(
+        fontFamily: 'Cairo',
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
+    );
   }
 }

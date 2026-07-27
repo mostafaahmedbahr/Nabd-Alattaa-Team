@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../constants/app_colors.dart';
 
@@ -55,7 +54,8 @@ class CustomTextField extends StatelessWidget {
       focusNode: focusNode,
       textInputAction: textInputAction,
       onEditingComplete: onEditingComplete,
-      style: GoogleFonts.cairo(
+      style: const TextStyle(
+        fontFamily: 'Cairo',
         fontSize: 14,
         color: AppColors.textPrimary,
       ),

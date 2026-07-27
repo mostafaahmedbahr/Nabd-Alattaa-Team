@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../constants/app_colors.dart';
 
@@ -12,6 +11,7 @@ class AppTheme {
       brightness: Brightness.light,
       primaryColor: AppColors.primary,
       scaffoldBackgroundColor: AppColors.background,
+      fontFamily: 'Cairo',
       colorScheme: const ColorScheme.light(
         primary: AppColors.primary,
         onPrimary: AppColors.textWhite,
@@ -22,18 +22,35 @@ class AppTheme {
         error: AppColors.error,
         onError: AppColors.textWhite,
       ),
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.textWhite,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: GoogleFonts.cairo(
+        titleTextStyle: TextStyle(
+          fontFamily: 'Cairo',
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: AppColors.textWhite,
         ),
       ),
-      textTheme: GoogleFonts.cairoTextTheme(),
+      textTheme: const TextTheme(
+        displayLarge: TextStyle(fontFamily: 'Cairo'),
+        displayMedium: TextStyle(fontFamily: 'Cairo'),
+        displaySmall: TextStyle(fontFamily: 'Cairo'),
+        headlineLarge: TextStyle(fontFamily: 'Cairo'),
+        headlineMedium: TextStyle(fontFamily: 'Cairo'),
+        headlineSmall: TextStyle(fontFamily: 'Cairo'),
+        titleLarge: TextStyle(fontFamily: 'Cairo'),
+        titleMedium: TextStyle(fontFamily: 'Cairo'),
+        titleSmall: TextStyle(fontFamily: 'Cairo'),
+        bodyLarge: TextStyle(fontFamily: 'Cairo'),
+        bodyMedium: TextStyle(fontFamily: 'Cairo'),
+        bodySmall: TextStyle(fontFamily: 'Cairo'),
+        labelLarge: TextStyle(fontFamily: 'Cairo'),
+        labelMedium: TextStyle(fontFamily: 'Cairo'),
+        labelSmall: TextStyle(fontFamily: 'Cairo'),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
@@ -42,7 +59,8 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          textStyle: GoogleFonts.cairo(
+          textStyle: const TextStyle(
+            fontFamily: 'Cairo',
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
@@ -56,7 +74,8 @@ class AppTheme {
             borderRadius: BorderRadius.circular(8),
           ),
           side: const BorderSide(color: AppColors.primary),
-          textStyle: GoogleFonts.cairo(
+          textStyle: const TextStyle(
+            fontFamily: 'Cairo',
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
@@ -83,12 +102,19 @@ class AppTheme {
         ),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        hintStyle: GoogleFonts.cairo(
+        hintStyle: const TextStyle(
+          fontFamily: 'Cairo',
           color: AppColors.textHint,
           fontSize: 14,
         ),
       ),
-
+      cardTheme: CardThemeData(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        color: AppColors.cardColor,
+      ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.surface,
         selectedItemColor: AppColors.primary,
