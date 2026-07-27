@@ -12,7 +12,9 @@ import 'core/router/app_router.dart';
 import 'core/constants/app_strings.dart';
 import 'features/auth/presentation/view_model/auth_bloc.dart';
 import 'features/auth/presentation/view_model/auth_event.dart';
+import 'features/auth/presentation/view_model/register_cubit.dart';
 import 'features/auth/data/repos_impl/auth_repo_impl.dart';
+import 'features/auth/data/repos_impl/register_repo_impl.dart';
 import 'features/auth/data/repos/auth_repo.dart';
 import 'firebase_options.dart';
 
@@ -60,6 +62,14 @@ class NabdAlAtaaApp extends StatelessWidget {
           create: (_) => AuthBloc(
             authRepository: di.sl<AuthRepository>(),
           )..add(CheckAuthStatusEvent()),
+        ),
+        BlocProvider(
+          create: (_) => RegisterCubit(
+            registerRepo: RegisterRepoImpl(
+              firebaseAuth: di.sl(),
+              firestore: di.sl(),
+            ),
+          ),
         ),
       ],
       child: MaterialApp.router(

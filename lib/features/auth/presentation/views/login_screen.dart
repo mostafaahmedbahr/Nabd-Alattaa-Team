@@ -176,6 +176,32 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                       },
                     ),
+                    const SizedBox(height: 16),
+
+                    // Register Link
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'ليس لديك حساب؟ ',
+                          style: TextStyle(
+                            fontFamily: 'Cairo',
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () => context.go('/register'),
+                          child: const Text(
+                            'إنشاء حساب',
+                            style: TextStyle(
+                              fontFamily: 'Cairo',
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
