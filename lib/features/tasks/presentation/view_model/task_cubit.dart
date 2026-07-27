@@ -82,10 +82,10 @@ class TaskCubit extends Cubit<TaskState> {
     );
   }
 
-  @override
-  void close() {
-    _tasksSubscription?.cancel();
-    _commentsSubscription?.cancel();
-    return super.close();
-  }
+  // @override
+  // void close() {
+  //   _tasksSubscription?.cancel();
+  //   _commentsSubscription?.cancel();
+  //   return super.close();
+  // }
 }

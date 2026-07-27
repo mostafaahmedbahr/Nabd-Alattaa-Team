@@ -102,6 +102,7 @@ class AppStrings {
   static const String paid = 'تم الدفع';
   static const String notPaid = 'لم يتم الدفع';
 
+
   // Profile
   static const String editProfile = 'تعديل الملف الشخصي';
   static const String name = 'الاسم';

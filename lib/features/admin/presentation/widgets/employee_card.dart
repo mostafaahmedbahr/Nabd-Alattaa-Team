@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/firestore_constants.dart';
-import '../../auth/data/models/user_model.dart';
+import '../../../auth/data/models/user_model.dart';
 
 class EmployeeCard extends StatelessWidget {
   final UserModel employee;

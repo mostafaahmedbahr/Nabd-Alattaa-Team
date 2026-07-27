@@ -45,7 +45,7 @@ class _MealsScreenState extends State<MealsScreen>
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(AppStrings.mealsTitle),
+          title:   Text("AppStrings.mealsTitle"),
           bottom: TabBar(
             controller: _tabController,
             isScrollable: true,

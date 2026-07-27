@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
 import '../../../../core/theme/app_text_styles.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -74,7 +72,7 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             'أحمد محمد',
-            style: AppTextStyles.headlineMedium.copyWith(
+            style: AppTextStyles.labelLarge.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
@@ -154,7 +152,7 @@ class HomeScreen extends StatelessWidget {
       children: [
         Text(
           title,
-          style: AppTextStyles.titleLarge.copyWith(
+          style: AppTextStyles.labelLarge.copyWith(
             fontWeight: FontWeight.bold,
           ),
         ),

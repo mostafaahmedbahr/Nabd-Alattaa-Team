@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-
 import '../../../../core/constants/firestore_constants.dart';
 import '../../../../core/error/failures.dart';
-import '../../auth/data/models/user_model.dart';
+import '../../../auth/data/models/user_model.dart';
 import '../models/department_model.dart';
 import '../repos/admin_repo.dart';
 

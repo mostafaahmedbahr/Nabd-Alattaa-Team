@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../auth/data/models/user_model.dart';
-import '../data/models/department_model.dart';
-import '../data/repos/admin_repo.dart';
+import '../../../auth/data/models/user_model.dart';
+import '../../data/models/department_model.dart';
+import '../../data/repos/admin_repo.dart';
 import 'admin_state.dart';
 
 class AdminCubit extends Cubit<AdminState> {
@@ -10,7 +10,7 @@ class AdminCubit extends Cubit<AdminState> {
 
   AdminCubit(this._adminRepo) : super(const AdminInitial());
 
-  List<UserModel> _allEmployees = [];
+  List<UserModel> allEmployees = [];
 
   Future<void> loadDashboard() async {
     emit(const AdminLoading());
@@ -44,7 +44,7 @@ class AdminCubit extends Cubit<AdminState> {
     result.fold(
       (failure) => emit(AdminError(message: failure.message)),
       (employees) {
-        _allEmployees = employees;
+        allEmployees = employees;
         emit(EmployeesLoaded(
           employees: employees,
           filteredEmployees: employees,
@@ -53,27 +53,27 @@ class AdminCubit extends Cubit<AdminState> {
     );
   }
 
-  void filterEmployees(String query) {
-    final currentState = state;
-    if (currentState is EmployeesLoaded) {
-      if (query.isEmpty) {
-        emit(EmployeesLoaded(
-          employees: currentState.employees,
-          filteredEmployees: currentState.employees,
-        ));
-      } else {
-        final filtered = currentState.employees.where((emp) {
-          return emp.name.toLowerCase().contains(query.toLowerCase()) ||
-              emp.email.toLowerCase().contains(query.toLowerCase()) ||
-              emp.department.toLowerCase().contains(query.toLowerCase());
-        }).toList();
-        emit(EmployeesLoaded(
-          employees: currentState.employees,
-          filteredEmployees: filtered,
-        ));
-      }
-    }
-  }
+  // void filterEmployees(String query) {
+  //   final currentState = state;
+  //   if (currentState is EmployeesLoaded) {
+  //     if (query.isEmpty) {
+  //       emit(EmployeesLoaded(
+  //         employees: currentState.employees,
+  //         filteredEmployees: currentState.employees,
+  //       ));
+  //     } else {
+  //       final filtered = currentState.employees.where((emp) {
+  //         return emp.toLowerCase().contains(query.toLowerCase()) ||
+  //             emp.email.toLowerCase().contains(query.toLowerCase()) ||
+  //             emp.department.toLowerCase().contains(query.toLowerCase());
+  //       }).toList();
+  //       emit(EmployeesLoaded(
+  //         employees: currentState.employees,
+  //         filteredEmployees: filtered,
+  //       ));
+  //     }
+  //   }
+  // }
 
   Future<void> updateEmployeeRole(String userId, String newRole) async {
     final result = await _adminRepo.updateEmployeeRole(userId, newRole);

@@ -1,8 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../data/models/meal_item_model.dart';
-import '../data/models/meal_order_model.dart';
-import '../data/repos/meal_repo.dart';
+import '../../data/models/meal_item_model.dart';
+import '../../data/models/meal_order_model.dart';
+import '../../data/repos/meal_repo.dart';
 import 'meal_state.dart';
 
 class MealCubit extends Cubit<MealState> {

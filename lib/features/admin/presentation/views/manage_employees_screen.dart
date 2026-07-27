@@ -47,7 +47,7 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
               hintText: 'بحث بالاسم أو البريد أو القسم',
               prefixIcon: Icons.search,
               onChanged: (value) {
-                context.read<AdminCubit>().filterEmployees(value ?? '');
+                // context.read<AdminCubit>().filterEmployees(value ?? '');
               },
             ),
           ),

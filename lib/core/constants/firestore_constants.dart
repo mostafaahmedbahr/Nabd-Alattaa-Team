@@ -131,6 +131,8 @@ class FirestoreConstants {
   static const String mealOrderIsPaid = 'is_paid';
   static const String mealOrderDate = 'date';
   static const String mealOrderCreatedAt = 'created_at';
+  static const String mealsCollection = 'meals_collection';
+  static const String mealOrdersCollection = 'meal_orders_collection';
 
   // Notification Fields
   static const String notificationTitle = 'title';

@@ -36,9 +36,9 @@ class IdeaCubit extends Cubit<IdeaState> {
     );
   }
 
-  @override
-  void close() {
-    _subscription?.cancel();
-    return super.close();
-  }
+  // @override
+  // void close() {
+  //   _subscription?.cancel();
+  //   return super.close();
+  // }
 }

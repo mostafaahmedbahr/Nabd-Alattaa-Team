@@ -29,9 +29,9 @@ class LibraryCubit extends Cubit<LibraryState> {
     );
   }
 
-  @override
-  void close() {
-    _subscription?.cancel();
-    return super.close();
-  }
+  // @override
+  // void close() {
+  //   _subscription?.cancel();
+  //   return super.close();
+  // }
 }

@@ -11,6 +11,7 @@ import 'core/router/app_router.dart';
 import 'core/constants/app_strings.dart';
 import 'features/auth/presentation/view_model/auth_bloc.dart';
 import 'features/auth/data/repos_impl/auth_repo_impl.dart';
+import 'features/auth/presentation/view_model/auth_event.dart';
 import 'firebase_options.dart';
 
 @pragma('vm:entry-point')

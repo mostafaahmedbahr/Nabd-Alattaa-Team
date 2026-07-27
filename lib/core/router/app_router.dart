@@ -7,8 +7,6 @@ import '../../features/home/presentation/views/main_screen.dart';
 import '../../features/tasks/presentation/views/tasks_screen.dart';
 import '../../features/tasks/presentation/views/create_task_screen.dart';
 import '../../features/tasks/presentation/views/task_details_screen.dart';
-import '../../features/announcements/presentation/views/announcements_screen.dart';
-import '../../features/announcements/presentation/views/create_announcement_screen.dart';
 import '../../features/complaints/presentation/views/complaints_screen.dart';
 import '../../features/complaints/presentation/views/create_complaint_screen.dart';
 import '../../features/library/presentation/views/library_screen.dart';
@@ -53,20 +51,20 @@ class AppRouter {
       ),
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
-        builder: (context, state, child) => MainScreen(child: child),
+        builder: (context, state, child) => MainScreen( ),
         routes: [
           GoRoute(
             path: '/',
-            builder: (context, state) => const MainScreen(child: SizedBox()),
+            builder: (context, state) => const MainScreen( ),
           ),
           GoRoute(
             path: '/tasks',
             builder: (context, state) => const TasksScreen(),
           ),
-          GoRoute(
-            path: '/announcements',
-            builder: (context, state) => const AnnouncementsScreen(),
-          ),
+          // GoRoute(
+          //   path: '/announcements',
+          //   builder: (context, state) => const AnnouncementsScreen(),
+          // ),
           GoRoute(
             path: '/complaints',
             builder: (context, state) => const ComplaintsScreen(),
@@ -94,7 +92,8 @@ class AppRouter {
           GoRoute(
             path: '/chat/:roomId',
             builder: (context, state) => ChatRoomScreen(
-              roomId: state.pathParameters['roomId']!,
+              chatRoomId: state.pathParameters['roomId']!,
+              chatRoomName: state.pathParameters['chatRoomName']!,
             ),
           ),
           GoRoute(
@@ -107,7 +106,9 @@ class AppRouter {
           ),
           GoRoute(
             path: '/profile',
-            builder: (context, state) => const ProfileScreen(),
+            builder: (context, state) =>   ProfileScreen(
+              userId: state.pathParameters['userId']!,
+            ),
           ),
           GoRoute(
             path: '/admin',
@@ -127,11 +128,11 @@ class AppRouter {
           taskId: state.pathParameters['taskId']!,
         ),
       ),
-      GoRoute(
-        path: '/create-announcement',
-        parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => const CreateAnnouncementScreen(),
-      ),
+      // GoRoute(
+      //   path: '/create-announcement',
+      //   parentNavigatorKey: _rootNavigatorKey,
+      //   builder: (context, state) => const CreateAnnouncementScreen(),
+      // ),
       GoRoute(
         path: '/create-complaint',
         parentNavigatorKey: _rootNavigatorKey,

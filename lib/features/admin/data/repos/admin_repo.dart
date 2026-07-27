@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
-
 import '../../../../core/error/failures.dart';
-import '../../auth/data/models/user_model.dart';
+import '../../../auth/data/models/user_model.dart';
 import '../models/department_model.dart';
 
 abstract class AdminRepository {
