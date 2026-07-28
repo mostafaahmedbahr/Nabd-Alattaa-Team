@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../common_imports.dart';
+import '../widgets/background_decorative_circles.dart';
+import '../widgets/main_content.dart';
+import '../widgets/splash_navigate.dart';
+import '../widgets/version_text.dart';
 
-import '../../../../core/constants/app_colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -64,27 +64,12 @@ class _SplashScreenState extends State<SplashScreen>
 
     Timer(const Duration(milliseconds: 3500), () {
       if (mounted) {
-        _navigateToNext();
+        navigateToNext(context);
       }
     });
   }
 
-  void _navigateToNext() async {
-    final prefs = await SharedPreferences.getInstance();
-    final onboardingComplete = prefs.getBool('onboarding_complete') ?? false;
 
-    if (!onboardingComplete) {
-      context.go('/onboarding');
-      return;
-    }
-
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      context.go('/');
-    } else {
-      context.go('/login');
-    }
-  }
 
   @override
   void dispose() {
@@ -94,8 +79,6 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -113,162 +96,22 @@ class _SplashScreenState extends State<SplashScreen>
         ),
         child: Stack(
           children: [
-            // Background decorative circles
-            Positioned(
-              top: -size.width * 0.3,
-              right: -size.width * 0.3,
-              child: Container(
-                width: size.width * 0.8,
-                height: size.width * 0.8,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.05),
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: -size.width * 0.2,
-              left: -size.width * 0.2,
-              child: Container(
-                width: size.width * 0.6,
-                height: size.width * 0.6,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.05),
-                ),
-              ),
+            /// Background decorative circles
+            BackgroundDecorativeCircles(),
+
+
+            /// Main content
+            MainContent(
+              controller:_controller ,
+              dotAnimation: _dotAnimation,
+              fadeAnimation:_fadeAnimation ,
+              scaleAnimation:_scaleAnimation ,
+               slideAnimation: _slideAnimation,
             ),
 
-            // Main content
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Logo
-                  AnimatedBuilder(
-                    animation: _controller,
-                    builder: (context, child) {
-                      return FadeTransition(
-                        opacity: _fadeAnimation,
-                        child: ScaleTransition(
-                          scale: _scaleAnimation,
-                          child: Container(
-                            width: 120,
-                            height: 120,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  blurRadius: 30,
-                                  offset: const Offset(0, 10),
-                                ),
-                              ],
-                            ),
-                            child: ClipOval(
-                              child: Image.asset(
-                                'assets/images/logo.jpg',
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 30),
+            /// Version text
+            VersionText(dotAnimation: _dotAnimation,),
 
-                  // App name
-                  SlideTransition(
-                    position: _slideAnimation,
-                    child: FadeTransition(
-                      opacity: _fadeAnimation,
-                      child: Column(
-                        children: [
-                          const Text(
-                            'نبض العطاء',
-                            style: TextStyle(
-                              fontFamily: 'Cairo',
-                              fontSize: 36,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              letterSpacing: 2,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'نubits نعمل بقلوب',
-                            style: TextStyle(
-                              fontFamily: 'Cairo',
-                              fontSize: 16,
-                              color: Colors.white.withOpacity(0.8),
-                              letterSpacing: 1,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 60),
-
-                  // Loading dots
-                  AnimatedBuilder(
-                    animation: _dotAnimation,
-                    builder: (context, child) {
-                      return Opacity(
-                        opacity: _dotAnimation.value,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(3, (index) {
-                            return AnimatedContainer(
-                              duration: Duration(
-                                milliseconds: 300 + (index * 200),
-                              ),
-                              margin: const EdgeInsets.symmetric(horizontal: 4),
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(
-                                  _dotAnimation.value,
-                                ),
-                                shape: BoxShape.circle,
-                              ),
-                            );
-                          }),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-
-            // Version text
-            Positioned(
-              bottom: 40,
-              left: 0,
-              right: 0,
-              child: AnimatedBuilder(
-                animation: _dotAnimation,
-                builder: (context, child) {
-                  return Opacity(
-                    opacity: _dotAnimation.value * 0.6,
-                    child: const Text(
-                      'version 1.0.0',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Cairo',
-                        fontSize: 12,
-                        color: Colors.white,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
           ],
         ),
       ),
