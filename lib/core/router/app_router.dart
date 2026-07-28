@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../features/splash/presentation/views/splash_screen.dart';
-import '../../features/onboarding/presentation/views/onboarding_screen.dart';
+import '../../features/splash/presentation/views/splash_view.dart';
+import '../../features/onboarding/presentation/views/onboarding_view.dart';
 import '../../features/auth/presentation/views/login_screen.dart';
 import '../../features/auth/presentation/views/register_screen.dart';
 import '../../features/home/presentation/views/main_screen.dart';
@@ -58,11 +58,11 @@ class AppRouter {
     routes: [
       GoRoute(
         path: '/splash',
-        builder: (context, state) => const SplashScreen(),
+        builder: (context, state) => const SplashView(),
       ),
       GoRoute(
         path: '/onboarding',
-        builder: (context, state) => const OnboardingScreen(),
+        builder: (context, state) => const OnboardingView(),
       ),
       GoRoute(
         path: '/login',

@@ -7,6 +7,7 @@ import 'features/auth/data/repos_impl/register_repo_impl.dart';
 import 'features/auth/presentation/view_model/auth_bloc.dart';
 import 'features/auth/presentation/view_model/auth_event.dart';
 import 'features/auth/presentation/view_model/register_cubit.dart';
+import 'features/onboarding/presentation/view_model/onboarding_cubit.dart';
 
 
 
@@ -34,6 +35,9 @@ class NabdAlattaaApp extends StatelessWidget {
                 firestore: di.sl(),
               ),
             ),
+          ),
+          BlocProvider(
+            create: (_) => OnboardingCubit(),
           ),
         ],
         child: MaterialApp.router(
