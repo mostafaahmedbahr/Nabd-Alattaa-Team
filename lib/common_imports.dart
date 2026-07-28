@@ -6,4 +6,5 @@ export 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
 export 'package:shared_preferences/shared_preferences.dart';
 export 'package:go_router/go_router.dart';
 export 'package:nabd_alattaa_team/core/constants/app_colors.dart';
-
+export 'package:nabd_alattaa_team/core/widgets/custom_button.dart';
+export 'package:nabd_alattaa_team/core/widgets/custom_text_field.dart';

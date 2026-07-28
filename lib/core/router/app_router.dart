@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../features/splash/presentation/views/splash_view.dart';
 import '../../features/onboarding/presentation/views/onboarding_view.dart';
-import '../../features/auth/presentation/views/login_screen.dart';
+import '../../features/login/presentation/views/login_view.dart';
 import '../../features/auth/presentation/views/register_screen.dart';
 import '../../features/home/presentation/views/main_screen.dart';
 import '../../features/tasks/presentation/views/tasks_screen.dart';
@@ -66,7 +66,7 @@ class AppRouter {
       ),
       GoRoute(
         path: '/login',
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) => const LoginView(),
       ),
       GoRoute(
         path: '/register',
