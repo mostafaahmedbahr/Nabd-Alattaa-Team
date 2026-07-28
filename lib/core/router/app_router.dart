@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../features/splash/presentation/views/splash_screen.dart';
+import '../../features/onboarding/presentation/views/onboarding_screen.dart';
 import '../../features/auth/presentation/views/login_screen.dart';
 import '../../features/auth/presentation/views/register_screen.dart';
 import '../../features/home/presentation/views/main_screen.dart';
@@ -30,12 +32,18 @@ class AppRouter {
 
   static final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/',
+    initialLocation: '/splash',
     redirect: (context, state) {
       final user = FirebaseAuth.instance.currentUser;
+      final isSplashRoute = state.matchedLocation == '/splash';
+      final isOnboardingRoute = state.matchedLocation == '/onboarding';
       final isLoginRoute = state.matchedLocation == '/login';
       final isRegisterRoute = state.matchedLocation == '/register';
       final isAuthRoute = isLoginRoute || isRegisterRoute;
+
+      if (isSplashRoute || isOnboardingRoute) {
+        return null;
+      }
 
       if (user == null && !isAuthRoute) {
         return '/login';
@@ -48,6 +56,14 @@ class AppRouter {
       return null;
     },
     routes: [
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding',
+        builder: (context, state) => const OnboardingScreen(),
+      ),
       GoRoute(
         path: '/login',
         builder: (context, state) => const LoginScreen(),
