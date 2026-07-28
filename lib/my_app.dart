@@ -2,15 +2,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'common_imports.dart';
 import 'core/utils/service_locator.dart' as di;
+import 'features/login/data/repos/login_repos.dart';
+import 'features/login/data/repos/login_repos_impl.dart';
+import 'features/login/presentation/view_model/login_cubit.dart';
 import 'features/auth/data/repos/auth_repo.dart';
 import 'features/auth/data/repos_impl/register_repo_impl.dart';
 import 'features/auth/presentation/view_model/auth_bloc.dart';
 import 'features/auth/presentation/view_model/auth_event.dart';
 import 'features/auth/presentation/view_model/register_cubit.dart';
 import 'features/onboarding/presentation/view_model/onboarding_cubit.dart';
-
-
-
 
 class NabdAlattaaApp extends StatelessWidget {
   const NabdAlattaaApp({super.key});
@@ -23,6 +23,14 @@ class NabdAlattaaApp extends StatelessWidget {
       splitScreenMode: true,
       child: MultiBlocProvider(
         providers: [
+          BlocProvider(
+            create: (_) => LoginCubit(
+              loginRepository: LoginRepoImpl(
+                firebaseAuth: di.sl(),
+                firestore: di.sl(),
+              ),
+            ),
+          ),
           BlocProvider(
             create: (_) => AuthBloc(
               authRepository: di.sl<AuthRepository>(),
