@@ -1,34 +1,43 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-class UserModel extends Equatable {
-  final String id;
+class RegisterModel extends Equatable {
+  final String? id;
   final String name;
   final String email;
   final String phone;
+  final String? password; // Added for registration only
   final String role;
   final String department;
   final String position;
   final bool isActive;
   final String? fcmToken;
-  final DateTime createdAt;
+  final DateTime? createdAt;
   final int points;
+  final String gender;
+  final DateTime birthDate;
+  final int age;
 
-  const UserModel({
-    required this.id,
+  const RegisterModel({
+    this.id,
     required this.name,
     required this.email,
-    this.phone = '',
-    required this.role,
+    required this.phone,
+    this.password, // Optional - used only during registration
+    this.role = 'employee',
     this.department = '',
     this.position = '',
     this.isActive = true,
     this.fcmToken,
-    required this.createdAt,
+    this.createdAt,
     this.points = 0,
+    required this.gender,
+    required this.birthDate,
+    required this.age,
   });
 
-  factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
+  factory RegisterModel.fromMap(Map<String, dynamic> map) {
+    return RegisterModel(
       id: map['user_id'] ?? '',
       name: map['user_name'] ?? '',
       email: map['user_email'] ?? '',
@@ -40,12 +49,15 @@ class UserModel extends Equatable {
       fcmToken: map['fcm_token'],
       createdAt: map['created_at']?.toDate() ?? DateTime.now(),
       points: map['points'] ?? 0,
+      gender: map['gender'] ?? 'male',
+      birthDate: map['birth_date']?.toDate() ?? DateTime.now(),
+      age: map['age'] ?? 0,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'user_id': id,
+      if (id != null) 'user_id': id,
       'user_name': name,
       'user_email': email,
       'user_phone': phone,
@@ -54,12 +66,16 @@ class UserModel extends Equatable {
       'user_position': position,
       'is_active': isActive,
       'fcm_token': fcmToken,
-      'created_at': createdAt,
+      'created_at': createdAt ?? FieldValue.serverTimestamp(),
       'points': points,
+      'gender': gender,
+      'birth_date': birthDate,
+      'age': age,
     };
   }
 
-  UserModel copyWith({
+  // Remove password from copyWith - it shouldn't be copied
+  RegisterModel copyWith({
     String? id,
     String? name,
     String? email,
@@ -71,8 +87,11 @@ class UserModel extends Equatable {
     String? fcmToken,
     DateTime? createdAt,
     int? points,
+    String? gender,
+    DateTime? birthDate,
+    int? age,
   }) {
-    return UserModel(
+    return RegisterModel(
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
@@ -84,6 +103,9 @@ class UserModel extends Equatable {
       fcmToken: fcmToken ?? this.fcmToken,
       createdAt: createdAt ?? this.createdAt,
       points: points ?? this.points,
+      gender: gender ?? this.gender,
+      birthDate: birthDate ?? this.birthDate,
+      age: age ?? this.age,
     );
   }
 
@@ -93,7 +115,19 @@ class UserModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id, name, email, phone, role, department,
-        position, isActive, fcmToken, createdAt, points,
-      ];
+    id,
+    name,
+    email,
+    phone,
+    role,
+    department,
+    position,
+    isActive,
+    fcmToken,
+    createdAt,
+    points,
+    gender,
+    birthDate,
+    age,
+  ];
 }
