@@ -4,12 +4,10 @@ import 'common_imports.dart';
 import 'core/utils/service_locator.dart' as di;
 import 'features/login/data/repos/login_repos_impl.dart';
 import 'features/login/presentation/view_model/login_cubit.dart';
-import 'features/auth/data/repos/auth_repo.dart';
-import 'features/auth/data/repos_impl/register_repo_impl.dart';
-import 'features/auth/presentation/view_model/auth_bloc.dart';
-import 'features/auth/presentation/view_model/auth_event.dart';
-import 'features/auth/presentation/view_model/register_cubit.dart';
+
 import 'features/onboarding/presentation/view_model/onboarding_cubit.dart';
+import 'features/register/data/repos/register_repos_impl.dart';
+import 'features/register/presentation/view_model/register_cubit.dart';
 
 class NabdAlattaaApp extends StatelessWidget {
   const NabdAlattaaApp({super.key});
@@ -30,11 +28,11 @@ class NabdAlattaaApp extends StatelessWidget {
               ),
             ),
           ),
-          BlocProvider(
-            create: (_) => AuthBloc(
-              authRepository: di.sl<AuthRepository>(),
-            )..add(CheckAuthStatusEvent()),
-          ),
+          // BlocProvider(
+          //   create: (_) => AuthBloc(
+          //     authRepository: di.sl<AuthRepository>(),
+          //   )..add(CheckAuthStatusEvent()),
+          // ),
           BlocProvider(
             create: (_) => RegisterCubit(
               registerRepo: RegisterRepoImpl(

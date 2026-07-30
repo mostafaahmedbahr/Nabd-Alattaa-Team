@@ -6,8 +6,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../features/auth/data/repos_impl/auth_repo_impl.dart';
-import '../../features/auth/data/repos/auth_repo.dart';
 
 final sl = GetIt.instance;
 
@@ -21,19 +19,5 @@ Future<void> init() async {
   sl.registerLazySingleton(() => FirebaseAnalytics.instance);
   sl.registerLazySingleton(() => FirebaseCrashlytics.instance);
 
-  // Repos
-  sl.registerLazySingleton<AuthRepository>(
-    () => AuthRepoImpl(
-      firebaseAuth: sl(),
-      firestore: sl(),
-      sharedPreferences: sl(),
-    ),
-  );
-  sl.registerLazySingleton<AuthRepoImpl>(
-    () => AuthRepoImpl(
-      firebaseAuth: sl(),
-      firestore: sl(),
-      sharedPreferences: sl(),
-    ),
-  );
+
 }

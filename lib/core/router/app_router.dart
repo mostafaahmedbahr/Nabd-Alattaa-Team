@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../features/register/presentation/views/register_view.dart';
 import '../../features/splash/presentation/views/splash_view.dart';
 import '../../features/onboarding/presentation/views/onboarding_view.dart';
 import '../../features/login/presentation/views/login_view.dart';
-import '../../features/auth/presentation/views/register_screen.dart';
-import '../../features/home/presentation/views/main_screen.dart';
+ import '../../features/home/presentation/views/main_screen.dart';
 import '../../features/tasks/presentation/views/tasks_screen.dart';
 import '../../features/tasks/presentation/views/create_task_screen.dart';
 import '../../features/tasks/presentation/views/task_details_screen.dart';
@@ -70,7 +70,7 @@ class AppRouter {
       ),
       GoRoute(
         path: '/register',
-        builder: (context, state) => const RegisterScreen(),
+        builder: (context, state) => const RegisterView(),
       ),
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
@@ -131,10 +131,10 @@ class AppRouter {
             path: '/profile',
             builder: (context, state) => const ProfileScreen(),
           ),
-          GoRoute(
-            path: '/admin',
-            builder: (context, state) => const AdminDashboardScreen(),
-          ),
+          // GoRoute(
+          //   path: '/admin',
+          //   builder: (context, state) => const AdminDashboardScreen(),
+          // ),
         ],
       ),
       GoRoute(
