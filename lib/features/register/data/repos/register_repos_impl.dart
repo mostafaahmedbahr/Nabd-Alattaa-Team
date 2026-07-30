@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nabd_alattaa_team/features/register/data/repos/register_repos.dart';
 import '../../../../core/constants/firestore_constants.dart';
 import '../../../../core/error/failures.dart';
+import '../../../../core/utils/firebase_messaging_service.dart';
+import '../../../../core/utils/service_locator.dart';
 import '../models/register_model.dart';
 
 
@@ -33,20 +35,23 @@ class RegisterRepoImpl implements RegisterRepo {
           AuthFailure(message: 'فشل في إنشاء الحساب'),
         );
       }
-
+      final fcmToken = await sl<FirebaseMessagingService>().getToken();
       // 2. Create user data for Firestore
       final registerModel = RegisterModel(
         id: user.uid,
         name: registerData.name,
         email: registerData.email,
         phone: registerData.phone,
-        role: 'employee', // Default role
+        fcmToken:fcmToken,
+        password: registerData.password,
+        role: 'user', // Default role
+        position: 'employee', // Default position
         department: registerData.department,
         gender: registerData.gender,
         birthDate: registerData.birthDate,
         age: registerData.age,
         createdAt: DateTime.now(),
-        isActive: true,
+        isActive: false,
         points: 0,
       );
 

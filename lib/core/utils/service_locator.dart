@@ -6,18 +6,41 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'firebase_messaging_service.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  // External
   final sharedPreferences = await SharedPreferences.getInstance();
-  sl.registerLazySingleton(() => sharedPreferences);
-  sl.registerLazySingleton(() => FirebaseAuth.instance);
-  sl.registerLazySingleton(() => FirebaseFirestore.instance);
-  sl.registerLazySingleton(() => FirebaseMessaging.instance);
-  sl.registerLazySingleton(() => FirebaseAnalytics.instance);
-  sl.registerLazySingleton(() => FirebaseCrashlytics.instance);
 
+  sl.registerLazySingleton<SharedPreferences>(
+        () => sharedPreferences,
+  );
 
+  sl.registerLazySingleton<FirebaseAuth>(
+        () => FirebaseAuth.instance,
+  );
+
+  sl.registerLazySingleton<FirebaseFirestore>(
+        () => FirebaseFirestore.instance,
+  );
+
+  sl.registerLazySingleton<FirebaseMessaging>(
+        () => FirebaseMessaging.instance,
+  );
+
+  sl.registerLazySingleton<FirebaseAnalytics>(
+        () => FirebaseAnalytics.instance,
+  );
+
+  sl.registerLazySingleton<FirebaseCrashlytics>(
+        () => FirebaseCrashlytics.instance,
+  );
+
+  sl.registerLazySingleton<FirebaseMessagingService>(
+        () => FirebaseMessagingService(
+      messaging: sl<FirebaseMessaging>(),
+      preferences: sl<SharedPreferences>(),
+    ),
+  );
 }

@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'core/utils/app_bloc_observer.dart';
+import 'core/utils/firebase_messaging_service.dart';
 import 'core/utils/service_locator.dart' as di;
 import 'my_app.dart';
 
@@ -16,6 +17,7 @@ Future<void> initializeApp() async {
 
   await Firebase.initializeApp();
 
+
   FirebaseMessaging.onBackgroundMessage(
     _firebaseMessagingBackgroundHandler,
   );
@@ -23,7 +25,7 @@ Future<void> initializeApp() async {
   Bloc.observer = AppBlocObserver();
 
   await di.init();
-
+  await di.sl<FirebaseMessagingService>().initialize();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
