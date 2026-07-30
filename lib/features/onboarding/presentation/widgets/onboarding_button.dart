@@ -41,7 +41,7 @@ class OnboardingButton extends StatelessWidget {
             Icon(
               isLastPage
                   ? Icons.rocket_launch_rounded
-                  : Icons.arrow_back_ios_new_rounded,
+                  : Icons.arrow_forward_ios_outlined,
               size: 20.sp,
             ),
           ],

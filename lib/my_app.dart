@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'common_imports.dart';
 import 'core/utils/service_locator.dart' as di;
-import 'features/login/data/repos/login_repos.dart';
 import 'features/login/data/repos/login_repos_impl.dart';
 import 'features/login/presentation/view_model/login_cubit.dart';
 import 'features/auth/data/repos/auth_repo.dart';
