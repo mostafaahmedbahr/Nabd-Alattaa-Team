@@ -37,10 +37,7 @@ class RegisterRepoImpl implements RegisterRepo {
       }
 
       // 2. Get FCM token
-      final token = await FCMService.getToken();
 
-      print(token);
-      print('Register FCM Token: $token');
 
       // 3. Create user data for Firestore
       final registerModel = RegisterModel(
@@ -56,7 +53,7 @@ class RegisterRepoImpl implements RegisterRepo {
         createdAt: DateTime.now(),
         isActive: false,
         points: 0,
-        fcmToken: token,
+        fcmToken: FCMService.token,
       );
 
       // 4. Save to Firestore

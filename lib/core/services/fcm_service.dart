@@ -1,55 +1,41 @@
+import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class FCMService {
-  FCMService._();
-
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
-  static String? _token;
-
-  static String? get token => _token;
+  static String? token;
 
   static Future<void> initialize() async {
-    try {
-      final settings = await _messaging.requestPermission(
-        alert: true,
-        badge: true,
-        sound: true,
-        provisional: false,
-      );
+    await _messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
 
-      print('Notification Permission: ${settings.authorizationStatus}');
+    if (Platform.isIOS) {
+      String? apnsToken;
 
-      _token = await _messaging.getToken();
+      for (int i = 0; i < 10; i++) {
+        apnsToken = await _messaging.getAPNSToken();
 
-      print('FCM Token: $_token');
+        if (apnsToken != null) {
+          break;
+        }
 
-      _messaging.onTokenRefresh.listen((newToken) {
-        _token = newToken;
-        print('FCM Token Refreshed: $newToken');
-      });
-    } catch (e) {
-      print('FCM Initialize Error: $e');
+        await Future.delayed(const Duration(seconds: 1));
+      }
+
+      print("APNS Token: $apnsToken");
+
+      if (apnsToken == null) {
+        print("APNS Token is still null");
+        return;
+      }
     }
-  }
 
-  static Future<String?> getToken() async {
-    try {
-      _token ??= await _messaging.getToken();
-      return _token;
-    } catch (e) {
-      print('FCM Get Token Error: $e');
-      return null;
-    }
-  }
+    token = await _messaging.getToken();
 
-  static Future<void> refreshToken() async {
-    try {
-      await _messaging.deleteToken();
-      _token = await _messaging.getToken();
-      print('New FCM Token: $_token');
-    } catch (e) {
-      print('FCM Refresh Error: $e');
-    }
+    print("FCM Token: $token");
   }
 }
