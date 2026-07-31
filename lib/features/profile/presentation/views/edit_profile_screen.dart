@@ -23,13 +23,30 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _phoneController;
+  late TextEditingController _positionController;
+  String _selectedDepartment = '';
   bool _initialized = false;
+
+  final _departments = [
+    'الإدارة',
+    'الموارد البشرية',
+    'المالية',
+    'المراجعة الداخلية',
+    'الشؤون القانونية',
+    'البرامج',
+    'الأبحاث',
+    'المشتريات',
+    'المخازن',
+    'الاستقبال',
+    'الخدمات',
+  ];
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController();
     _phoneController = TextEditingController();
+    _positionController = TextEditingController();
   }
 
   @override
@@ -40,6 +57,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (state is ProfileLoaded) {
         _nameController.text = state.profile.name;
         _phoneController.text = state.profile.phone;
+        _positionController.text = state.profile.position;
+        _selectedDepartment = state.profile.department;
         _initialized = true;
       }
     }
@@ -49,6 +68,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void dispose() {
     _nameController.dispose();
     _phoneController.dispose();
+    _positionController.dispose();
     super.dispose();
   }
 
@@ -65,6 +85,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           if (state is ProfileLoaded && _initialized) {
             _nameController.text = state.profile.name;
             _phoneController.text = state.profile.phone;
+            _positionController.text = state.profile.position;
+            _selectedDepartment = state.profile.department;
           }
         },
         builder: (context, state) {
@@ -112,6 +134,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       return null;
                     },
                   ),
+                  const SizedBox(height: 16),
+                  CustomTextField(
+                    controller: _positionController,
+                    labelText: AppStrings.position,
+                    prefixIcon: Icons.work_outlined,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'الوظيفة مطلوبة';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildDepartmentDropdown(),
                   const SizedBox(height: 32),
                   CustomButton(
                     text: AppStrings.save,
@@ -121,6 +157,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         final data = {
                           FirestoreConstants.userName: _nameController.text.trim(),
                           FirestoreConstants.userPhone: _phoneController.text.trim(),
+                          FirestoreConstants.userPosition: _positionController.text.trim(),
+                          FirestoreConstants.userDepartment: _selectedDepartment,
                         };
                         context
                             .read<ProfileCubit>()
@@ -134,6 +172,60 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           );
         },
       ),
+    );
+  }
+
+  Widget _buildDepartmentDropdown() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          AppStrings.department,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: AppColors.grey200),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: _selectedDepartment.isEmpty ? null : _selectedDepartment,
+              hint: const Text(
+                'اختر القسم',
+                style: TextStyle(
+                  color: AppColors.textHint,
+                  fontSize: 14,
+                ),
+              ),
+              isExpanded: true,
+              dropdownColor: AppColors.surface,
+              icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.grey400),
+              style: const TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 14,
+              ),
+              items: _departments
+                  .map((dept) => DropdownMenuItem(
+                        value: dept,
+                        child: Text(dept),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                setState(() => _selectedDepartment = value ?? '');
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

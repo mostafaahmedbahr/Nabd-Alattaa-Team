@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import 'section_title.dart';
 import 'field_label.dart';
@@ -86,6 +87,7 @@ class PersonalInfoStep extends StatelessWidget {
           textInputAction: TextInputAction.next,
           validator: (value) {
             if (value == null || value.trim().isEmpty) return 'الاسم مطلوب';
+            if (value.trim().length < 3) return 'الاسم يجب أن يكون 3 أحرف على الأقل';
             return null;
           },
         ),
@@ -107,6 +109,8 @@ class PersonalInfoStep extends StatelessWidget {
           textInputAction: TextInputAction.next,
           validator: (value) {
             if (value == null || value.trim().isEmpty) return 'رقم الهاتف مطلوب';
+            final phoneRegex = RegExp(r'^0[0-9]{10}$');
+            if (!phoneRegex.hasMatch(value.trim())) return 'رقم الهاتف غير صالح (01XXXXXXXXX)';
             return null;
           },
         ),
@@ -128,6 +132,9 @@ class PersonalInfoStep extends StatelessWidget {
           readOnly: true,
           validator: (value) {
             if (value == null || value.trim().isEmpty) return 'العمر مطلوب';
+            final age = int.tryParse(value.trim());
+            if (age == null) return 'العمر يجب أن يكون رقماً';
+            if (age < 18 || age > 100) return 'العمر يجب أن يكون بين 18 و 100';
             return null;
           },
         ),

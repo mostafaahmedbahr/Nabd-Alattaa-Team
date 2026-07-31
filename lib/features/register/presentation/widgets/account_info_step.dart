@@ -60,7 +60,8 @@ class AccountInfoStep extends StatelessWidget {
             if (value == null || value.trim().isEmpty) {
               return AppStrings.emailRequired;
             }
-            if (!value.contains('@')) return AppStrings.emailRequired;
+            final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+            if (!emailRegex.hasMatch(value.trim())) return 'البريد الإلكتروني غير صالح';
             return null;
           },
         ),
@@ -87,6 +88,8 @@ class AccountInfoStep extends StatelessWidget {
           validator: (value) {
             if (value == null || value.isEmpty) return AppStrings.passwordRequired;
             if (value.length < 6) return AppStrings.passwordTooShort;
+            if (!RegExp(r'[A-Z]').hasMatch(value)) return 'كلمة المرور يجب أن تحتوي على حرف كبير';
+            if (!RegExp(r'[0-9]').hasMatch(value)) return 'كلمة المرور يجب أن تحتوي على رقم';
             return null;
           },
         ),

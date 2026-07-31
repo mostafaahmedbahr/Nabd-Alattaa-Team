@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'core/services/fcm_service.dart';
 import 'core/utils/app_bloc_observer.dart';
 import 'core/utils/service_locator.dart' as di;
 import 'my_app.dart';
@@ -19,7 +20,7 @@ Future<void> initializeApp() async {
   FirebaseMessaging.onBackgroundMessage(
     _firebaseMessagingBackgroundHandler,
   );
-
+  await FCMService.initialize();
   Bloc.observer = AppBlocObserver();
 
   await di.init();

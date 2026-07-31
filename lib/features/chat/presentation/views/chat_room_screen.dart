@@ -128,8 +128,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
           top: BorderSide(color: AppColors.divider, width: 0.5),
         ),
       ),
-      child: SafeArea(
-        child: Row(
+      child: Row(
           children: [
             Expanded(
               child: TextField(
@@ -167,7 +166,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
             ),
           ],
         ),
-      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nabd_alattaa_team/features/profile/presentation/views/profile_screen.dart';
 
 import 'home_screen.dart';
 
@@ -53,9 +54,7 @@ class _MainScreenState extends State<MainScreen> {
           child: Text('الشات', style: TextStyle(fontSize: 24)),
         );
       case 4:
-        return const Center(
-          child: Text('حسابي', style: TextStyle(fontSize: 24)),
-        );
+        return ProfileScreen();
       default:
         return const HomeScreen();
     }

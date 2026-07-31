@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:nabd_alattaa_team/features/register/data/repos/register_repos.dart';
 import '../../../../core/constants/firestore_constants.dart';
 import '../../../../core/error/failures.dart';
+import '../../../../core/services/fcm_service.dart';
 import '../models/register_model.dart';
 
 
@@ -34,29 +36,39 @@ class RegisterRepoImpl implements RegisterRepo {
         );
       }
 
-      // 2. Create user data for Firestore
+      // 2. Get FCM token
+      final token = await FCMService.getToken();
+
+      print(token);
+      print('Register FCM Token: $token');
+
+      // 3. Create user data for Firestore
       final registerModel = RegisterModel(
         id: user.uid,
         name: registerData.name,
         email: registerData.email,
         phone: registerData.phone,
-        role: 'employee', // Default role
+        role: 'employee',
         department: registerData.department,
         gender: registerData.gender,
         birthDate: registerData.birthDate,
         age: registerData.age,
         createdAt: DateTime.now(),
-        isActive: true,
+        isActive: false,
         points: 0,
+        fcmToken: token,
       );
 
-      // 3. Save to Firestore
+      // 4. Save to Firestore
       await firestore
           .collection(FirestoreConstants.users)
           .doc(user.uid)
           .set(registerModel.toMap());
 
-      // 4. Return the created model
+      // 5. Sign out so user goes to login screen
+      await firebaseAuth.signOut();
+
+      // 6. Return the created model
       return Right(registerModel);
 
     } on FirebaseAuthException catch (e) {

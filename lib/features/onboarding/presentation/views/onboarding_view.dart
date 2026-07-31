@@ -15,8 +15,7 @@ class OnboardingView extends StatelessWidget {
     final cubit = context.read<OnboardingCubit>();
     return Scaffold(
       body: OnboardingBackground(
-        child: SafeArea(
-          child: Column(
+        child: Column(
             children: [
               Align(
                 alignment: Alignment.topLeft,
@@ -70,8 +69,7 @@ class OnboardingView extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
 

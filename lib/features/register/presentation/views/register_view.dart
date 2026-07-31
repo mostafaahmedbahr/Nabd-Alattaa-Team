@@ -52,8 +52,7 @@ class _RegisterViewState extends State<RegisterView> {
       backgroundColor: AppColors.background,
       body: BlocListener<RegisterCubit, RegisterStates>(
         listener: _handleRegisterState,
-        child: SafeArea(
-          child: SizedBox(
+        child: SizedBox(
             height: size.height,
             child: Column(
               children: [
@@ -79,7 +78,6 @@ class _RegisterViewState extends State<RegisterView> {
               ],
             ),
           ),
-        ),
       ),
     );
   }
@@ -123,10 +121,7 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   bool _validateStep1() {
-    if (_nameController.text.trim().isEmpty) return false;
-    if (_phoneController.text.trim().isEmpty) return false;
-    if (_selectedDepartment.isEmpty) return false;
-    return true;
+    return _formKey.currentState!.validate() && _selectedDepartment.isNotEmpty;
   }
 
   void _submitRegister() {
@@ -149,7 +144,7 @@ class _RegisterViewState extends State<RegisterView> {
     if (state is RegisterSuccessState) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('تم إنشاء الحساب بنجاح'),
+          content: const Text('تم إنشاء الحساب بنجاح، في انتظار موافقة المدير'),
           backgroundColor: AppColors.success,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(

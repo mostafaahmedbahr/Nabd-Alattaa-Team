@@ -40,7 +40,7 @@ class LoginRepoImpl implements LoginRepository {
           } else {
             await firebaseAuth.signOut();
             return const Left(AuthFailure(
-              message: 'هذا الحساب غير نشط',
+              message: 'حسابك لا يزال قيد المراجعة، في انتظار موافقة المدير',
             ));
           }
         } else {

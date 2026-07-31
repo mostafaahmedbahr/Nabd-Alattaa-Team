@@ -68,8 +68,7 @@ class _LoginViewState extends State<LoginView>
             );
           }
         },
-        child: SafeArea(
-          child: SizedBox(
+        child: SizedBox(
             height: size.height,
             child: Stack(
               children: [
@@ -126,7 +125,6 @@ class _LoginViewState extends State<LoginView>
               ],
             ),
           ),
-        ),
       ),
     );
   }

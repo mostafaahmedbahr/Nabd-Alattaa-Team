@@ -24,6 +24,7 @@ import '../../features/good_deeds/presentation/views/good_deeds_screen.dart';
 import '../../features/good_deeds/presentation/views/create_good_deed_screen.dart';
 import '../../features/meals/presentation/views/meals_screen.dart';
 import '../../features/profile/presentation/views/profile_screen.dart';
+import '../../features/profile/presentation/views/edit_profile_screen.dart';
 import '../../features/admin/presentation/views/admin_dashboard_screen.dart';
 
 class AppRouter {
@@ -173,6 +174,13 @@ class AppRouter {
         path: '/create-good-deed',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const CreateGoodDeedScreen(),
+      ),
+      GoRoute(
+        path: '/edit-profile',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => EditProfileScreen(
+          userId: FirebaseAuth.instance.currentUser?.uid ?? '',
+        ),
       ),
     ],
   );
