@@ -41,27 +41,27 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'] as String?,
-      name: json['name'] ?? '',
-      email: json['email'] ?? '',
-      phone: json['phone'] ?? '',
+      id: json['user_id'] as String?,
+      name: json['user_name'] ?? '',
+      email: json['user_email'] ?? '',
+      phone: json['user_phone'] ?? '',
       password: json['password'],
 
-      role: json['role'] ?? '',
-      department: json['department'] ?? '',
-      position: json['position'] ?? '',
+      role: json['user_role'] ?? '',
+      department: json['user_department'] ?? '',
+      position: json['user_position'] ?? '',
 
-      isActive: json['isActive'] ?? true,
-      fcmToken: json['fcmToken'],
+      isActive: json['is_active'] ?? true,
+      fcmToken: json['fcm_token'],
 
-      createdAt: json['createdAt'] != null
-          ? (json['createdAt'] as Timestamp).toDate()
+      createdAt: json['created_at'] != null
+          ? (json['created_at'] as Timestamp).toDate()
           : null,
 
       points: json['points'] ?? 0,
       gender: json['gender'] ?? '',
-      birthDate: json['birthDate'] != null
-          ? (json['birthDate'] as Timestamp).toDate()
+      birthDate: json['birth_date'] != null
+          ? (json['birth_date'] as Timestamp).toDate()
           : DateTime.now(),
       age: json['age'] ?? 0,
     );
@@ -69,23 +69,24 @@ class UserModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'name': name,
-      'email': email,
-      'phone': phone,
+      'user_id': id,
+      'user_name': name,
+      'user_email': email,
+      'user_phone': phone,
       'password': password,
 
-      'role': role,
-      'department': department,
-      'position': position,
+      'user_role': role,
+      'user_department': department,
+      'user_position': position,
 
-      'isActive': isActive,
-      'fcmToken': fcmToken,
+      'is_active': isActive,
+      'fcm_token': fcmToken,
 
-      'createdAt': createdAt ?? FieldValue.serverTimestamp(),
+      'created_at': createdAt ?? FieldValue.serverTimestamp(),
 
       'points': points,
       'gender': gender,
-      'birthDate': Timestamp.fromDate(birthDate),
+      'birth_date': Timestamp.fromDate(birthDate),
       'age': age,
     };
   }

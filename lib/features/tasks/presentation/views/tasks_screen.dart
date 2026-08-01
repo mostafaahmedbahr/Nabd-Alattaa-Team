@@ -8,8 +8,35 @@ import '../view_model/task_cubit.dart';
 import '../view_model/task_state.dart';
 import '../widgets/task_card.dart';
 
-class TasksScreen extends StatelessWidget {
+class TasksScreen extends StatefulWidget {
   const TasksScreen({super.key});
+
+  @override
+  State<TasksScreen> createState() => _TasksScreenState();
+}
+
+class _TasksScreenState extends State<TasksScreen> {
+  String? _selectedStatus;
+
+  final Map<String?, Color> _statusColors = {
+    null: AppColors.primary,
+    'not_started': Colors.orange,
+    'in_progress': Colors.blue,
+    'completed': Colors.green,
+  };
+
+  final Map<String?, String> _statusLabels = {
+    null: 'عرض الكل',
+    'not_started': AppStrings.notStarted,
+    'in_progress': AppStrings.inProgress,
+    'completed': AppStrings.completed,
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<TaskCubit>().loadTasks();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +50,37 @@ class TasksScreen extends StatelessWidget {
       body: Column(
         children: [
           // Filter Chips
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                _buildFilterChip(context, 'الكل', null),
-                const SizedBox(width: 8),
-                _buildFilterChip(context, AppStrings.notStarted, 'not_started'),
-                const SizedBox(width: 8),
-                _buildFilterChip(context, AppStrings.inProgress, 'in_progress'),
-                const SizedBox(width: 8),
-                _buildFilterChip(context, AppStrings.completed, 'completed'),
-              ],
+          SizedBox(
+            height: 60,
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              scrollDirection: Axis.horizontal,
+              itemCount: _statusColors.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              itemBuilder: (context, index) {
+                final status = _statusColors.keys.elementAt(index);
+                final color = _statusColors[status]!;
+                final label = _statusLabels[status]!;
+                final isSelected = _selectedStatus == status;
+
+                return ChoiceChip(
+                  label: Text(
+                    label,
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : color,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  selected: isSelected,
+                  selectedColor: color,
+                  backgroundColor: color.withValues(alpha: 0.1),
+                  side: BorderSide(color: color),
+                  onSelected: (_) {
+                    setState(() => _selectedStatus = status);
+                    context.read<TaskCubit>().loadTasks(status: status);
+                  },
+                );
+              },
             ),
           ),
 
@@ -72,17 +118,6 @@ class TasksScreen extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildFilterChip(BuildContext context, String label, String? status) {
-    return FilterChip(
-      label: Text(label),
-      onSelected: (selected) {
-        if (selected) {
-          context.read<TaskCubit>().loadTasks(status: status);
-        }
-      },
     );
   }
 }
