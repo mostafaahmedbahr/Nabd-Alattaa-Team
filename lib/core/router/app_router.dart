@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:nabd_alattaa_team/features/layout/presentation/views/layout_view.dart';
 import 'app_routes.dart';
-
 import '../../features/register/presentation/views/register_view.dart';
 import '../../features/splash/presentation/views/splash_view.dart';
 import '../../features/onboarding/presentation/views/onboarding_view.dart';
 import '../../features/login/presentation/views/login_view.dart';
-import '../../features/home/presentation/views/main_screen.dart';
 import '../../features/home/presentation/views/home_screen.dart';
 import '../../features/tasks/presentation/views/tasks_screen.dart';
 import '../../features/tasks/presentation/views/create_task_screen.dart';
@@ -87,7 +85,7 @@ class AppRouter {
 
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
-        builder: (context, state, child) => MainScreen(child: child),
+        builder: (context, state, child) => LayoutView(),
         routes: [
           GoRoute(
             path: Routes.home,

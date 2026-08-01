@@ -1,4 +1,5 @@
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:nabd_alattaa_team/features/layout/presentation/view_model/layout_cubit.dart';
 import 'common_imports.dart';
 import 'core/utils/service_locator.dart' as di;
 import 'features/home/presentation/view_model/home_cubit.dart';
@@ -24,6 +25,7 @@ class NabdAlattaaApp extends StatelessWidget {
       splitScreenMode: true,
       child: MultiBlocProvider(
         providers: [
+          BlocProvider(create: (context)=>LayoutCubit()),
           BlocProvider(
             create: (_) => LoginCubit(
               loginRepository: LoginRepoImpl(
