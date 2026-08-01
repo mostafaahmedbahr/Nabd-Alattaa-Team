@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nabd_alattaa_team/features/profile/presentation/views/profile_screen.dart';
 
 import 'home_screen.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class MainScreen extends StatelessWidget {
+  final Widget? child;
 
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
+  const MainScreen({super.key, this.child});
 
-class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
-
-  final List<String> _titles = [
+  static const List<String> _titles = [
     'الرئيسية',
     'المهام',
     'الإعلانات',
@@ -21,7 +17,7 @@ class _MainScreenState extends State<MainScreen> {
     'حسابي',
   ];
 
-  final List<IconData> _icons = [
+  static const List<IconData> _icons = [
     Icons.home_outlined,
     Icons.task_alt_outlined,
     Icons.campaign_outlined,
@@ -29,7 +25,7 @@ class _MainScreenState extends State<MainScreen> {
     Icons.person_outline,
   ];
 
-  final List<IconData> _selectedIcons = [
+  static const List<IconData> _selectedIcons = [
     Icons.home,
     Icons.task_alt,
     Icons.campaign,
@@ -37,46 +33,53 @@ class _MainScreenState extends State<MainScreen> {
     Icons.person,
   ];
 
-  Widget _buildTabContent(int index) {
+  static int _calculateIndex(BuildContext context) {
+    final location = GoRouterState.of(context).matchedLocation;
+    if (location.startsWith('/tasks')) return 1;
+    if (location.startsWith('/notifications') ||
+        location.startsWith('/announcements')) return 2;
+    if (location.startsWith('/chat')) return 3;
+    if (location.startsWith('/profile') || location.startsWith('/edit-profile')) {
+      return 4;
+    }
+    return 0;
+  }
+
+  void _onTap(BuildContext context, int index) {
     switch (index) {
       case 0:
-        return const HomeScreen();
+        context.go('/');
+        break;
       case 1:
-        return const Center(
-          child: Text('المهام', style: TextStyle(fontSize: 24)),
-        );
+        context.go('/tasks');
+        break;
       case 2:
-        return const Center(
-          child: Text('الإعلانات', style: TextStyle(fontSize: 24)),
-        );
+        context.go('/notifications');
+        break;
       case 3:
-        return const Center(
-          child: Text('الشات', style: TextStyle(fontSize: 24)),
-        );
+        context.go('/chat');
+        break;
       case 4:
-        return ProfileScreen();
-      default:
-        return const HomeScreen();
+        context.go('/profile');
+        break;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final currentIndex = _calculateIndex(context);
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_titles[_currentIndex]),
+          title: Text(_titles[currentIndex]),
           centerTitle: true,
         ),
-        body: _buildTabContent(_currentIndex),
+        body: child ?? const HomeScreen(),
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
+          currentIndex: currentIndex,
+          onTap: (index) => _onTap(context, index),
           type: BottomNavigationBarType.fixed,
           selectedFontSize: 12,
           unselectedFontSize: 12,
@@ -84,9 +87,7 @@ class _MainScreenState extends State<MainScreen> {
             _titles.length,
             (index) => BottomNavigationBarItem(
               icon: Icon(
-                _currentIndex == index
-                    ? _selectedIcons[index]
-                    : _icons[index],
+                currentIndex == index ? _selectedIcons[index] : _icons[index],
               ),
               label: _titles[index],
             ),

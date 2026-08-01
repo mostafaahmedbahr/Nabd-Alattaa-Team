@@ -1,6 +1,7 @@
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'common_imports.dart';
 import 'core/utils/service_locator.dart' as di;
+import 'features/home/presentation/view_model/home_cubit.dart';
 import 'features/login/data/repos/login_repos_impl.dart';
 import 'features/login/presentation/view_model/login_cubit.dart';
 
@@ -58,6 +59,9 @@ class NabdAlattaaApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => ProfileCubit(ProfileRepoImpl()),
+          ),
+          BlocProvider(
+            create: (_) => HomeCubit(),
           ),
         ],
         child: MaterialApp.router(

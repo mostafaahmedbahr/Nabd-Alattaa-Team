@@ -1,24 +1,34 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
-import '../widgets/welcome_section.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeScreen extends StatelessWidget {
+import '../view_model/home_cubit.dart';
+import '../view_model/home_states.dart';
+import '../widgets/welcome_section.dart';
+import '../widgets/quick_actions_grid.dart';
+import '../widgets/announcements_section.dart';
+import '../widgets/tasks_section.dart';
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
-  static const List<Map<String, dynamic>> _quickActionsRow1 = [
-    {'icon': Icons.task_alt, 'label': 'المهام'},
-    {'icon': Icons.campaign, 'label': 'الإعلانات'},
-    {'icon': Icons.report_outlined, 'label': 'البلاغات'},
-    {'icon': Icons.feedback_outlined, 'label': 'الشكاوى'},
-  ];
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
 
-  static const List<Map<String, dynamic>> _quickActionsRow2 = [
-    {'icon': Icons.lightbulb_outline, 'label': 'صندوق الأفكار'},
-    {'icon': Icons.library_books_outlined, 'label': 'المكتبة'},
-    {'icon': Icons.volunteer_activism_outlined, 'label': 'عملت خير'},
-    {'icon': Icons.restaurant_outlined, 'label': 'طلبات الطعام'},
-  ];
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  void _loadData() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      context.read<HomeCubit>().loadHomeData(user.uid);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,240 +39,33 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            WelcomeSection(),
+            const WelcomeSection(),
             const SizedBox(height: 24),
-            _buildQuickActions(context),
+            const QuickActionsGrid(),
             const SizedBox(height: 24),
-            _buildSectionTitle('آخر الإعلانات'),
-            const SizedBox(height: 8),
-            _buildRecentAnnouncements(),
-            const SizedBox(height: 24),
-            _buildSectionTitle('آخر المهام'),
-            const SizedBox(height: 8),
-            _buildRecentTasks(),
+            // BlocBuilder<HomeCubit, HomeStates>(
+            //   builder: (context, state) {
+            //     if (state is HomeLoading) {
+            //       return const Center(child: CircularProgressIndicator());
+            //     }
+            //     if (state is HomeLoaded) {
+            //       return Column(
+            //         children: [
+            //           AnnouncementsSection(
+            //             announcements: state.announcements,
+            //           ),
+            //           const SizedBox(height: 24),
+            //           TasksSection(tasks: state.tasks),
+            //         ],
+            //       );
+            //     }
+            //     if (state is HomeError) {
+            //       return Center(child: Text(state.message));
+            //     }
+            //     return const SizedBox.shrink();
+            //   },
+            // ),
           ],
-        ),
-      ),
-    );
-  }
-
-
-
-  Widget _buildQuickActions(BuildContext context) {
-    return Column(
-      children: [
-        _buildActionsRow(_quickActionsRow1),
-        const SizedBox(height: 12),
-        _buildActionsRow(_quickActionsRow2),
-      ],
-    );
-  }
-
-  Widget _buildActionsRow(List<Map<String, dynamic>> actions) {
-    return Row(
-      children: actions.map((action) {
-        return Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: _buildActionCard(
-              icon: action['icon'] as IconData,
-              label: action['label'] as String,
-              onTap: (){
-                print("dd");
-              }
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildActionCard({required IconData icon, required String label , required  void Function()? onTap}) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Column(
-            children: [
-              Icon(
-                icon,
-                size: 32,
-                color: AppColors.primary,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                label,
-                style: AppTextStyles.bodySmall,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSectionTitle(String title) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: AppTextStyles.labelLarge.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        TextButton(
-          onPressed: () {},
-          child: Text(
-            'عرض الكل',
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.primary,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildRecentAnnouncements() {
-    return Column(
-      children: List.generate(3, (index) {
-        return _buildAnnouncementCard(
-          title: 'إعلان ${(index + 1)}',
-          subtitle: 'هذا نص تجريبي للإعلان رقم ${index + 1}',
-          time: '${index + 1} ساعات مضت',
-        );
-      }),
-    );
-  }
-
-  Widget _buildAnnouncementCard({
-    required String title,
-    required String subtitle,
-    required String time,
-  }) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      elevation: 1,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.all(12),
-        leading: Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: AppColors.primary.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(
-            Icons.campaign_outlined,
-            color: AppColors.primary,
-          ),
-        ),
-        title: Text(
-          title,
-          style: AppTextStyles.bodyLarge.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(top: 4),
-          child: Text(
-            subtitle,
-            style: AppTextStyles.bodySmall,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        trailing: Text(
-          time,
-          style: AppTextStyles.bodySmall.copyWith(
-            color: Colors.grey,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRecentTasks() {
-    return Column(
-      children: List.generate(3, (index) {
-        return _buildTaskCard(
-          title: 'مهمة ${(index + 1)}',
-          subtitle: 'وصف المهمة رقم ${index + 1}',
-          status: index == 0 ? 'مكتملة' : (index == 1 ? 'قيد التنفيذ' : 'جديدة'),
-          statusColor: index == 0
-              ? Colors.green
-              : (index == 1 ? Colors.orange : Colors.blue),
-        );
-      }),
-    );
-  }
-
-  Widget _buildTaskCard({
-    required String title,
-    required String subtitle,
-    required String status,
-    required Color statusColor,
-  }) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      elevation: 1,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.all(12),
-        leading: Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: statusColor.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(
-            Icons.task_alt_outlined,
-            color: statusColor,
-          ),
-        ),
-        title: Text(
-          title,
-          style: AppTextStyles.bodyLarge.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(top: 4),
-          child: Text(
-            subtitle,
-            style: AppTextStyles.bodySmall,
-          ),
-        ),
-        trailing: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 8,
-            vertical: 4,
-          ),
-          decoration: BoxDecoration(
-            color: statusColor.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            status,
-            style: AppTextStyles.bodySmall.copyWith(
-              color: statusColor,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
         ),
       ),
     );
