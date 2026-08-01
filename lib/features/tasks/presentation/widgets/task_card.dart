@@ -43,13 +43,24 @@ class TaskCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(color: AppColors.textSecondary),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               Row(
                 children: [
                   Icon(Icons.person, size: 16, color: AppColors.grey500),
                   const SizedBox(width: 4),
                   Text(task.assigneeName),
                   const Spacer(),
+                  Icon(Icons.person_outline, size: 16, color: AppColors.grey500),
+                  const SizedBox(width: 4),
+                  Text(
+                    task.creatorName,
+                    style: TextStyle(color: AppColors.textSecondary),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Row(
+                children: [
                   Icon(Icons.calendar_today, size: 16, color: AppColors.grey500),
                   const SizedBox(width: 4),
                   Text(

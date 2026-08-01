@@ -29,6 +29,7 @@ class TaskCubit extends Cubit<TaskState> {
   }
 
   Future<void> createTask(TaskModel task) async {
+    emit(TaskCreating());
     final result = await taskRepository.createTask(task);
     result.fold(
       (failure) => emit(TaskError(message: failure.message)),
