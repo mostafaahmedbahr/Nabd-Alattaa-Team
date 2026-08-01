@@ -6,6 +6,9 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../features/users/data/repos/users_repo.dart';
+import '../../features/users/presentation/view_model/users_cubit.dart';
+
 
 final sl = GetIt.instance;
 
@@ -19,5 +22,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => FirebaseAnalytics.instance);
   sl.registerLazySingleton(() => FirebaseCrashlytics.instance);
 
-
+  sl.registerLazySingleton<UsersRepo>(() => UsersRepo());
+  sl.registerFactory(() => UsersCubit(
+    usersRepo: sl(),
+  ));
 }

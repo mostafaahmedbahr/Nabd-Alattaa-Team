@@ -20,6 +20,7 @@ class LoginRepoImpl implements LoginRepository {
     required String password,
   }) async {
     try {
+      print('🔐 [LoginRepo] Signing in with Firebase Auth...');
       final credential = await firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
@@ -27,7 +28,9 @@ class LoginRepoImpl implements LoginRepository {
 
       if (credential.user != null) {
         final userId = credential.user!.uid;
+        print('✅ [LoginRepo] Firebase Auth success! userId: $userId');
 
+        print('📦 [LoginRepo] Checking Firestore users/$userId...');
         final userDoc = await firestore
             .collection(FirestoreConstants.users)
             .doc(userId)
@@ -35,15 +38,22 @@ class LoginRepoImpl implements LoginRepository {
 
         if (userDoc.exists) {
           final userData = userDoc.data();
-          if (userData != null && userData['is_active'] == true) {
+          print('📦 [LoginRepo] User doc found: $userData');
+          final isActive = userData?['is_active'];
+          print('📦 [LoginRepo] is_active = $isActive');
+
+          if (isActive == true) {
+            print('🟢 [LoginRepo] Login SUCCESS - user is active');
             return Right(userId);
           } else {
+            print('🔴 [LoginRepo] Login REJECTED - is_active is not true');
             await firebaseAuth.signOut();
             return const Left(AuthFailure(
               message: 'حسابك لا يزال قيد المراجعة، في انتظار موافقة المدير',
             ));
           }
         } else {
+          print('🔴 [LoginRepo] User doc NOT found in Firestore');
           return const Left(AuthFailure(
             message: 'لم يتم العثور على بيانات المستخدم',
           ));
@@ -54,10 +64,12 @@ class LoginRepoImpl implements LoginRepository {
         message: 'البريد الإلكتروني أو كلمة المرور غير صحيحة',
       ));
     } on FirebaseAuthException catch (e) {
+      print('🔴 [LoginRepo] FirebaseAuthException: ${e.code}');
       return Left(AuthFailure(
         message: _getErrorMessage(e.code),
       ));
     } catch (e) {
+      print('🔴 [LoginRepo] Unexpected error: $e');
       return Left(AuthFailure(
         message: 'حدث خطأ غير متوقع: ${e.toString()}',
       ));

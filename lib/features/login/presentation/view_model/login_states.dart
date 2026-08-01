@@ -1,51 +1,24 @@
-import 'package:equatable/equatable.dart';
+abstract class LoginStates {}
 
-abstract class LoginState extends Equatable {
-  const LoginState();
+class LoginInitial extends LoginStates {}
 
-  @override
-  List<Object?> get props => [];
-}
+class LoginLoadingState extends LoginStates {}
 
-class LoginInitial extends LoginState {
-  const LoginInitial();
-}
-
-class LoginLoading extends LoginState {
-  const LoginLoading();
-}
-
-class LoginSuccess extends LoginState {
+class LoginSuccessState extends LoginStates {
   final String userId;
-
-  const LoginSuccess({required this.userId});
-
-  @override
-  List<Object?> get props => [userId];
+    LoginSuccessState({required this.userId});
 }
 
-class LoginError extends LoginState {
+class LoginErrorState extends LoginStates {
   final String message;
-
-  const LoginError({required this.message});
-
-  @override
-  List<Object?> get props => [message];
+    LoginErrorState({required this.message});
 }
 
-class ResetPasswordLoading extends LoginState {
-  const ResetPasswordLoading();
-}
+class ResetPasswordLoading extends LoginStates {}
 
-class ResetPasswordSuccess extends LoginState {
-  const ResetPasswordSuccess();
-}
+class ResetPasswordSuccess extends LoginStates {}
 
-class ResetPasswordError extends LoginState {
+class ResetPasswordError extends LoginStates {
   final String message;
-
-  const ResetPasswordError({required this.message});
-
-  @override
-  List<Object?> get props => [message];
+    ResetPasswordError({required this.message});
 }

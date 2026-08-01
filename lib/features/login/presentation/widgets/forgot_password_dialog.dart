@@ -1,4 +1,3 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../common_imports.dart';
 import '../view_model/login_cubit.dart';
 import '../view_model/login_states.dart';
@@ -29,7 +28,7 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginCubit, LoginState>(
+    return BlocListener<LoginCubit, LoginStates>(
       listener: (context, state) {
         if (state is ResetPasswordSuccess) {
           Navigator.pop(context);

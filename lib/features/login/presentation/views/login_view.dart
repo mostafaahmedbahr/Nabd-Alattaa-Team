@@ -1,4 +1,3 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../common_imports.dart';
 import '../view_model/login_cubit.dart';
 import '../view_model/login_states.dart';
@@ -51,11 +50,11 @@ class _LoginViewState extends State<LoginView>
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: BlocListener<LoginCubit, LoginState>(
+      body: BlocListener<LoginCubit, LoginStates>(
         listener: (context, state) {
-          if (state is LoginSuccess) {
+          if (state is LoginSuccessState) {
             context.go('/');
-          } else if (state is LoginError) {
+          } else if (state is LoginErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
@@ -126,6 +125,7 @@ class _LoginViewState extends State<LoginView>
             ),
           ),
       ),
+
     );
   }
 
