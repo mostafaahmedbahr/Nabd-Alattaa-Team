@@ -10,3 +10,4 @@ export 'package:nabd_alattaa_team/core/widgets/custom_button.dart';
 export 'package:nabd_alattaa_team/core/widgets/custom_text_field.dart';
 export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:nabd_alattaa_team/core/utils/validators.dart';
+export 'package:nabd_alattaa_team/core/theme/app_text_styles.dart';

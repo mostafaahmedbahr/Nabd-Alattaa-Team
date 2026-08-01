@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../widgets/welcome_section.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -28,7 +29,7 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildWelcomeSection(),
+            WelcomeSection(),
             const SizedBox(height: 24),
             _buildQuickActions(context),
             const SizedBox(height: 24),
@@ -45,64 +46,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildWelcomeSection() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            AppColors.primary,
-            AppColors.primaryDark,
-          ],
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-        ),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          ClipOval(
-            child: Image.asset(
-              'assets/images/logo.jpg',
-              width: 60,
-              height: 60,
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'مرحباً بك،',
-                  style: AppTextStyles.bodyLarge.copyWith(
-                    color: Colors.white70,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'أحمد محمد',
-                  style: AppTextStyles.labelLarge.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'نتمنى لك يوماً موفقاً',
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: Colors.white60,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+
 
   Widget _buildQuickActions(BuildContext context) {
     return Column(
@@ -123,6 +67,9 @@ class HomeScreen extends StatelessWidget {
             child: _buildActionCard(
               icon: action['icon'] as IconData,
               label: action['label'] as String,
+              onTap: (){
+                print("dd");
+              }
             ),
           ),
         );
@@ -130,14 +77,14 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildActionCard({required IconData icon, required String label}) {
+  Widget _buildActionCard({required IconData icon, required String label , required  void Function()? onTap}) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
