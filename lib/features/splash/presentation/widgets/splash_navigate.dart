@@ -15,7 +15,7 @@ void navigateToNext(BuildContext context) async {
   final user = FirebaseAuth.instance.currentUser;
   if (user != null) {
     if (context.mounted) {
-      context.go('/');
+      context.go(Routes.layoutView);
     }
   } else {
     if (context.mounted) {

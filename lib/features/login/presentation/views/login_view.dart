@@ -53,7 +53,7 @@ class _LoginViewState extends State<LoginView>
       body: BlocListener<LoginCubit, LoginStates>(
         listener: (context, state) {
           if (state is LoginSuccessState) {
-            context.go('/');
+            context.go(Routes.layoutView);
           } else if (state is LoginErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

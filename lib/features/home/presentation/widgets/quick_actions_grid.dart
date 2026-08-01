@@ -11,71 +11,26 @@ class QuickActionsGrid extends StatelessWidget {
       children: [
         Row(
           children: [
-            _buildAction(
-              context,
-              icon: Icons.task_alt,
-              label: "المهام",
-              route: Routes.tasks,
-            ),
-            _buildAction(
-              context,
-              icon: Icons.campaign,
-              label: "الإعلانات",
-              route: Routes.notifications,
-            ),
-            _buildAction(
-              context,
-              icon: Icons.report_outlined,
-              label: "البلاغات",
-              route: Routes.complaints,
-            ),
-            _buildAction(
-              context,
-              icon: Icons.feedback_outlined,
-              label: "الشكاوى",
-              route: Routes.complaints,
-            ),
+            _buildAction(context, Icons.task_alt, "المهام", Routes.tasks),
+            _buildAction(context, Icons.campaign, "الإعلانات", Routes.notifications),
+            _buildAction(context, Icons.report_outlined, "البلاغات", Routes.complaints),
+            _buildAction(context, Icons.feedback_outlined, "الشكاوى", Routes.complaints),
           ],
         ),
         SizedBox(height: 12.h),
         Row(
           children: [
-            _buildAction(
-              context,
-              icon: Icons.lightbulb_outline,
-              label: "صندوق الأفكار",
-              route: Routes.ideas,
-            ),
-            _buildAction(
-              context,
-              icon: Icons.library_books_outlined,
-              label: "المكتبة",
-              route: Routes.library,
-            ),
-            _buildAction(
-              context,
-              icon: Icons.volunteer_activism_outlined,
-              label: "عملت خير",
-              route: Routes.goodDeeds,
-            ),
-            _buildAction(
-              context,
-              icon: Icons.restaurant_outlined,
-              label: "طلبات الطعام",
-              route: Routes.meals,
-            ),
+            _buildAction(context, Icons.lightbulb_outline, "صندوق الأفكار", Routes.ideas),
+            _buildAction(context, Icons.library_books_outlined, "المكتبة", Routes.library),
+            _buildAction(context, Icons.volunteer_activism_outlined, "عملت خير", Routes.goodDeeds),
+            _buildAction(context, Icons.restaurant_outlined, "طلبات الطعام", Routes.meals),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildAction(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required String route,
-  }) {
+  Widget _buildAction(BuildContext context, IconData icon, String label, String route) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4),

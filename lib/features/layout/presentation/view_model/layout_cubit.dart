@@ -6,9 +6,7 @@ import '../../../../common_imports.dart';
 import 'layout_states.dart';
 
 class LayoutCubit extends Cubit<LayoutStates> {
-  LayoutCubit() : super(  LayoutInitialState());
-
-
+  LayoutCubit() : super(LayoutInitialState());
 
   static int pageIndex = 0;
 
@@ -20,7 +18,7 @@ class LayoutCubit extends Cubit<LayoutStates> {
     ProfileScreen(),
   ];
 
-  void changeBottomNav(int index, context) {
+  void changeBottomNav(int index) {
     pageIndex = index;
     emit(MainNavigationChanged());
   }
@@ -28,29 +26,27 @@ class LayoutCubit extends Cubit<LayoutStates> {
   DateTime? _lastPressed;
 
   void onPopInvoked(bool didPop, BuildContext context) {
-    if (didPop) {
-      return;
-    }
+    if (didPop) return;
     if (pageIndex == 0) {
       DateTime now = DateTime.now();
       if (_lastPressed == null ||
           now.difference(_lastPressed!) > const Duration(seconds: 2)) {
         _lastPressed = now;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text("خروج"),
-            duration: const Duration(seconds: 2),
+            duration: Duration(seconds: 2),
           ),
         );
       } else {
         SystemNavigator.pop();
       }
     } else {
-      changeBottomNav(0, context);
+      changeBottomNav(0);
     }
   }
 
-    List<String>  titles = [
+  List<String> titles = [
     'الرئيسية',
     'المهام',
     'الإعلانات',
@@ -58,7 +54,7 @@ class LayoutCubit extends Cubit<LayoutStates> {
     'حسابي',
   ];
 
-    List<IconData>  icons = [
+  List<IconData> icons = [
     Icons.home_outlined,
     Icons.task_alt_outlined,
     Icons.campaign_outlined,
@@ -66,7 +62,7 @@ class LayoutCubit extends Cubit<LayoutStates> {
     Icons.person_outline,
   ];
 
-  List<IconData>  selectedIcons = [
+  List<IconData> selectedIcons = [
     Icons.home,
     Icons.task_alt,
     Icons.campaign,

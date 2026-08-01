@@ -3,8 +3,8 @@ class Routes {
   static const onboarding = '/onboarding';
   static const login = '/login';
   static const register = '/register';
-
-  static const home = '/';
+  static const layoutView = '/layoutView';
+  static const home = '/home';
 
   static const tasks = '/tasks';
   static const createTask = '/create-task';

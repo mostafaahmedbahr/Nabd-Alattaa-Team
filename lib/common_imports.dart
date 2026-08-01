@@ -1,6 +1,7 @@
 export 'core/constants/app_strings.dart';
 export 'package:flutter/material.dart';
 export 'core/router/app_router.dart';
+export 'core/router/app_routes.dart';
 export 'core/theme/app_theme.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:shared_preferences/shared_preferences.dart';
