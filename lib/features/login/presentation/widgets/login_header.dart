@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
-import '../../../../core/constants/app_colors.dart';
+
+import '../../../../common_imports.dart';
 
 class LoginHeader extends StatelessWidget {
   const LoginHeader({super.key});

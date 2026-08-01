@@ -87,14 +87,20 @@ class AccountInfoStep extends StatelessWidget {
           onSuffixTap: onPasswordVisibilityToggle,
           validator: (value) {
             if (value == null || value.isEmpty) return AppStrings.passwordRequired;
-            if (value.length < 6) return AppStrings.passwordTooShort;
-            if (!RegExp(r'[A-Z]').hasMatch(value)) return 'كلمة المرور يجب أن تحتوي على حرف كبير';
-            if (!RegExp(r'[0-9]').hasMatch(value)) return 'كلمة المرور يجب أن تحتوي على رقم';
+
             return null;
           },
         ),
         const SizedBox(height: 8),
-        PasswordStrength(password: passwordController.text),
+
+        ValueListenableBuilder<TextEditingValue>(
+          valueListenable: passwordController,
+          builder: (context, value, child) {
+            return PasswordStrength(
+              password: value.text,
+            );
+          },
+        ),
       ],
     );
   }

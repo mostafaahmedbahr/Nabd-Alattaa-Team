@@ -68,7 +68,7 @@ class RegisterBottomButton extends StatelessWidget {
                   const SizedBox(width: 8),
                   Icon(
                     currentStep == 0
-                        ? Icons.arrow_back_ios
+                        ? Icons.arrow_forward_ios
                         : Icons.check_circle_outline,
                     size: 20,
                   ),

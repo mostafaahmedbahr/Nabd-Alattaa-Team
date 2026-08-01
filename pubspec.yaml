@@ -4,7 +4,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.12.1
+  sdk: ^3.8.1
 
 dependencies:
   flutter:
@@ -53,7 +53,7 @@ dependencies:
   fluttertoast: ^8.2.8
   fl_chart: ^0.70.2
   table_calendar: ^3.2.0
-  flutter_screenutil_plus:
+  flutter_screenutil: ^5.9.3
 
   # Utils
   url_launcher: ^6.3.1

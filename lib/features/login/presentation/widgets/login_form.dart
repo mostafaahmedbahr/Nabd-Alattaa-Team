@@ -1,11 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
-
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
-import '../../../../core/utils/validators.dart';
-import '../../../../core/widgets/custom_text_field.dart';
+import '../../../../common_imports.dart';
 import '../view_model/login_cubit.dart';
 import '../view_model/login_states.dart';
 import 'forgot_password_dialog.dart';

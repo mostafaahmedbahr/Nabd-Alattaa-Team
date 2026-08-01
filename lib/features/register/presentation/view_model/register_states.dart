@@ -24,3 +24,7 @@ class RegisterErrorState extends RegisterStates {
 
   const RegisterErrorState({required this.message});
 }
+// New state for UI updates (form changes, step changes, etc.)
+class RegisterStateUpdated extends RegisterStates {
+  const RegisterStateUpdated();
+}

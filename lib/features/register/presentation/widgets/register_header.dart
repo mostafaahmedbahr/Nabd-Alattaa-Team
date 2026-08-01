@@ -16,7 +16,7 @@ class RegisterHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+      padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -34,7 +34,7 @@ class RegisterHeader extends StatelessWidget {
               IconButton(
                 onPressed: onBackPressed,
                 icon: const Icon(
-                  Icons.arrow_forward_ios,
+                  Icons.arrow_back_ios,
                   color: AppColors.textWhite,
                   size: 20,
                 ),

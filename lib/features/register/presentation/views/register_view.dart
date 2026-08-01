@@ -1,6 +1,4 @@
- import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../common_imports.dart';
- import '../../data/models/register_model.dart';
 import '../view_model/register_cubit.dart';
 import '../view_model/register_states.dart';
 import '../widgets/account_info_step.dart';
@@ -8,135 +6,100 @@ import '../widgets/personal_info_step.dart';
 import '../widgets/register_bottom_button.dart';
 import '../widgets/register_header.dart';
 
-class RegisterView extends StatefulWidget {
+class RegisterView extends StatelessWidget {
   const RegisterView({super.key});
-
-  @override
-  State<RegisterView> createState() => _RegisterViewState();
-}
-
-class _RegisterViewState extends State<RegisterView> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-  final _ageController = TextEditingController();
-
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
-
-  String _selectedGender = 'male';
-  String _selectedDepartment = '';
-  DateTime _birthDate = DateTime.now().subtract(const Duration(days: 365 * 22));
-
-  int _currentStep = 0;
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _phoneController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    _ageController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: BlocListener<RegisterCubit, RegisterStates>(
+      body: BlocConsumer<RegisterCubit, RegisterStates>(
         listener: _handleRegisterState,
-        child: SizedBox(
+        builder: (context, state) {
+          final cubit = context.read<RegisterCubit>();
+          return SizedBox(
             height: size.height,
             child: Column(
               children: [
                 RegisterHeader(
-                  currentStep: _currentStep,
+                  currentStep: cubit.currentStep,
                   onBackPressed: () => context.go('/login'),
                 ),
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.all(20),
                     child: Form(
-                      key: _formKey,
-                      child: _currentStep == 0
-                          ? _buildPersonalInfoStep()
-                          : _buildAccountInfoStep(),
+                      key: context.read<RegisterCubit>().formKey,
+                      child: cubit.currentStep == 0
+                          ? _buildPersonalInfoStep(context)
+                          : _buildAccountInfoStep(context),
                     ),
                   ),
                 ),
                 RegisterBottomButton(
-                  currentStep: _currentStep,
-                  onPressed: _handleButtonPress,
+                  currentStep: cubit.currentStep,
+                  onPressed: () => _handleButtonPress(context),
                 ),
               ],
             ),
-          ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildPersonalInfoStep() {
+  Widget _buildPersonalInfoStep(BuildContext context) {
+    final cubit = context.watch<RegisterCubit>();
+
     return PersonalInfoStep(
-      nameController: _nameController,
-      phoneController: _phoneController,
-      ageController: _ageController,
-      selectedGender: _selectedGender,
-      onGenderChanged: (value) => setState(() => _selectedGender = value),
-      selectedDepartment: _selectedDepartment,
-      onDepartmentChanged: (value) => setState(() => _selectedDepartment = value),
-      birthDate: _birthDate,
-      onBirthDateChanged: (date) => setState(() => _birthDate = date),
+      nameController: cubit.nameController,
+      phoneController: cubit.phoneController,
+      ageController: cubit.ageController,
+      selectedGender: cubit.selectedGender,
+      onGenderChanged: cubit.updateGender,
+      selectedDepartment: cubit.selectedDepartment,
+      onDepartmentChanged: cubit.updateDepartment,
+      birthDate: cubit.birthDate,
+      onBirthDateChanged: cubit.updateBirthDate,
     );
   }
 
-  Widget _buildAccountInfoStep() {
+  Widget _buildAccountInfoStep(BuildContext context) {
+    final cubit = context.watch<RegisterCubit>();
+
     return AccountInfoStep(
-      emailController: _emailController,
-      passwordController: _passwordController,
-      confirmPasswordController: _confirmPasswordController,
-      obscurePassword: _obscurePassword,
-      onPasswordVisibilityToggle: () =>
-          setState(() => _obscurePassword = !_obscurePassword),
-      obscureConfirmPassword: _obscureConfirmPassword,
-      onConfirmPasswordVisibilityToggle: () =>
-          setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+      emailController: cubit.emailController,
+      passwordController: cubit.passwordController,
+      confirmPasswordController: cubit.confirmPasswordController,
+      obscurePassword: cubit.obscurePassword,
+      onPasswordVisibilityToggle: cubit.togglePasswordVisibility,
+      obscureConfirmPassword: cubit.obscureConfirmPassword,
+      onConfirmPasswordVisibilityToggle: cubit.toggleConfirmPasswordVisibility,
     );
   }
 
-  void _handleButtonPress() {
-    if (_currentStep == 0) {
-      if (_validateStep1()) {
-        setState(() => _currentStep = 1);
+  void _handleButtonPress(BuildContext context) {
+    final cubit = context.read<RegisterCubit>();
+
+    if (cubit.currentStep == 0) {
+      // Validate step 1
+      if (cubit.validateStep1()) {
+        cubit.goToNextStep();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('يرجى ملء جميع الحقول المطلوبة'),
+            backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
       }
     } else {
-      _submitRegister();
-    }
-  }
-
-  bool _validateStep1() {
-    return _formKey.currentState!.validate() && _selectedDepartment.isNotEmpty;
-  }
-
-  void _submitRegister() {
-    if (_formKey.currentState!.validate()) {
-      final registerData = RegisterModel(
-        name: _nameController.text.trim(),
-        email: _emailController.text.trim(),
-        phone: _phoneController.text.trim(),
-        password: _passwordController.text,
-        age: int.parse(_ageController.text.trim()),
-        department: _selectedDepartment,
-        gender: _selectedGender,
-        birthDate: _birthDate,
-      );
-      context.read<RegisterCubit>().register(registerData: registerData);
+      // Submit registration
+      cubit.submitRegister();
     }
   }
 
