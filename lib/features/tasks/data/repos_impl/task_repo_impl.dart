@@ -23,11 +23,15 @@ class TaskRepoImpl implements TaskRepository {
       query = query.where('status', isEqualTo: status);
     }
 
-    return query.orderBy('created_at', descending: true).snapshots().map(
-          (snapshot) => snapshot.docs
-              .map((doc) => TaskModel.fromMap(doc.data() as Map<String, dynamic>))
-              .toList(),
-        );
+    return query.snapshots().map(
+          (snapshot) {
+        final tasks = snapshot.docs
+            .map((doc) => TaskModel.fromMap(doc.data() as Map<String, dynamic>))
+            .toList();
+        tasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        return tasks;
+      },
+    );
   }
 
   @override
@@ -92,13 +96,16 @@ class TaskRepoImpl implements TaskRepository {
     return firestore
         .collection(FirestoreConstants.taskComments)
         .where('task_id', isEqualTo: taskId)
-        .orderBy('created_at', descending: false)
         .snapshots()
         .map(
-          (snapshot) => snapshot.docs
-              .map((doc) => TaskCommentModel.fromMap(doc.data()))
-              .toList(),
-        );
+          (snapshot) {
+        final comments = snapshot.docs
+            .map((doc) => TaskCommentModel.fromMap(doc.data()))
+            .toList();
+        comments.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+        return comments;
+      },
+    );
   }
 
   @override

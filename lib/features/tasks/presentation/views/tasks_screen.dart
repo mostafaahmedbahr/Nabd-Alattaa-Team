@@ -13,9 +13,6 @@ class TasksScreen extends StatefulWidget {
 }
 
 class _TasksScreenState extends State<TasksScreen> {
-  String? _selectedStatus;
-
-
   @override
   void initState() {
     super.initState();
@@ -28,7 +25,7 @@ class _TasksScreenState extends State<TasksScreen> {
       backgroundColor: AppColors.background,
       body: BlocBuilder<TaskCubit, TaskState>(
         builder: (context, state) {
-          var tasksCubit = context.read<TaskCubit>();
+          final cubit = context.read<TaskCubit>();
           int totalTasks = 0;
           int completedTasks = 0;
           int inProgressTasks = 0;
@@ -48,11 +45,10 @@ class _TasksScreenState extends State<TasksScreen> {
                 inProgressTasks: inProgressTasks,
               ),
               TasksFilterSection(
-                  statuses : tasksCubit.statuses,
-                selectedStatus : _selectedStatus??"",
+                statuses: cubit.statuses,
+                initialStatus: null,
               ),
-              TasksListItems(),
-
+              const TasksListItems(),
             ],
           );
         },
@@ -62,8 +58,8 @@ class _TasksScreenState extends State<TasksScreen> {
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         elevation: 4,
-        icon:   Icon(Icons.add_rounded, size: 24.sp),
-        label:   Text(
+        icon: Icon(Icons.add_rounded, size: 24.sp),
+        label: Text(
           "مهمة جديدة",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp),
         ),
@@ -71,4 +67,3 @@ class _TasksScreenState extends State<TasksScreen> {
     );
   }
 }
-

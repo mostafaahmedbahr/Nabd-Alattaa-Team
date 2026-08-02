@@ -10,7 +10,7 @@ class TasksListItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return   BlocBuilder<TaskCubit, TaskState>(
+    return BlocBuilder<TaskCubit, TaskState>(
       builder: (context, state) {
         if (state is TaskLoading) {
           return const SliverFillRemaining(
@@ -21,19 +21,23 @@ class TasksListItems extends StatelessWidget {
         }
 
         if (state is TaskError) {
-          return CustomErrorWidget(
-            message: state.message,
-            onRetry: (){
-              context.read<TaskCubit>().loadTasks();
-            },
+          return SliverFillRemaining(
+            child: CustomErrorWidget(
+              message: state.message,
+              onRetry: () {
+                context.read<TaskCubit>().loadTasks();
+              },
+            ),
           );
         }
 
         if (state is TaskLoaded) {
           if (state.tasks.isEmpty) {
-            return   EmptyStateWidget(
-              message:   "لا توجد مهام حالياً",
-              icon: Icons.hourglass_empty,
+            return SliverFillRemaining(
+              child: EmptyStateWidget(
+                message: "لا توجد مهام حالياً",
+                icon: Icons.hourglass_empty,
+              ),
             );
           }
 
@@ -41,7 +45,7 @@ class TasksListItems extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
             sliver: SliverList.separated(
               itemCount: state.tasks.length,
-              separatorBuilder: (_, _) =>   SizedBox(height: 10.h),
+              separatorBuilder: (_, _) => SizedBox(height: 10.h),
               itemBuilder: (context, index) {
                 return TaskCard(task: state.tasks[index]);
               },
