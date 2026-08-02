@@ -47,7 +47,7 @@ class AppRouter {
 
       if (isSplash || isOnboarding) return null;
       if (user == null && !isAuth) return Routes.login;
-      if (user != null && isAuth) return Routes.layoutView;
+       if (user != null && isAuth) return Routes.layoutView;
 
       return null;
     },
