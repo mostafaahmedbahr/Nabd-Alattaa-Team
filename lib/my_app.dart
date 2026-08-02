@@ -11,7 +11,7 @@ import 'features/profile/data/repos_impl/profile_repo_impl.dart';
 import 'features/profile/presentation/view_model/profile_cubit.dart';
 import 'features/register/data/repos/register_repos_impl.dart';
 import 'features/register/presentation/view_model/register_cubit.dart';
-import 'features/tasks/data/repos_impl/task_repo_impl.dart';
+import 'features/tasks/data/repos/task_repo_impl.dart';
 import 'features/tasks/presentation/view_model/task_cubit.dart';
 import 'features/users/data/repos/users_repo.dart';
 import 'features/users/presentation/view_model/users_cubit.dart';

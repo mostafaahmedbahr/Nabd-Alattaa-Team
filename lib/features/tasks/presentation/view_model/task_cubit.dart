@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../../common_imports.dart';
 import '../../data/repos/task_repo.dart';
 import '../../data/models/task_model.dart';

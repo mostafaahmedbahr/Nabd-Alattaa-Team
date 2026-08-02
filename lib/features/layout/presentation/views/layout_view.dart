@@ -15,10 +15,6 @@ class LayoutView extends StatelessWidget {
           canPop: false,
           onPopInvoked: (didPop) => cubit.onPopInvoked(didPop, context),
           child: Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              title: Text(cubit.titles[LayoutCubit.pageIndex]),
-            ),
             body: cubit.screens[LayoutCubit.pageIndex],
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: LayoutCubit.pageIndex,

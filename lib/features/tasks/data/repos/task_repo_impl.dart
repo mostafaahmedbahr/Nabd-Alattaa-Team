@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../core/constants/firestore_constants.dart';
 import '../../../../core/error/failures.dart';
-import '../repos/task_repo.dart';
+import 'task_repo.dart';
 import '../models/task_model.dart';
 import '../models/task_comment_model.dart';
 
