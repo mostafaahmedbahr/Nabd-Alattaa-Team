@@ -20,16 +20,16 @@ class _TasksScreenState extends State<TasksScreen> {
 
   final Map<String?, Color> _statusColors = {
     null: AppColors.primary,
-    'not_started': Colors.orange,
-    'in_progress': Colors.blue,
-    'completed': Colors.green,
+    'لم تبدأ': Colors.orange,
+    'جاري التنفيذ':  Colors.blue,
+    'مكتملة': Colors.green,
   };
 
   final Map<String?, String> _statusLabels = {
     null: 'عرض الكل',
-    'not_started': AppStrings.notStarted,
-    'in_progress': AppStrings.inProgress,
-    'completed': AppStrings.completed,
+    'لم تبدأ': AppStrings.notStarted,
+    'جاري التنفيذ': AppStrings.inProgress,
+    'مكتملة': AppStrings.completed,
   };
 
   @override
@@ -62,7 +62,6 @@ class _TasksScreenState extends State<TasksScreen> {
                 final color = _statusColors[status]!;
                 final label = _statusLabels[status]!;
                 final isSelected = _selectedStatus == status;
-
                 return ChoiceChip(
                   label: Text(
                     label,

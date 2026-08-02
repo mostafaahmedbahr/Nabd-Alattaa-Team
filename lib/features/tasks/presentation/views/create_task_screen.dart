@@ -26,7 +26,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
-  String _selectedPriority = 'medium';
+  String _selectedPriority = 'متوسطة';
   String _selectedAssigneeId = '';
   String _selectedAssigneeName = '';
   DateTime _dueDate = DateTime.now().add(const Duration(days: 1));
@@ -114,9 +114,9 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   labelText: AppStrings.priority,
                 ),
                 items: const [
-                  DropdownMenuItem(value: 'high', child: Text('عالية')),
-                  DropdownMenuItem(value: 'medium', child: Text('متوسطة')),
-                  DropdownMenuItem(value: 'low', child: Text('منخفضة')),
+                  DropdownMenuItem(value: 'عالية', child: Text('عالية')),
+                  DropdownMenuItem(value: 'متوسطة', child: Text('متوسطة')),
+                  DropdownMenuItem(value: 'منخفضة', child: Text('منخفضة')),
                 ],
                 onChanged: (value) {
                   setState(() {
@@ -177,7 +177,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                                 creatorId: _currentUserId,
                                 creatorName: _currentUserName,
                                 priority: _selectedPriority,
-                                status: 'not_started',
+                                status: 'لم تبدأ',
                                 dueDate: _dueDate,
                                 createdAt: DateTime.now(),
                                 updatedAt: DateTime.now(),
