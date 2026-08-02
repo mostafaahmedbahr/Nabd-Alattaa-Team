@@ -1,20 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/router/app_routes.dart';
 import '../view_model/library_cubit.dart';
 import '../view_model/library_state.dart';
 import '../widgets/library_item_card.dart';
 
-class LibraryScreen extends StatelessWidget {
+class LibraryScreen extends StatefulWidget {
   const LibraryScreen({super.key});
+
+  @override
+  State<LibraryScreen> createState() => _LibraryScreenState();
+}
+
+class _LibraryScreenState extends State<LibraryScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<LibraryCubit>().loadItems();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text(AppStrings.library)),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.push(Routes.createLibraryItem),
+        backgroundColor: AppColors.primary,
+        child: const Icon(Icons.add, color: AppColors.textWhite),
+      ),
       body: Column(
         children: [
           Padding(

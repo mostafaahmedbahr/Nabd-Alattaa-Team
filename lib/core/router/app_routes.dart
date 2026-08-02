@@ -22,6 +22,7 @@ class Routes {
   static const notifications = '/notifications';
 
   static const library = '/library';
+  static const createLibraryItem = '/create-library-item';
 
   static const chat = '/chat';
   static const chatRoom = '/chat-room';

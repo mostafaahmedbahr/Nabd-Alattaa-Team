@@ -7,6 +7,8 @@ import 'features/chat/presentation/view_model/chat_cubit.dart';
 import 'features/good_deeds/data/repos/good_deed_repo_impl.dart';
 import 'features/good_deeds/presentation/view_model/good_deed_cubit.dart';
 import 'features/home/presentation/view_model/home_cubit.dart';
+import 'features/library/data/repos_impl/library_repo_impl.dart';
+import 'features/library/presentation/view_model/library_cubit.dart';
 import 'features/login/data/repos/login_repos_impl.dart';
 import 'features/login/presentation/view_model/login_cubit.dart';
 
@@ -86,6 +88,11 @@ class NabdAlattaaApp extends StatelessWidget {
           BlocProvider(
             create: (_) => GoodDeedCubit(
               repository: GoodDeedRepoImpl(),
+            ),
+          ),
+          BlocProvider(
+            create: (_) => LibraryCubit(
+              libraryRepository: LibraryRepoImpl(firestore: di.sl()),
             ),
           ),
         ],

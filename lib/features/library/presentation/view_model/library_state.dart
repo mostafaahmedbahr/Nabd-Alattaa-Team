@@ -34,3 +34,12 @@ class LibraryError extends LibraryState {
   @override
   List<Object?> get props => [message];
 }
+
+class LibraryActionError extends LibraryState {
+  final String message;
+
+  const LibraryActionError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

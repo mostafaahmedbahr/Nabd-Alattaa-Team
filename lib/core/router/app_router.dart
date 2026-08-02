@@ -16,6 +16,7 @@ import '../../features/tasks/presentation/views/task_details_screen.dart';
 import '../../features/complaints/presentation/views/complaints_screen.dart';
 import '../../features/complaints/presentation/views/create_complaint_screen.dart';
 import '../../features/library/presentation/views/library_screen.dart';
+import '../../features/library/presentation/views/create_library_item_screen.dart';
 import '../../features/ideas/presentation/views/ideas_screen.dart';
 import '../../features/ideas/presentation/views/create_idea_screen.dart';
 import '../../features/reports/presentation/views/reports_screen.dart';
@@ -82,6 +83,10 @@ class AppRouter {
       GoRoute(
         path: Routes.library,
         builder: (_, _) => const LibraryScreen(),
+      ),
+      GoRoute(
+        path: Routes.createLibraryItem,
+        builder: (_, _) => const CreateLibraryItemScreen(),
       ),
       GoRoute(
         path: Routes.ideas,
