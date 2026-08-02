@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
 import '../../../../core/widgets/error_widget.dart';
 import '../../../../core/widgets/loading_widget.dart';
@@ -11,9 +12,19 @@ import '../view_model/good_deed_cubit.dart';
 import '../view_model/good_deed_state.dart';
 import '../widgets/good_deed_card.dart';
 
-class GoodDeedsScreen extends StatelessWidget {
+class GoodDeedsScreen extends StatefulWidget {
   const GoodDeedsScreen({super.key});
 
+  @override
+  State<GoodDeedsScreen> createState() => _GoodDeedsScreenState();
+}
+
+class _GoodDeedsScreenState extends State<GoodDeedsScreen> {
+  @override
+  void initState() {
+    context.read<GoodDeedCubit>().loadGoodDeeds();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -79,7 +90,7 @@ class GoodDeedsScreen extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            context.push('/good-deeds/create');
+            context.push(Routes.createGoodDeed);
           },
           backgroundColor: AppColors.primary,
           child: const Icon(Icons.add, color: AppColors.textWhite),

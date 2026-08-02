@@ -4,6 +4,8 @@ import 'common_imports.dart';
 import 'core/utils/service_locator.dart' as di;
 import 'features/chat/data/repos/chat_repo.dart';
 import 'features/chat/presentation/view_model/chat_cubit.dart';
+import 'features/good_deeds/data/repos/good_deed_repo_impl.dart';
+import 'features/good_deeds/presentation/view_model/good_deed_cubit.dart';
 import 'features/home/presentation/view_model/home_cubit.dart';
 import 'features/login/data/repos/login_repos_impl.dart';
 import 'features/login/presentation/view_model/login_cubit.dart';
@@ -79,6 +81,11 @@ class NabdAlattaaApp extends StatelessWidget {
           BlocProvider(
             create: (_) => ChatCubit(
               chatRepository: di.sl<ChatRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (_) => GoodDeedCubit(
+              repository: GoodDeedRepoImpl(),
             ),
           ),
         ],

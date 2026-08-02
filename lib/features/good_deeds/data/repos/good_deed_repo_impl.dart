@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/constants/firestore_constants.dart';
 import '../../../../core/error/failures.dart';
 import '../models/good_deed_model.dart';
-import '../repos/good_deed_repo.dart';
+import 'good_deed_repo.dart';
 
 class GoodDeedRepoImpl implements GoodDeedRepository {
   final FirebaseFirestore _firestore;
