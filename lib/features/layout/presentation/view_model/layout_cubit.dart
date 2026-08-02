@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:nabd_alattaa_team/features/home/presentation/views/home_screen.dart';
 import 'package:nabd_alattaa_team/features/profile/presentation/views/profile_screen.dart';
 import 'package:nabd_alattaa_team/features/tasks/presentation/views/tasks_screen.dart';
+import 'package:nabd_alattaa_team/features/chat/presentation/views/chat_list_screen.dart';
 import '../../../../common_imports.dart';
 import 'layout_states.dart';
 
@@ -14,7 +15,7 @@ class LayoutCubit extends Cubit<LayoutStates> {
     HomeScreen(),
     TasksScreen(),
     ProfileScreen(),
-    ProfileScreen(),
+    ChatListScreen(),
     ProfileScreen(),
   ];
 

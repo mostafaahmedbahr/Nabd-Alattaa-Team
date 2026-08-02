@@ -1,14 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-
-import '../../../../core/constants/firestore_constants.dart';
 
 class MessageModel extends Equatable {
   final String id;
+
+  /// Message text
   final String content;
+
+  /// Sender
   final String senderId;
   final String senderName;
+
+  /// Timestamp
   final DateTime timestamp;
-  final bool isRead;
+
+  /// Has this message been edited?
+  final bool isEdited;
+
+  /// Soft delete
+  final bool isDeleted;
+
+  /// Users who have read this message
+  final List<String> readBy;
 
   const MessageModel({
     required this.id,
@@ -16,30 +29,12 @@ class MessageModel extends Equatable {
     required this.senderId,
     required this.senderName,
     required this.timestamp,
-    this.isRead = false,
+    this.isEdited = false,
+    this.isDeleted = false,
+    this.readBy = const [],
   });
 
-  factory MessageModel.fromMap(Map<String, dynamic> map) {
-    return MessageModel(
-      id: map['id'] ?? '',
-      content: map[FirestoreConstants.messageContent] ?? '',
-      senderId: map[FirestoreConstants.messageSenderId] ?? '',
-      senderName: map[FirestoreConstants.messageSenderName] ?? '',
-      timestamp: map[FirestoreConstants.messageTimestamp]?.toDate() ?? DateTime.now(),
-      isRead: map[FirestoreConstants.messageIsRead] ?? false,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      FirestoreConstants.messageContent: content,
-      FirestoreConstants.messageSenderId: senderId,
-      FirestoreConstants.messageSenderName: senderName,
-      FirestoreConstants.messageTimestamp: timestamp,
-      FirestoreConstants.messageIsRead: isRead,
-    };
-  }
+  bool isReadBy(String userId) => readBy.contains(userId);
 
   MessageModel copyWith({
     String? id,
@@ -47,7 +42,9 @@ class MessageModel extends Equatable {
     String? senderId,
     String? senderName,
     DateTime? timestamp,
-    bool? isRead,
+    bool? isEdited,
+    bool? isDeleted,
+    List<String>? readBy,
   }) {
     return MessageModel(
       id: id ?? this.id,
@@ -55,10 +52,50 @@ class MessageModel extends Equatable {
       senderId: senderId ?? this.senderId,
       senderName: senderName ?? this.senderName,
       timestamp: timestamp ?? this.timestamp,
-      isRead: isRead ?? this.isRead,
+      isEdited: isEdited ?? this.isEdited,
+      isDeleted: isDeleted ?? this.isDeleted,
+      readBy: readBy ?? this.readBy,
     );
   }
 
+  factory MessageModel.fromJson(Map<String, dynamic> json) {
+    return MessageModel(
+      id: json['id'] ?? '',
+      content: json['content'] ?? '',
+      senderId: json['senderId'] ?? '',
+      senderName: json['senderName'] ?? '',
+      timestamp: json['timestamp'] is Timestamp
+          ? (json['timestamp'] as Timestamp).toDate()
+          : DateTime.tryParse(json['timestamp'].toString()) ??
+          DateTime.now(),
+      isEdited: json['isEdited'] ?? false,
+      isDeleted: json['isDeleted'] ?? false,
+      readBy: List<String>.from(json['readBy'] ?? const []),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'content': content,
+      'senderId': senderId,
+      'senderName': senderName,
+      'timestamp': Timestamp.fromDate(timestamp),
+      'isEdited': isEdited,
+      'isDeleted': isDeleted,
+      'readBy': readBy,
+    };
+  }
+
   @override
-  List<Object?> get props => [id, content, senderId, senderName, timestamp, isRead];
+  List<Object?> get props => [
+    id,
+    content,
+    senderId,
+    senderName,
+    timestamp,
+    isEdited,
+    isDeleted,
+    readBy,
+  ];
 }

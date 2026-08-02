@@ -6,6 +6,8 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../features/chat/data/repos/chat_repo.dart';
+import '../../features/chat/data/repos/chat_repo_impl.dart';
 import '../../features/users/data/repos/users_repo.dart';
 import '../../features/users/presentation/view_model/users_cubit.dart';
 
@@ -21,6 +23,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => FirebaseMessaging.instance);
   sl.registerLazySingleton(() => FirebaseAnalytics.instance);
   sl.registerLazySingleton(() => FirebaseCrashlytics.instance);
+
+  sl.registerLazySingleton<ChatRepository>(() => ChatRepositoryImpl(
+    firestore: sl(),
+  ));
 
   sl.registerLazySingleton<UsersRepo>(() => UsersRepo());
   sl.registerFactory(() => UsersCubit(

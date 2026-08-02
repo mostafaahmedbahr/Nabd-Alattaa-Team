@@ -1,76 +1,142 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-
-import '../../../../core/constants/firestore_constants.dart';
 
 class ChatRoomModel extends Equatable {
   final String id;
-  final String name;
-  final String type;
+
+  /// Users inside this chat
   final List<String> participants;
-  final String? lastMessage;
-  final DateTime? lastMessageTime;
-  final String createdBy;
+
+  /// User names
+  final List<String> participantNames;
+
+  /// Last message preview
+  final String lastMessage;
+
+  /// Last sender
+  final String lastSenderId;
+
+  /// Last message time
+  final DateTime lastMessageTime;
+
+  /// Number of unread messages for each user
+  final Map<String, int> unreadCounts;
+
+  /// Room creation date
   final DateTime createdAt;
 
   const ChatRoomModel({
     required this.id,
-    required this.name,
-    required this.type,
     required this.participants,
-    this.lastMessage,
-    this.lastMessageTime,
-    required this.createdBy,
+    required this.participantNames,
+    required this.lastMessage,
+    required this.lastSenderId,
+    required this.lastMessageTime,
+    required this.unreadCounts,
     required this.createdAt,
   });
 
-  factory ChatRoomModel.fromMap(Map<String, dynamic> map) {
-    return ChatRoomModel(
-      id: map['id'] ?? '',
-      name: map[FirestoreConstants.chatRoomName] ?? '',
-      type: map[FirestoreConstants.chatRoomType] ?? ChatRoomType.individual,
-      participants: List<String>.from(map[FirestoreConstants.chatRoomParticipants] ?? []),
-      lastMessage: map[FirestoreConstants.chatRoomLastMessage],
-      lastMessageTime: map[FirestoreConstants.chatRoomLastMessageTime]?.toDate(),
-      createdBy: map[FirestoreConstants.chatRoomCreatedBy] ?? '',
-      createdAt: map[FirestoreConstants.chatRoomCreatedAt]?.toDate() ?? DateTime.now(),
+  /// Returns the other user's id in a private chat.
+  String otherUserId(String currentUserId) {
+    return participants.firstWhere(
+          (id) => id != currentUserId,
+      orElse: () => '',
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      FirestoreConstants.chatRoomName: name,
-      FirestoreConstants.chatRoomType: type,
-      FirestoreConstants.chatRoomParticipants: participants,
-      FirestoreConstants.chatRoomLastMessage: lastMessage,
-      FirestoreConstants.chatRoomLastMessageTime: lastMessageTime,
-      FirestoreConstants.chatRoomCreatedBy: createdBy,
-      FirestoreConstants.chatRoomCreatedAt: createdAt,
-    };
+  /// Returns the other user's name.
+  String otherUserName(String currentUserId) {
+    final index = participants.indexWhere(
+          (id) => id != currentUserId,
+    );
+
+    if (index == -1) return '';
+
+    return participantNames[index];
+  }
+
+  /// Current user's unread count.
+  int unreadCount(String currentUserId) {
+    return unreadCounts[currentUserId] ?? 0;
   }
 
   ChatRoomModel copyWith({
     String? id,
-    String? name,
-    String? type,
     List<String>? participants,
+    List<String>? participantNames,
     String? lastMessage,
+    String? lastSenderId,
     DateTime? lastMessageTime,
-    String? createdBy,
+    Map<String, int>? unreadCounts,
     DateTime? createdAt,
   }) {
     return ChatRoomModel(
       id: id ?? this.id,
-      name: name ?? this.name,
-      type: type ?? this.type,
       participants: participants ?? this.participants,
+      participantNames: participantNames ?? this.participantNames,
       lastMessage: lastMessage ?? this.lastMessage,
+      lastSenderId: lastSenderId ?? this.lastSenderId,
       lastMessageTime: lastMessageTime ?? this.lastMessageTime,
-      createdBy: createdBy ?? this.createdBy,
+      unreadCounts: unreadCounts ?? this.unreadCounts,
       createdAt: createdAt ?? this.createdAt,
     );
   }
 
+  factory ChatRoomModel.fromJson(
+      Map<String, dynamic> json,
+      String documentId,
+      ) {
+    final unread = <String, int>{};
+
+    if (json['unreadCounts'] != null) {
+      (json['unreadCounts'] as Map<String, dynamic>).forEach(
+            (key, value) {
+          unread[key] = value as int;
+        },
+      );
+    }
+
+    return ChatRoomModel(
+      id: documentId,
+      participants: List<String>.from(
+        json['participants'] ?? const [],
+      ),
+      participantNames: List<String>.from(
+        json['participantNames'] ?? const [],
+      ),
+      lastMessage: json['lastMessage'] ?? '',
+      lastSenderId: json['lastSenderId'] ?? '',
+      lastMessageTime: json['lastMessageTime'] is Timestamp
+          ? (json['lastMessageTime'] as Timestamp).toDate()
+          : DateTime.now(),
+      unreadCounts: unread,
+      createdAt: json['createdAt'] is Timestamp
+          ? (json['createdAt'] as Timestamp).toDate()
+          : DateTime.now(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'participants': participants,
+      'participantNames': participantNames,
+      'lastMessage': lastMessage,
+      'lastSenderId': lastSenderId,
+      'lastMessageTime': Timestamp.fromDate(lastMessageTime),
+      'unreadCounts': unreadCounts,
+      'createdAt': Timestamp.fromDate(createdAt),
+    };
+  }
+
   @override
-  List<Object?> get props => [id, name, type, participants, lastMessage, lastMessageTime, createdBy, createdAt];
+  List<Object?> get props => [
+    id,
+    participants,
+    participantNames,
+    lastMessage,
+    lastSenderId,
+    lastMessageTime,
+    unreadCounts,
+    createdAt,
+  ];
 }

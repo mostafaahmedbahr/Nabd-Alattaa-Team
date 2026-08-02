@@ -39,9 +39,9 @@ class UserModel {
     required this.age,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
+  factory UserModel.fromJson(Map<String, dynamic> json, [String? id]) {
     return UserModel(
-      id: json['user_id'] as String?,
+      id: id ?? json['user_id'] as String?,
       name: json['user_name'] ?? '',
       email: json['user_email'] ?? '',
       phone: json['user_phone'] ?? '',

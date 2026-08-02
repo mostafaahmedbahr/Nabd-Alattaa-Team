@@ -2,6 +2,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nabd_alattaa_team/features/layout/presentation/view_model/layout_cubit.dart';
 import 'common_imports.dart';
 import 'core/utils/service_locator.dart' as di;
+import 'features/chat/data/repos/chat_repo.dart';
+import 'features/chat/presentation/view_model/chat_cubit.dart';
 import 'features/home/presentation/view_model/home_cubit.dart';
 import 'features/login/data/repos/login_repos_impl.dart';
 import 'features/login/presentation/view_model/login_cubit.dart';
@@ -73,6 +75,11 @@ class NabdAlattaaApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => HomeCubit(),
+          ),
+          BlocProvider(
+            create: (_) => ChatCubit(
+              repository: di.sl<ChatRepository>(),
+            ),
           ),
         ],
         child: MaterialApp.router(

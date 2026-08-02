@@ -103,10 +103,13 @@ class AppRouter {
       ),
       GoRoute(
         path: '${Routes.chat}/:roomId',
-        builder: (context, state) => ChatRoomScreen(
-          chatRoomId: state.pathParameters['roomId']!,
-          chatRoomName: '',
-        ),
+        builder: (context, state) {
+          final roomName = state.extra as String? ?? '';
+          return ChatRoomScreen(
+            chatRoomId: state.pathParameters['roomId']!,
+            chatRoomName: roomName,
+          );
+        },
       ),
 
       GoRoute(
