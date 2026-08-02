@@ -22,6 +22,7 @@ class HomeCubit extends Cubit<HomeStates> {
   }
 
   Future<void> loadHomeData(String userId) async {
+    if (state is HomeLoaded) return;
     emit(HomeLoading());
     try {
       final userDoc = await _firestore

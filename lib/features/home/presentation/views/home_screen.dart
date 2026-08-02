@@ -1,16 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:nabd_alattaa_team/features/tasks/presentation/views/tasks_screen.dart';
-
-import '../../../../core/router/app_routes.dart';
 import '../view_model/home_cubit.dart';
-import '../view_model/home_states.dart';
 import '../widgets/welcome_section.dart';
 import '../widgets/quick_actions_grid.dart';
-import '../widgets/announcements_section.dart';
-import '../widgets/tasks_section.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

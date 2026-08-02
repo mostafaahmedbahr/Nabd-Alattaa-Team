@@ -9,6 +9,16 @@ class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit(this._profileRepo) : super(const ProfileInitial());
 
   Future<void> loadProfile(String userId) async {
+    if (state is ProfileLoaded) return;
+    emit(const ProfileLoading());
+    final result = await _profileRepo.getProfile(userId);
+    result.fold(
+      (failure) => emit(ProfileError(message: failure.message)),
+      (profile) => emit(ProfileLoaded(profile: profile)),
+    );
+  }
+
+  Future<void> refreshProfile(String userId) async {
     emit(const ProfileLoading());
     final result = await _profileRepo.getProfile(userId);
     result.fold(

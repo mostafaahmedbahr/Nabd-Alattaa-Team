@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/constants/firestore_constants.dart';
 import '../../../../core/error/failures.dart';
 import '../models/user_profile_model.dart';
-import '../repos/profile_repo.dart';
+import 'profile_repo.dart';
 
 class ProfileRepoImpl implements ProfileRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
