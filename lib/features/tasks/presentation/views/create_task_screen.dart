@@ -1,19 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:uuid/uuid.dart';
-
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
-import '../../../../core/widgets/custom_button.dart';
-import '../../../../core/widgets/custom_text_field.dart';
+import '../../../../common_imports.dart';
 import '../../../users/data/models/user_model.dart';
 import '../../../users/presentation/widgets/user_search_dropdown.dart';
-import '../../data/models/task_model.dart';
 import '../view_model/task_cubit.dart';
 import '../view_model/task_state.dart';
+import '../widgets/create_task_widgets/create_task_app_bar_header.dart';
+import '../widgets/create_task_widgets/date_card.dart';
+import '../widgets/create_task_widgets/priority_selector.dart';
+import '../widgets/create_task_widgets/section_header.dart' show SectionHeader;
+import '../widgets/create_task_widgets/submit_button.dart';
 
 class CreateTaskScreen extends StatefulWidget {
   const CreateTaskScreen({super.key});
@@ -23,176 +19,132 @@ class CreateTaskScreen extends StatefulWidget {
 }
 
 class _CreateTaskScreenState extends State<CreateTaskScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  String _selectedPriority = 'متوسطة';
-  String _selectedAssigneeId = '';
-  String _selectedAssigneeName = '';
-  DateTime _dueDate = DateTime.now().add(const Duration(days: 1));
-  String _currentUserName = '';
-  String _currentUserId = '';
-
   @override
   void initState() {
     super.initState();
-    _loadCurrentUser();
-  }
-
-  void _loadCurrentUser() {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      _currentUserId = user.uid;
-      // Fetch user name from Firestore
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get()
-          .then((doc) {
-        if (doc.exists) {
-          setState(() {
-            _currentUserName = doc.data()?['user_name'] ?? '';
-          });
-        }
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _descriptionController.dispose();
-    super.dispose();
+    context.read<TaskCubit>().loadCurrentUser();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(AppStrings.createTask)),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              CustomTextField(
-                controller: _titleController,
-                labelText: AppStrings.taskTitle,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'عنوان المهمة مطلوب';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              CustomTextField(
-                controller: _descriptionController,
-                labelText: AppStrings.taskDescription,
-                maxLines: 3,
-              ),
-              const SizedBox(height: 16),
-
-              // Assignee Dropdown
-              UserSearchDropdown(
-                selectedUserId: _selectedAssigneeId,
-                selectedUserName: _selectedAssigneeName,
-                onUserSelected: (UserModel user) {
-                  setState(() {
-                    _selectedAssigneeId = user.id ?? '';
-                    _selectedAssigneeName = user.name;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Priority Dropdown
-              DropdownButtonFormField<String>(
-                value: _selectedPriority,
-                decoration: const InputDecoration(
-                  labelText: AppStrings.priority,
-                ),
-                items: const [
-                  DropdownMenuItem(value: 'عالية', child: Text('عالية')),
-                  DropdownMenuItem(value: 'متوسطة', child: Text('متوسطة')),
-                  DropdownMenuItem(value: 'منخفضة', child: Text('منخفضة')),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _selectedPriority = value!;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Due Date
-              ListTile(
-                title: const Text(AppStrings.dueDate),
-                subtitle: Text(
-                  '${_dueDate.day}/${_dueDate.month}/${_dueDate.year}',
-                ),
-                trailing: const Icon(Icons.calendar_today),
-                onTap: () async {
-                  final date = await showDatePicker(
-                    context: context,
-                    initialDate: _dueDate,
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime.now().add(const Duration(days: 365)),
-                  );
-                  if (date != null) {
-                    setState(() {
-                      _dueDate = date;
-                    });
-                  }
-                },
-              ),
-              const SizedBox(height: 24),
-
-              BlocConsumer<TaskCubit, TaskState>(
-                listener: (context, state) {
-                  if (state is TaskLoaded) {
-                    context.pop();
-                  } else if (state is TaskError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(state.message)),
-                    );
-                  }
-                },
-                builder: (context, state) {
-                  final isLoading = state is TaskCreating;
-                  return CustomButton(
-                    text: AppStrings.save,
-                    isLoading: isLoading,
-                    onPressed: isLoading
-                        ? null
-                        : () {
-                            if (_formKey.currentState!.validate()) {
-                              final task = TaskModel(
-                                id: const Uuid().v4(),
-                                title: _titleController.text,
-                                description: _descriptionController.text,
-                                assigneeId: _selectedAssigneeId,
-                                assigneeName: _selectedAssigneeName,
-                                creatorId: _currentUserId,
-                                creatorName: _currentUserName,
-                                priority: _selectedPriority,
-                                status: 'لم تبدأ',
-                                dueDate: _dueDate,
-                                createdAt: DateTime.now(),
-                                updatedAt: DateTime.now(),
-                              );
-
-                              context.read<TaskCubit>().createTask(task);
+      backgroundColor: AppColors.background,
+      body: BlocConsumer<TaskCubit, TaskState>(
+        listener: (context, state) {
+          if (state is TaskLoaded) {
+            context.pop();
+          } else if (state is TaskError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+        },
+        builder: (context, state) {
+          var taskCubit = context.read<TaskCubit>();
+          final isLoading = state is TaskCreating;
+          return CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              CreateTaskAppBarHeader(),
+              SliverToBoxAdapter(
+                child: Form(
+                  key: taskCubit.formKey,
+                  child: Padding(
+                    padding:   EdgeInsets.all(16.r),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SectionHeader(
+                          title: "بيانات المهمة",
+                          icon: Icons.edit_note_rounded,
+                        ),
+                          SizedBox(height: 14.h),
+                        _buildTextField(
+                          controller: taskCubit.titleController,
+                          label: AppStrings.taskTitle,
+                          icon: Icons.title_rounded,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'عنوان المهمة مطلوب';
                             }
+                            return null;
                           },
-                  );
-                },
+                        ),
+                          SizedBox(height: 12.h),
+                        _buildTextField(
+                          controller: taskCubit.descriptionController,
+                          label: AppStrings.taskDescription,
+                          icon: Icons.description_outlined,
+                          maxLines: 3,
+                        ),
+                          SizedBox(height: 24.h),
+                        SectionHeader(
+                          title: "المسؤول والموعد",
+                          icon: Icons.person_pin_circle_outlined,
+                        ),
+                        SizedBox(height: 24.h),
+                        UserSearchDropdown(
+                          selectedUserId: taskCubit.selectedAssigneeId,
+                          selectedUserName: taskCubit.selectedAssigneeName,
+                          onUserSelected: (UserModel user) {
+                            setState(() {
+                              taskCubit.selectedAssigneeId = user.id ?? '';
+                              taskCubit.selectedAssigneeName = user.name;
+                            });
+                          },
+                        ),
+                        SizedBox(height: 12.h),
+                        DateCard(),
+                        SizedBox(height: 24.h),
+                        SectionHeader(
+                          title: "الأولوية",
+                          icon: Icons.flag_outlined,
+                        ),
+                          SizedBox(height: 14.h),
+                        PrioritySelector(
+                          selectedPriority: taskCubit.selectedPriority,
+                        ),
+                          SizedBox(height: 32.h),
+                        SubmitButton(isLoading: isLoading,),
+                          SizedBox(height: 32.h),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ],
-          ),
-        ),
+          );
+        },
       ),
     );
   }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    int maxLines = 1,
+    String? Function(String?)? validator,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.grey200),
+      ),
+      child: CustomTextField(
+        controller: controller,
+        labelText: label,
+        prefixIcon: icon,
+        maxLines: maxLines,
+        validator: validator,
+      ),
+    );
+  }
+
+
+
+
 }
+
+

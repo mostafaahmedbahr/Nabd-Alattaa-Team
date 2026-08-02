@@ -1,4 +1,8 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../common_imports.dart';
 import '../../data/repos/task_repo.dart';
 import '../../data/models/task_model.dart';
@@ -28,7 +32,7 @@ class TaskCubit extends Cubit<TaskState> {
   }
 
   Future<void> createTask(TaskModel task) async {
-    emit(TaskCreating());
+    emit(TaskCreated());
     final result = await taskRepository.createTask(task);
     result.fold(
       (failure) => emit(TaskError(message: failure.message)),
@@ -95,5 +99,40 @@ class TaskCubit extends Cubit<TaskState> {
     {'key': 'جاري التنفيذ', 'label': AppStrings.inProgress, 'icon': Icons.play_circle_fill_rounded, 'color': AppColors.taskInProgress},
     {'key': 'مكتملة', 'label': AppStrings.completed, 'icon': Icons.check_circle_rounded, 'color': AppColors.taskCompleted},
   ];
+
+
+
+  /// create task
+  final formKey = GlobalKey<FormState>();
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
+  String selectedPriority = 'متوسطة';
+  String selectedAssigneeId = '';
+  String selectedAssigneeName = '';
+  DateTime dueDate = DateTime.now().add(const Duration(days: 1));
+  String currentUserName = '';
+  String currentUserId = '';
+
+  void loadCurrentUser() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      currentUserId = user.uid;
+      FirebaseFirestore.instance.collection('users').doc(user.uid).get().then((doc) {
+        if (doc.exists) {
+            currentUserName = doc.data()?['user_name'] ?? '';
+            emit(GetTheCurrentUserSuccessState());
+        }
+      });
+    }
+  }
+
+
+  @override
+  Future<void> close() {
+    titleController.dispose();
+    descriptionController.dispose();
+
+    return super.close();
+  }
 
 }
