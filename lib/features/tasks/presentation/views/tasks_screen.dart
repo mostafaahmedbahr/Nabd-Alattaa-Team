@@ -1,12 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
+import '../../../../common_imports.dart';
 import '../view_model/task_cubit.dart';
 import '../view_model/task_state.dart';
-import '../widgets/task_card.dart';
+import '../widgets/tasks_view_widgets/tasks_app_bar_header.dart';
+import '../widgets/tasks_view_widgets/tasks_filter_section.dart';
+import '../widgets/tasks_view_widgets/tasks_list_items.dart';
 
 class TasksScreen extends StatefulWidget {
   const TasksScreen({super.key});
@@ -18,19 +15,6 @@ class TasksScreen extends StatefulWidget {
 class _TasksScreenState extends State<TasksScreen> {
   String? _selectedStatus;
 
-  final Map<String?, Color> _statusColors = {
-    null: AppColors.primary,
-    'لم تبدأ': Colors.orange,
-    'جاري التنفيذ':  Colors.blue,
-    'مكتملة': Colors.green,
-  };
-
-  final Map<String?, String> _statusLabels = {
-    null: 'عرض الكل',
-    'لم تبدأ': AppStrings.notStarted,
-    'جاري التنفيذ': AppStrings.inProgress,
-    'مكتملة': AppStrings.completed,
-  };
 
   @override
   void initState() {
@@ -41,82 +25,50 @@ class _TasksScreenState extends State<TasksScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(AppStrings.tasks)),
-      floatingActionButton: FloatingActionButton(
+      backgroundColor: AppColors.background,
+      body: BlocBuilder<TaskCubit, TaskState>(
+        builder: (context, state) {
+          var tasksCubit = context.read<TaskCubit>();
+          int totalTasks = 0;
+          int completedTasks = 0;
+          int inProgressTasks = 0;
+
+          if (state is TaskLoaded) {
+            totalTasks = state.tasks.length;
+            completedTasks = state.tasks.where((t) => t.status == 'مكتملة').length;
+            inProgressTasks = state.tasks.where((t) => t.status == 'جاري التنفيذ').length;
+          }
+
+          return CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              TasksAppBarHeader(
+                totalTasks: totalTasks,
+                completedTasks: completedTasks,
+                inProgressTasks: inProgressTasks,
+              ),
+              TasksFilterSection(
+                  statuses : tasksCubit.statuses,
+                selectedStatus : _selectedStatus??"",
+              ),
+              TasksListItems(),
+
+            ],
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push('/create-task'),
         backgroundColor: AppColors.primary,
-        child: const Icon(Icons.add, color: AppColors.textWhite),
-      ),
-      body: Column(
-        children: [
-          // Filter Chips
-          SizedBox(
-            height: 60,
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              scrollDirection: Axis.horizontal,
-              itemCount: _statusColors.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 8),
-              itemBuilder: (context, index) {
-                final status = _statusColors.keys.elementAt(index);
-                final color = _statusColors[status]!;
-                final label = _statusLabels[status]!;
-                final isSelected = _selectedStatus == status;
-                return ChoiceChip(
-                  label: Text(
-                    label,
-                    style: TextStyle(
-                      color: isSelected ? Colors.white : color,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  selected: isSelected,
-                  selectedColor: color,
-                  backgroundColor: color.withValues(alpha: 0.1),
-                  side: BorderSide(color: color),
-                  onSelected: (_) {
-                    setState(() => _selectedStatus = status);
-                    context.read<TaskCubit>().loadTasks(status: status);
-                  },
-                );
-              },
-            ),
-          ),
-
-          // Tasks List
-          Expanded(
-            child: BlocBuilder<TaskCubit, TaskState>(
-              builder: (context, state) {
-                if (state is TaskLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (state is TaskError) {
-                  return Center(child: Text(state.message));
-                }
-
-                if (state is TaskLoaded) {
-                  if (state.tasks.isEmpty) {
-                    return const Center(
-                      child: Text(AppStrings.noData),
-                    );
-                  }
-
-                  return ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: state.tasks.length,
-                    itemBuilder: (context, index) {
-                      return TaskCard(task: state.tasks[index]);
-                    },
-                  );
-                }
-
-                return const SizedBox.shrink();
-              },
-            ),
-          ),
-        ],
+        foregroundColor: Colors.white,
+        elevation: 4,
+        icon:   Icon(Icons.add_rounded, size: 24.sp),
+        label:   Text(
+          "مهمة جديدة",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp),
+        ),
       ),
     );
   }
 }
+

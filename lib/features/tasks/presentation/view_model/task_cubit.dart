@@ -1,6 +1,5 @@
 import 'dart:async';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../../../../common_imports.dart';
 import '../../data/repos/task_repo.dart';
 import '../../data/models/task_model.dart';
 import '../../data/models/task_comment_model.dart';
@@ -89,4 +88,12 @@ class TaskCubit extends Cubit<TaskState> {
   //   _commentsSubscription?.cancel();
   //   return super.close();
   // }
+
+  final List<Map<String, dynamic>> statuses = [
+    {'key': null, 'label': 'الكل', 'icon': Icons.grid_view_rounded, 'color': AppColors.primary},
+    {'key': 'لم تبدأ', 'label': AppStrings.notStarted, 'icon': Icons.hourglass_empty_rounded, 'color': AppColors.taskNotStarted},
+    {'key': 'جاري التنفيذ', 'label': AppStrings.inProgress, 'icon': Icons.play_circle_fill_rounded, 'color': AppColors.taskInProgress},
+    {'key': 'مكتملة', 'label': AppStrings.completed, 'icon': Icons.check_circle_rounded, 'color': AppColors.taskCompleted},
+  ];
+
 }
