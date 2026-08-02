@@ -31,11 +31,27 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
       backgroundColor: AppColors.background,
       body: BlocConsumer<TaskCubit, TaskState>(
         listener: (context, state) {
-          if (state is TaskLoaded) {
+          if (state is TaskCreated) {
+            context.read<TaskCubit>().resetCreateForm();
+            context.read<TaskCubit>().loadTasks();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: const Text("تم إنشاء المهمة بنجاح"),
+                backgroundColor: Colors.green,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                duration: const Duration(seconds: 2),
+              ),
+            );
             context.pop();
           } else if (state is TaskError) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              ),
             );
           }
         },

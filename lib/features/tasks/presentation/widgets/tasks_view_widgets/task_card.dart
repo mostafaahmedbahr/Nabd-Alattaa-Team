@@ -144,15 +144,11 @@ class TaskCard extends StatelessWidget {
 
   Color _statusColor(String status) {
     switch (status.toLowerCase()) {
-      case "completed":
       case "مكتملة":
         return AppColors.success;
-      case "in_progress":
       case "جاري التنفيذ":
         return AppColors.taskInProgress;
-      case "not_started":
       case "لم تبدأ":
-      case "لم يبدأ":
         return AppColors.taskNotStarted;
       default:
         return AppColors.primary;

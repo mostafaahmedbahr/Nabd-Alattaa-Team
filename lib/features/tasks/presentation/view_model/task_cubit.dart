@@ -15,7 +15,6 @@ class TaskCubit extends Cubit<TaskState> {
   TaskCubit({required this.taskRepository}) : super(TaskInitial());
 
   void loadTasks({String? assigneeId, String? status}) {
-    emit(TaskLoading());
     _tasksSubscription?.cancel();
     _tasksSubscription = taskRepository
         .getTasks(assigneeId: assigneeId, status: status)
@@ -124,6 +123,14 @@ class TaskCubit extends Cubit<TaskState> {
     }
   }
 
+  void resetCreateForm() {
+    titleController.clear();
+    descriptionController.clear();
+    selectedPriority = 'متوسطة';
+    selectedAssigneeId = '';
+    selectedAssigneeName = '';
+    dueDate = DateTime.now().add(const Duration(days: 1));
+  }
 
   @override
   Future<void> close() {

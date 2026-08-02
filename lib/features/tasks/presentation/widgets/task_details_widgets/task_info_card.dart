@@ -112,7 +112,7 @@ class TaskInfoCard extends StatelessWidget {
         return Colors.blue;
       case "not_started":
       case "لم تبدأ":
-      case "لم يبدأ":
+      case "لم تبدأ":
         return Colors.grey;
       default:
         return AppColors.primary;

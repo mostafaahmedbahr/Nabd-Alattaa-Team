@@ -43,7 +43,7 @@ class AppStrings {
   static const String medium = 'متوسطة';
   static const String low = 'منخفضة';
   static const String dueDate = 'موعد التسليم';
-  static const String notStarted = 'لم يبدأ';
+  static const String notStarted = 'لم تبدأ';
   static const String inProgress = 'جاري التنفيذ';
   static const String inReview = 'قيد المراجعة';
   static const String completed = 'مكتملة';

@@ -55,7 +55,7 @@ class _TasksFilterSectionState extends State<TasksFilterSection> {
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: widget.statuses.length,
-            separatorBuilder: (_, __) => SizedBox(width: 8.w),
+            separatorBuilder: (_, _) => SizedBox(width: 8.w),
             itemBuilder: (context, index) {
               final status = widget.statuses[index];
               final statusKey = status['key'] as String?;

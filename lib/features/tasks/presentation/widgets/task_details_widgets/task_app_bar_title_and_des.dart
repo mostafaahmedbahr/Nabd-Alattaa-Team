@@ -113,7 +113,7 @@ Color _statusColor(String status) {
     case "جاري التنفيذ":
       return Colors.blue;
     case "لم تبدأ":
-    case "لم يبدأ":
+    case "لم تبدأ":
       return Colors.grey;
     default:
       return AppColors.primary;

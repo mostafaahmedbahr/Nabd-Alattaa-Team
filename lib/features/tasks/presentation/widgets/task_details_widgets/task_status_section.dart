@@ -21,7 +21,7 @@ class TaskStatusSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final statuses = [
       (
-        "لم يبدأ",
+        "لم تبدأ",
         Icons.hourglass_empty_rounded,
         AppColors.taskNotStarted,
       ),

@@ -54,7 +54,12 @@ class _TasksScreenState extends State<TasksScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => context.push('/create-task'),
+        onPressed: () async {
+          await context.push('/create-task');
+          if (mounted) {
+            context.read<TaskCubit>().loadTasks();
+          }
+        },
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         elevation: 4,

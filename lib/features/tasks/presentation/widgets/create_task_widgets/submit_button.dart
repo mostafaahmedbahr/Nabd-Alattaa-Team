@@ -30,7 +30,7 @@ class SubmitButton extends StatelessWidget {
                   creatorId: taskCubit.currentUserId,
                   creatorName: taskCubit.currentUserName,
                   priority: taskCubit.selectedPriority,
-                  status: 'لم يبدأ',
+                  status: 'لم تبدأ',
                   dueDate: taskCubit.dueDate,
                   createdAt: DateTime.now(),
                   updatedAt: DateTime.now(),
