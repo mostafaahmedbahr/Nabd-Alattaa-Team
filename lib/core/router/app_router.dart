@@ -103,10 +103,10 @@ class AppRouter {
         path: Routes.notifications,
         builder: (_, _) => const NotificationsScreen(),
       ),
-      GoRoute(
-        path: Routes.chat,
-        builder: (_, _) => const ChatListScreen(),
-      ),
+      // GoRoute(
+      //   path: Routes.chat,
+      //   builder: (_, _) => const ChatListScreen(),
+      // ),
       GoRoute(
         path: '${Routes.chatRoom}/:roomId',
         builder: (context, state) {

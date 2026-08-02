@@ -8,6 +8,7 @@ class MessageBubble extends StatelessWidget {
   final MessageModel message;
   final bool isMe;
   final bool showSenderName;
+  final String? senderName;
   final VoidCallback? onLongPress;
 
   const MessageBubble({
@@ -15,6 +16,7 @@ class MessageBubble extends StatelessWidget {
     required this.message,
     required this.isMe,
     this.showSenderName = false,
+    this.senderName,
     this.onLongPress,
   });
 
@@ -62,7 +64,7 @@ class MessageBubble extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 4),
                   child: Text(
-                    message.senderName,
+                    senderName ?? message.senderName,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,

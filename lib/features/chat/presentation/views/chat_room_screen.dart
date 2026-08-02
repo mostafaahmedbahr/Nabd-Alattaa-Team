@@ -39,8 +39,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   @override
   void initState() {
     super.initState();
-    print(widget.senderName);
-    print("ddddddd");
     context.read<ChatCubit>().loadMessages(roomId: widget.roomId);
     context.read<ChatCubit>().markMessagesAsRead(
           roomId: widget.roomId,
@@ -324,12 +322,20 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       itemBuilder: (context, index) {
                         final message = state.messages[index];
                         final isMe = message.senderId == widget.senderId;
-                        final showSenderName = !isMe;
+                        final previousMessage = index > 0
+                            ? state.messages[index - 1]
+                            : null;
+                        final showSenderName = !isMe &&
+                            (previousMessage?.senderId != message.senderId);
+                        final senderName = message.senderName.isNotEmpty
+                            ? message.senderName
+                            : widget.roomName;
 
                         return MessageBubble(
                           message: message,
                           isMe: isMe,
                           showSenderName: showSenderName,
+                          senderName: senderName,
                           onLongPress: () => _showMessageOptions(message),
                         );
                       },

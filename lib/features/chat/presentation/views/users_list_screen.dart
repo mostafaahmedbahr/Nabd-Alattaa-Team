@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/constants/firestore_constants.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/widgets/error_widget.dart';
 import '../../../../core/widgets/loading_widget.dart';
@@ -173,9 +175,18 @@ class _UserTile extends StatelessWidget {
 
     return ListTile(
       onTap: () async {
+        final currentUserDoc = await FirebaseFirestore.instance
+            .collection(FirestoreConstants.users)
+            .doc(currentUserId)
+            .get();
+        final currentUserName = currentUserDoc.data()?[
+                    FirestoreConstants.userName]
+                as String? ??
+            'مستخدم';
+
         final chatRoom = await context.read<ChatCubit>().getOrCreatePrivateChat(
               currentUserId: currentUserId,
-              currentUserName: FirebaseAuth.instance.currentUser?.displayName ?? 'مستخدم',
+              currentUserName: currentUserName,
               otherUserId: user.id ?? '',
               otherUserName: user.name,
             );
@@ -185,8 +196,8 @@ class _UserTile extends StatelessWidget {
             '/chat-room/${chatRoom.id}',
             extra: {
               'roomName': user.name,
-              'senderName': user.name,
-              'senderId': user.id,
+              'senderName': currentUserName,
+              'senderId': currentUserId,
             },
           );
         }
