@@ -244,6 +244,10 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 listener: (context, state) {
                   if (state is MessagesLoaded) {
                     _scrollToBottom();
+                    context.read<ChatCubit>().markMessagesAsRead(
+                          roomId: widget.roomId,
+                          currentUserId: widget.senderId,
+                        );
                   } else if (state is ChatError) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
