@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 
 import '../../data/models/chat_room_model.dart';
 import '../../data/models/message_model.dart';
-import '../../../users/data/models/user_model.dart';
 
 abstract class ChatState extends Equatable {
   const ChatState();
@@ -35,28 +34,6 @@ class MessagesLoaded extends ChatState {
 
   @override
   List<Object?> get props => [messages];
-}
-
-class UsersLoaded extends ChatState {
-  final List<UserModel> users;
-
-  const UsersLoaded({required this.users});
-
-  @override
-  List<Object?> get props => [users];
-}
-
-class ChatRoomCreated extends ChatState {
-  final ChatRoomModel chatRoom;
-
-  const ChatRoomCreated({required this.chatRoom});
-
-  @override
-  List<Object?> get props => [chatRoom];
-}
-
-class ChatActionSuccess extends ChatState {
-  const ChatActionSuccess();
 }
 
 class ChatError extends ChatState {

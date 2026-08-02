@@ -3,6 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nabd_alattaa_team/features/layout/presentation/views/layout_view.dart';
 import 'package:nabd_alattaa_team/features/tasks/presentation/views/tasks_screen.dart';
+import '../../features/chat/presentation/views/chat_list_screen.dart';
+import '../../features/chat/presentation/views/chat_room_screen.dart';
+import '../../features/chat/presentation/views/users_list_screen.dart';
 import 'app_routes.dart';
 import '../../features/register/presentation/views/register_view.dart';
 import '../../features/splash/presentation/views/splash_view.dart';
@@ -18,7 +21,6 @@ import '../../features/ideas/presentation/views/create_idea_screen.dart';
 import '../../features/reports/presentation/views/reports_screen.dart';
 import '../../features/reports/presentation/views/create_report_screen.dart';
 import '../../features/notifications/presentation/views/notifications_screen.dart';
-import '../../features/chat/presentation/views/chat_room_screen.dart';
 import '../../features/good_deeds/presentation/views/good_deeds_screen.dart';
 import '../../features/good_deeds/presentation/views/create_good_deed_screen.dart';
 import '../../features/meals/presentation/views/meals_screen.dart';
@@ -102,14 +104,24 @@ class AppRouter {
         builder: (_, _) => const NotificationsScreen(),
       ),
       GoRoute(
-        path: '${Routes.chat}/:roomId',
+        path: Routes.chat,
+        builder: (_, _) => const ChatListScreen(),
+      ),
+      GoRoute(
+        path: '${Routes.chatRoom}/:roomId',
         builder: (context, state) {
-          final roomName = state.extra as String? ?? '';
+          final roomId = state.pathParameters['roomId']!;
+          final extras = state.extra as Map<String, dynamic>? ?? {};
+          final roomName = extras['roomName'] as String? ?? '';
           return ChatRoomScreen(
-            chatRoomId: state.pathParameters['roomId']!,
-            chatRoomName: roomName,
+            roomId: roomId,
+            roomName: roomName,
           );
         },
+      ),
+      GoRoute(
+        path: Routes.usersList,
+        builder: (_, _) => const UsersListScreen(),
       ),
 
       GoRoute(

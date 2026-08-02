@@ -211,7 +211,7 @@ class ChatRepositoryImpl implements ChatRepository {
 
       final messageRef = roomRef
           .collection('messages')
-          .doc(message.id);
+          .doc();
 
       await firestore.runTransaction((transaction) async {
         final roomSnapshot = await transaction.get(roomRef);
@@ -239,7 +239,10 @@ class ChatRepositoryImpl implements ChatRepository {
 
         transaction.set(
           messageRef,
-          message.toJson(),
+          {
+            ...message.toJson(),
+            'id': messageRef.id,
+          },
         );
 
         transaction.update(

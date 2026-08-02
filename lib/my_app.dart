@@ -78,7 +78,7 @@ class NabdAlattaaApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => ChatCubit(
-              repository: di.sl<ChatRepository>(),
+              chatRepository: di.sl<ChatRepository>(),
             ),
           ),
         ],

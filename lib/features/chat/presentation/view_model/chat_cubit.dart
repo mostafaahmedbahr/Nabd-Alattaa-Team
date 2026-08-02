@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../data/models/chat_room_model.dart';
 import '../../data/models/message_model.dart';
 import '../../data/repos/chat_repo.dart';
 import 'chat_state.dart';
@@ -14,20 +15,7 @@ class ChatCubit extends Cubit<ChatState> {
   ChatCubit({required this.chatRepository}) : super(const ChatInitial());
 
   // =========================================================
-  // Users
-  // =========================================================
-
-  Future<void> getUsers({required String currentUserId}) async {
-    emit(const ChatLoading());
-    final result = await chatRepository.getUsers(currentUserId: currentUserId);
-    result.fold(
-      (failure) => emit(ChatError(message: failure.message)),
-      (users) => emit(UsersLoaded(users: users)),
-    );
-  }
-
-  // =========================================================
-  // Chat Rooms (Stream)
+  // Chat Rooms (Stream) - WhatsApp style list
   // =========================================================
 
   void loadChatRooms({required String currentUserId}) {
@@ -48,25 +36,27 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   // =========================================================
-  // Create / Get Private Chat
+  // Create / Get Private Chat (no loading emit to avoid breaking list)
   // =========================================================
 
-  Future<void> getOrCreatePrivateChat({
+  Future<ChatRoomModel?> getOrCreatePrivateChat({
     required String currentUserId,
     required String currentUserName,
     required String otherUserId,
     required String otherUserName,
   }) async {
-    emit(const ChatLoading());
     final result = await chatRepository.getOrCreatePrivateChat(
       currentUserId: currentUserId,
       currentUserName: currentUserName,
       otherUserId: otherUserId,
       otherUserName: otherUserName,
     );
-    result.fold(
-      (failure) => emit(ChatError(message: failure.message)),
-      (chatRoom) => emit(ChatRoomCreated(chatRoom: chatRoom)),
+    return result.fold(
+      (failure) {
+        emit(ChatError(message: failure.message));
+        return null;
+      },
+      (chatRoom) => chatRoom,
     );
   }
 
@@ -78,7 +68,7 @@ class ChatCubit extends Cubit<ChatState> {
     final result = await chatRepository.deleteChatRoom(roomId: roomId);
     result.fold(
       (failure) => emit(ChatError(message: failure.message)),
-      (_) => emit(const ChatActionSuccess()),
+      (_) {},
     );
   }
 
@@ -178,21 +168,12 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   // =========================================================
-  // Unread Count
+  // Stop messages stream (when leaving chat room)
   // =========================================================
 
-  Future<int> getUnreadCount({
-    required String roomId,
-    required String currentUserId,
-  }) async {
-    final result = await chatRepository.getUnreadCount(
-      roomId: roomId,
-      currentUserId: currentUserId,
-    );
-    return result.fold(
-      (failure) => 0,
-      (count) => count,
-    );
+  void stopMessagesStream() {
+    _messagesSubscription?.cancel();
+    _messagesSubscription = null;
   }
 
   @override

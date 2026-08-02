@@ -24,6 +24,8 @@ class Routes {
   static const library = '/library';
 
   static const chat = '/chat';
+  static const chatRoom = '/chat-room';
+  static const usersList = '/users-list';
 
   static const goodDeeds = '/good-deeds';
   static const createGoodDeed = '/create-good-deed';
