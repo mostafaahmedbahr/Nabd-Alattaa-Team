@@ -1,4 +1,3 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../common_imports.dart';
 import '../view_model/onboarding_cubit.dart';
 import '../view_model/onboarding_states.dart';
@@ -17,16 +16,19 @@ class OnboardingView extends StatelessWidget {
       body: OnboardingBackground(
         child: Column(
             children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: TextButton(
-                  onPressed: () => cubit.onSkip(context),
-                  child: Text(
-                    'تخطي',
-                    style: TextStyle(
-                      fontFamily: 'Cairo',
-                      fontSize: 14.sp,
-                      color: Colors.white.withValues(alpha: 0.8),
+              Padding(
+                padding:   EdgeInsets.only(top: 20.h,left: 10.w),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: TextButton(
+                    onPressed: () => cubit.onSkip(context),
+                    child: Text(
+                      'تخطي',
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
+                        fontSize: 14.sp,
+                        color: Colors.white.withValues(alpha: 0.8),
+                      ),
                     ),
                   ),
                 ),

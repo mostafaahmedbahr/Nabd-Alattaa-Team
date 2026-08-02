@@ -1,10 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
-import '../../../../core/router/app_routes.dart';
+import '../../../../common_imports.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
 import '../../../../core/widgets/error_widget.dart';
 import '../../../../core/widgets/loading_widget.dart';
@@ -59,7 +53,7 @@ class _GoodDeedsScreenState extends State<GoodDeedsScreen> {
                   context.read<GoodDeedCubit>().loadGoodDeeds();
                 },
                 child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  padding:   EdgeInsets.symmetric(vertical: 8.h),
                   itemCount: state.goodDeeds.length,
                   itemBuilder: (context, index) {
                     final deed = state.goodDeeds[index];

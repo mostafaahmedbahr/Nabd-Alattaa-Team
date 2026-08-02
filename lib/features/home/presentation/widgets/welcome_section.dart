@@ -42,24 +42,23 @@ class _WelcomeSectionState extends State<WelcomeSection> {
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
         ),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
       ),
       child: Row(
         children: [
           ClipOval(
             child: Image.asset(
-              'assets/images/logo.jpg',
+              AppAssets.logo,
               width: 60,
               height: 60,
               fit: BoxFit.cover,
             ),
           ),
-          const SizedBox(width: 16),
+            SizedBox(width: 16.w),
           Expanded(
             child: BlocBuilder<ProfileCubit, ProfileState>(
               builder: (context, state) {
                 String userName = 'مستخدم';
-
                 if (state is ProfileLoaded) {
                   userName = state.profile.name;
                   logSuccess('🟢 [WelcomeSection] User name loaded: $userName');
@@ -68,7 +67,6 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                 } else if (state is ProfileError) {
                   logError('🔴 [WelcomeSection] Error: ${state.message}');
                 }
-
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -78,7 +76,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                         color: Colors.white70,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                      SizedBox(height: 4.h),
                     Text(
                       userName,
                       style: AppTextStyles.labelLarge.copyWith(
@@ -86,7 +84,7 @@ class _WelcomeSectionState extends State<WelcomeSection> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                      SizedBox(height: 4.h),
                     Text(
                       'نتمنى لك يوماً موفقاً',
                       style: AppTextStyles.bodyMedium.copyWith(

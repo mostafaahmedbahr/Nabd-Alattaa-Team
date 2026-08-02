@@ -22,24 +22,15 @@ class MainContent extends StatelessWidget {
                 child: ScaleTransition(
                   scale:  scaleAnimation,
                   child: Container(
-                    width: 120.w,
-                    height: 120.h,
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.2),
-                          blurRadius: 30.r,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
+                      shape: BoxShape.circle
                     ),
-                    child: ClipOval(
+                    child: ClipRRect(
+                      borderRadius: BorderRadiusGeometry.circular(10.r),
                       child: Image.asset(
-                        'assets/images/logo.jpg',
-                        width: 100.w,
-                        height: 100.h,
+                        AppAssets.logo,
+                        width: 120.w,
+                        height: 120.h,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -58,7 +49,7 @@ class MainContent extends StatelessWidget {
               child: Column(
                 children: [
                     Text(
-                    'نبض العطاء',
+                    'مؤسسة نبض العطاء',
                     style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 36.sp,
@@ -69,7 +60,7 @@ class MainContent extends StatelessWidget {
                   ),
                     SizedBox(height: 8.h),
                   Text(
-                    'يدا بيد عطاء ممتد',
+                    'يداً_بيد_عطاءً_ممتد',
                     style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 16.sp,

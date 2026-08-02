@@ -1,11 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
+import '../../../../common_imports.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
-import '../../../../core/widgets/custom_button.dart';
 import '../view_model/good_deed_cubit.dart';
 import '../view_model/good_deed_state.dart';
 
@@ -68,43 +62,35 @@ class _CreateGoodDeedScreenState extends State<CreateGoodDeedScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Icon(
+                    Icon(
                     Icons.favorite_border,
-                    size: 64,
+                    size: 64.sp,
                     color: AppColors.primary,
                   ),
-                  const SizedBox(height: 24),
-                  const Text(
+                    SizedBox(height: 24.h),
+                    Text(
                     AppStrings.goodDeedContent,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
+                    SizedBox(height: 8.h),
+                    Text(
                     'عمل الخير يبقى وأثره يدوم',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       color: AppColors.textSecondary,
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  TextFormField(
+                    SizedBox(height: 24.h),
+                  CustomTextField(
                     controller: _controller,
-                    textDirection: TextDirection.rtl,
                     maxLines: 5,
-                    decoration: InputDecoration(
-                      hintText: 'اكتب هنا...',
-                      hintStyle: const TextStyle(color: AppColors.textHint),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      alignLabelWithHint: true,
-                    ),
+                    hintText: 'اكتب هنا...',
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
                         return 'اكتب عمل الخير الذي قمت به';

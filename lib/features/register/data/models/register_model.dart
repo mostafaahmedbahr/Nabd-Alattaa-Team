@@ -45,11 +45,11 @@ class RegisterModel extends Equatable {
       role: map['user_role'] ?? 'employee',
       department: map['user_department'] ?? '',
       position: map['user_position'] ?? '',
-      isActive: map['is_active'] ?? true,
+      isActive: map['is_active'] ?? false,
       fcmToken: map['fcm_token'],
       createdAt: map['created_at']?.toDate() ?? DateTime.now(),
       points: map['points'] ?? 0,
-      gender: map['gender'] ?? 'male',
+      gender: map['gender'] ?? '',
       birthDate: map['birth_date']?.toDate() ?? DateTime.now(),
       age: map['age'] ?? 0,
     );

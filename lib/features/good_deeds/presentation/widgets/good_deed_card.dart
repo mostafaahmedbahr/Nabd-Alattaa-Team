@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
-
-import '../../../../core/constants/app_colors.dart';
+import 'package:nabd_alattaa_team/common_imports.dart';
 import '../../data/models/good_deed_model.dart';
 
 class GoodDeedCard extends StatelessWidget {
@@ -23,10 +21,10 @@ class GoodDeedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      margin:   EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
       elevation: 1,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -35,19 +33,19 @@ class GoodDeedCard extends StatelessWidget {
           children: [
             Text(
               deed.content,
-              style: const TextStyle(
-                fontSize: 15,
+              style:   TextStyle(
+                fontSize: 15.sp,
                 color: AppColors.textPrimary,
-                height: 1.5,
+                height: 1.5.h,
               ),
             ),
-            const SizedBox(height: 12),
+              SizedBox(height: 12.h),
             Row(
               children: [
                 Text(
                   _formatDate(deed.createdAt),
-                  style: const TextStyle(
-                    fontSize: 11,
+                  style:   TextStyle(
+                    fontSize: 11.sp,
                     color: AppColors.textHint,
                   ),
                 ),
@@ -58,7 +56,7 @@ class GoodDeedCard extends StatelessWidget {
                   color: isLiked ? AppColors.error : AppColors.grey500,
                   onTap: onLike,
                 ),
-                const SizedBox(width: 16),
+                  SizedBox(width: 16.w),
                 _buildReactionButton(
                   icon: isPrayed ? Icons.water_drop : Icons.water_drop_outlined,
                   count: deed.prayersCount,
@@ -83,12 +81,12 @@ class GoodDeedCard extends StatelessWidget {
       onTap: onTap,
       child: Row(
         children: [
-          Icon(icon, size: 20, color: color),
-          const SizedBox(width: 4),
+          Icon(icon, size: 20.sp, color: color),
+            SizedBox(width: 4.w),
           Text(
             count.toString(),
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 13.sp,
               color: color,
               fontWeight: FontWeight.w500,
             ),

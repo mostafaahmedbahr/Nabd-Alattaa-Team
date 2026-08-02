@@ -27,12 +27,12 @@ class _LoginFormState extends State<LoginForm> {
         boxShadow: [
           BoxShadow(
             color: AppColors.primary.withValues(alpha: 0.08),
-            blurRadius: 20,
+            blurRadius: 20.r,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 10,
+            blurRadius: 10.r,
             offset: const Offset(0, 5),
           ),
         ],
