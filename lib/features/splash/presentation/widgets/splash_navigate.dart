@@ -3,11 +3,11 @@ import '../../../../common_imports.dart';
 
 void navigateToNext(BuildContext context) async {
   final prefs = await SharedPreferences.getInstance();
-  final onboardingComplete = prefs.getBool('onboarding_complete') ?? false;
+  final onboardingComplete = prefs.getBool(AppStrings.onboardingComplete) ?? false;
 
   if (!onboardingComplete) {
     if (context.mounted) {
-      context.go('/onboarding');
+      context.go(Routes.onboarding);
     }
     return;
   }
@@ -19,7 +19,7 @@ void navigateToNext(BuildContext context) async {
     }
   } else {
     if (context.mounted) {
-      context.go('/login');
+      context.go(Routes.login);
     }
   }
 }

@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:nabd_alattaa_team/core/constants/firestore_constants.dart';
+import 'package:nabd_alattaa_team/core/error/failures.dart';
 import 'package:nabd_alattaa_team/features/register/data/repos/register_repos.dart';
-import '../../../../core/constants/firestore_constants.dart';
-import '../../../../core/error/failures.dart';
 import '../../../../core/services/fcm_service.dart';
 import '../models/register_model.dart';
 

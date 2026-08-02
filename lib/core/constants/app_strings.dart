@@ -155,4 +155,9 @@ class AppStrings {
   static const String rejected = 'مرفوض';
   static const String active = 'نشط';
   static const String inactive = 'غير نشط';
+
+
+
+  /// storage
+  static const String onboardingComplete = 'onboarding_complete';
 }

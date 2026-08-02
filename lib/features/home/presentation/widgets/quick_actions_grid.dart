@@ -33,7 +33,7 @@ class QuickActionsGrid extends StatelessWidget {
   Widget _buildAction(BuildContext context, IconData icon, String label, String route) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
+        padding:   EdgeInsets.symmetric(horizontal: 4.w),
         child: QuickActionCard(
           icon: icon,
           label: label,

@@ -2,7 +2,7 @@ class AppAssets {
   AppAssets._();
 
   // Images
-  static const String logo = 'assets/images/logo.png';
+  static const String logo = 'assets/images/logo.jpg';
   static const String splash = 'assets/images/splash.png';
   static const String emptyState = 'assets/images/empty_state.png';
   static const String noConnection = 'assets/images/no_connection.png';

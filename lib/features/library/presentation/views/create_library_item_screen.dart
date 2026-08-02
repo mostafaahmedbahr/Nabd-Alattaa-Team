@@ -1,10 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../../../core/constants/app_colors.dart';
+import '../../../../common_imports.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
-import '../../../../core/widgets/custom_button.dart';
 import '../view_model/library_cubit.dart';
 import '../view_model/library_state.dart';
 
@@ -85,22 +80,22 @@ class _CreateLibraryItemScreenState extends State<CreateLibraryItemScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Icon(
+                    Icon(
                     Icons.link_rounded,
-                    size: 64,
+                    size: 64.sp,
                     color: AppColors.primary,
                   ),
-                  const SizedBox(height: 24),
-                  const Text(
+                    SizedBox(height: 24.h),
+                    Text(
                     'جمع الروابط المهمة في مكان واحد',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
                   TextFormField(
                     controller: _nameController,
                     textDirection: TextDirection.rtl,
@@ -109,7 +104,7 @@ class _CreateLibraryItemScreenState extends State<CreateLibraryItemScreen> {
                       hintText: 'مثال: نموذج طلب إجازة',
                       hintStyle: const TextStyle(color: AppColors.textHint),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
                     ),
                     validator: (value) {
@@ -119,7 +114,7 @@ class _CreateLibraryItemScreenState extends State<CreateLibraryItemScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                   TextFormField(
                     controller: _descriptionController,
                     textDirection: TextDirection.rtl,
@@ -129,12 +124,13 @@ class _CreateLibraryItemScreenState extends State<CreateLibraryItemScreen> {
                       hintText: 'وصف بسيط للرابط',
                       hintStyle: const TextStyle(color: AppColors.textHint),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                   TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: _linkController,
                     textDirection: TextDirection.ltr,
                     keyboardType: TextInputType.url,
@@ -158,16 +154,16 @@ class _CreateLibraryItemScreenState extends State<CreateLibraryItemScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
+                    SizedBox(height: 16.h),
+                    Text(
                     'التصنيف',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -188,7 +184,7 @@ class _CreateLibraryItemScreenState extends State<CreateLibraryItemScreen> {
                         )
                         .toList(),
                   ),
-                  const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
                   CustomButton(
                     text: 'إضافة',
                     onPressed: _submit,

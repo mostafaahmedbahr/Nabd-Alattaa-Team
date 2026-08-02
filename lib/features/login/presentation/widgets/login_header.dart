@@ -14,10 +14,12 @@ class LoginHeader extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.15),
             shape: BoxShape.circle,
+            
           ),
-          child: ClipOval(
+          child: ClipRRect(
+            borderRadius: BorderRadiusGeometry.circular(10.r),
             child: Image.asset(
-              'assets/images/logo.jpg',
+              AppAssets.logo,
               width: 100.w,
               height: 100.h,
               fit: BoxFit.cover,
@@ -26,7 +28,7 @@ class LoginHeader extends StatelessWidget {
         ),
         SizedBox(height: 16.h),
         Text(
-          'نبض العطاء',
+          'مؤسسة نبض العطاء',
           style: TextStyle(
             fontFamily: 'Cairo',
             fontSize: 28.sp,
