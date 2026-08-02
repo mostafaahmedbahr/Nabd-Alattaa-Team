@@ -175,8 +175,7 @@ class _UserTile extends StatelessWidget {
       onTap: () async {
         final chatRoom = await context.read<ChatCubit>().getOrCreatePrivateChat(
               currentUserId: currentUserId,
-              currentUserName:
-                  FirebaseAuth.instance.currentUser?.displayName ?? 'مستخدم',
+              currentUserName: FirebaseAuth.instance.currentUser?.displayName ?? 'مستخدم',
               otherUserId: user.id ?? '',
               otherUserName: user.name,
             );
@@ -186,6 +185,8 @@ class _UserTile extends StatelessWidget {
             '/chat-room/${chatRoom.id}',
             extra: {
               'roomName': user.name,
+              'senderName': user.name,
+              'senderId': user.id,
             },
           );
         }

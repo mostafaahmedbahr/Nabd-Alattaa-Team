@@ -17,11 +17,15 @@ import '../widgets/message_bubble.dart';
 class ChatRoomScreen extends StatefulWidget {
   final String roomId;
   final String roomName;
+  final String senderName;
+  final String senderId;
 
   const ChatRoomScreen({
     super.key,
     required this.roomId,
     required this.roomName,
+    required this.senderName,
+    required this.senderId,
   });
 
   @override
@@ -31,17 +35,16 @@ class ChatRoomScreen extends StatefulWidget {
 class _ChatRoomScreenState extends State<ChatRoomScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  String get _currentUserId => FirebaseAuth.instance.currentUser?.uid ?? '';
-  String get _currentUserName =>
-      FirebaseAuth.instance.currentUser?.displayName ?? 'مستخدم';
 
   @override
   void initState() {
     super.initState();
+    print(widget.senderName);
+    print("ddddddd");
     context.read<ChatCubit>().loadMessages(roomId: widget.roomId);
     context.read<ChatCubit>().markMessagesAsRead(
           roomId: widget.roomId,
-          currentUserId: _currentUserId,
+          currentUserId: widget.senderId,
         );
   }
 
@@ -73,8 +76,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     final message = MessageModel(
       id: '',
       content: text,
-      senderId: _currentUserId,
-      senderName: _currentUserName,
+      senderId: widget.senderId,
+      senderName: widget.senderName,
       timestamp: DateTime.now(),
     );
 
@@ -88,7 +91,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   }
 
   void _showMessageOptions(MessageModel message) {
-    if (message.senderId != _currentUserId) return;
+    if (message.senderId != widget.senderId) return;
 
     showModalBottomSheet(
       context: context,
@@ -199,7 +202,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 width: 38,
                 height: 38,
                 decoration: BoxDecoration(
-                  color: AppColors.textWhite.withOpacity(0.2),
+                  color: AppColors.textWhite.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
@@ -277,7 +280,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                             Container(
                               padding: const EdgeInsets.all(20),
                               decoration: BoxDecoration(
-                                color: AppColors.primary.withOpacity(0.1),
+                                color: AppColors.primary.withValues(alpha: 0.1),
                                 shape: BoxShape.circle,
                               ),
                               child: const Icon(
@@ -320,12 +323,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       itemCount: state.messages.length,
                       itemBuilder: (context, index) {
                         final message = state.messages[index];
-                        final isMe = message.senderId == _currentUserId;
-                        final showSenderName =
-                            !isMe &&
-                                (index == 0 ||
-                                    state.messages[index - 1].senderId !=
-                                        message.senderId);
+                        final isMe = message.senderId == widget.senderId;
+                        final showSenderName = !isMe;
 
                         return MessageBubble(
                           message: message,

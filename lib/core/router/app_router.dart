@@ -113,9 +113,13 @@ class AppRouter {
           final roomId = state.pathParameters['roomId']!;
           final extras = state.extra as Map<String, dynamic>? ?? {};
           final roomName = extras['roomName'] as String? ?? '';
+          final senderId = extras['senderId'] as String? ?? '';
+          final senderName = extras['senderName'] as String? ?? '';
           return ChatRoomScreen(
             roomId: roomId,
             roomName: roomName,
+            senderId: senderId,
+            senderName: senderName,
           );
         },
       ),
