@@ -1,12 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
-import '../../../../core/router/app_routes.dart';
 import '../../../../core/widgets/error_widget.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../view_model/chat_cubit.dart';
@@ -112,7 +107,15 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 ),
               ),
               ListTile(
-                leading: const Icon(Icons.edit_outlined, color: AppColors.primary),
+                leading: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.edit_outlined, color: AppColors.primary, size: 20),
+                ),
                 title: const Text('تعديل الرسالة', style: TextStyle(fontFamily: 'Cairo')),
                 onTap: () {
                   Navigator.pop(ctx);
@@ -120,7 +123,15 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.delete_outline, color: AppColors.error),
+                leading: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: AppColors.error.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.delete_outline, color: AppColors.error, size: 20),
+                ),
                 title: const Text(
                   'حذف الرسالة',
                   style: TextStyle(color: AppColors.error, fontFamily: 'Cairo'),
@@ -144,36 +155,102 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     final controller = TextEditingController(text: message.content);
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('تعديل الرسالة'),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        content: TextField(
-          controller: controller,
-          maxLines: null,
-          decoration: const InputDecoration(
-            hintText: 'اكتب الرسالة...',
+      builder: (ctx) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.edit_rounded, color: AppColors.primary, size: 28),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'تعديل الرسالة',
+                style: TextStyle(
+                  fontFamily: 'Cairo',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: controller,
+                maxLines: null,
+                style: const TextStyle(fontFamily: 'Cairo'),
+                decoration: InputDecoration(
+                  hintText: 'اكتب الرسالة...',
+                  hintStyle: const TextStyle(fontFamily: 'Cairo', color: AppColors.textHint),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: AppColors.grey200),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: AppColors.grey200),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: AppColors.primary, width: 2),
+                  ),
+                  contentPadding: const EdgeInsets.all(16),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(ctx),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: const BorderSide(color: AppColors.grey300),
+                        ),
+                      ),
+                      child: const Text('إلغاء', style: TextStyle(fontFamily: 'Cairo')),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        final newContent = controller.text.trim();
+                        if (newContent.isNotEmpty && newContent != message.content) {
+                          context.read<ChatCubit>().editMessage(
+                                roomId: widget.roomId,
+                                messageId: message.id,
+                                newContent: newContent,
+                              );
+                        }
+                        Navigator.pop(ctx);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: const Text('حفظ', style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w600)),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text(AppStrings.cancel),
-          ),
-          TextButton(
-            onPressed: () {
-              final newContent = controller.text.trim();
-              if (newContent.isNotEmpty && newContent != message.content) {
-                context.read<ChatCubit>().editMessage(
-                      roomId: widget.roomId,
-                      messageId: message.id,
-                      newContent: newContent,
-                    );
-              }
-              Navigator.pop(ctx);
-            },
-            child: const Text(AppStrings.save),
-          ),
-        ],
       ),
     );
   }
@@ -188,55 +265,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFFF0EDF5),
-        appBar: AppBar(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.textWhite,
-          elevation: 0,
-          titleSpacing: 0,
-          title: Row(
-            children: [
-              Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  color: AppColors.textWhite.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Text(
-                    widget.roomName.isNotEmpty ? widget.roomName[0] : '?',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textWhite,
-                      fontFamily: 'Cairo',
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.roomName.isNotEmpty ? widget.roomName : 'محادثة',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textWhite,
-                        fontFamily: 'Cairo',
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+        backgroundColor: const Color(0xFFF5F3F8),
+        appBar: _buildAppBar(),
         body: Column(
           children: [
             Expanded(
@@ -266,69 +296,25 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     return CustomErrorWidget(
                       message: state.message,
                       onRetry: () {
-                        context.read<ChatCubit>().loadMessages(
-                              roomId: widget.roomId,
-                            );
+                        context.read<ChatCubit>().loadMessages(roomId: widget.roomId);
                       },
                     );
                   }
 
                   if (state is MessagesLoaded) {
                     if (state.messages.isEmpty) {
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                color: AppColors.primary.withValues(alpha: 0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.chat_bubble_outline,
-                                size: 48,
-                                color: AppColors.primary,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            const Text(
-                              'ابدأ المحادثة',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textPrimary,
-                                fontFamily: 'Cairo',
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            const Text(
-                              'أرسل رسالة للبدء في المحادثة',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: AppColors.textSecondary,
-                                fontFamily: 'Cairo',
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
+                      return _buildEmptyChat();
                     }
 
                     return ListView.builder(
                       controller: _scrollController,
                       physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 16,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                       itemCount: state.messages.length,
                       itemBuilder: (context, index) {
                         final message = state.messages[index];
                         final isMe = message.senderId == widget.senderId;
-                        final previousMessage = index > 0
-                            ? state.messages[index - 1]
-                            : null;
+                        final previousMessage = index > 0 ? state.messages[index - 1] : null;
                         final showSenderName = !isMe &&
                             (previousMessage?.senderId != message.senderId);
                         final senderName = message.senderName.isNotEmpty
@@ -357,6 +343,106 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     );
   }
 
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      backgroundColor: AppColors.primary,
+      elevation: 0,
+      leadingWidth: 40,
+      titleSpacing: 0,
+      title: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Text(
+                widget.roomName.isNotEmpty ? widget.roomName[0] : '?',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontFamily: 'Cairo',
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.roomName.isNotEmpty ? widget.roomName : 'محادثة',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    fontFamily: 'Cairo',
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  'متصل الآن',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.white.withOpacity(0.7),
+                    fontFamily: 'Cairo',
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyChat() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withOpacity(0.08),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.chat_bubble_outline_rounded,
+              size: 56,
+              color: AppColors.primary,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'ابدأ المحادثة',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+              fontFamily: 'Cairo',
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'أرسل رسالة للبدء في المحادثة',
+            style: TextStyle(
+              fontSize: 14,
+              color: AppColors.textSecondary,
+              fontFamily: 'Cairo',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildMessageInput() {
     return Container(
       padding: EdgeInsets.only(
@@ -369,7 +455,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         color: AppColors.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -397,7 +483,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   color: AppColors.textPrimary,
                 ),
                 decoration: InputDecoration(
-                  hintText: AppStrings.typeMessage,
+                  hintText: 'اكتب رسالة...',
                   hintStyle: const TextStyle(
                     fontFamily: 'Cairo',
                     color: AppColors.textHint,
@@ -430,13 +516,12 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 shape: BoxShape.circle,
               ),
               child: IconButton(
-                onPressed:
-                    _messageController.text.trim().isNotEmpty ? _sendMessage : null,
+                onPressed: _messageController.text.trim().isNotEmpty ? _sendMessage : null,
                 icon: Icon(
                   Icons.send_rounded,
                   size: 22,
                   color: _messageController.text.trim().isNotEmpty
-                      ? AppColors.textWhite
+                      ? Colors.white
                       : AppColors.grey400,
                 ),
               ),

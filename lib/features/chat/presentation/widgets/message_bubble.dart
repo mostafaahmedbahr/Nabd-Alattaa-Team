@@ -42,7 +42,14 @@ class MessageBubble extends StatelessWidget {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
-            color: isMe ? AppColors.primary : AppColors.surface,
+            gradient: isMe
+                ? const LinearGradient(
+                    colors: [AppColors.primary, AppColors.primaryLight],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
+                : null,
+            color: isMe ? null : AppColors.surface,
             borderRadius: BorderRadius.only(
               topLeft: const Radius.circular(18),
               topRight: const Radius.circular(18),
@@ -51,7 +58,7 @@ class MessageBubble extends StatelessWidget {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                color: (isMe ? AppColors.primary : Colors.black).withOpacity(isMe ? 0.15 : 0.04),
                 blurRadius: 6,
                 offset: const Offset(0, 2),
               ),
@@ -65,12 +72,10 @@ class MessageBubble extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 4),
                   child: Text(
                     senderName ?? message.senderName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: isMe
-                          ? AppColors.textWhite.withOpacity(0.8)
-                          : AppColors.primary,
+                      color: AppColors.primary,
                       fontFamily: 'Cairo',
                     ),
                   ),
@@ -84,7 +89,7 @@ class MessageBubble extends StatelessWidget {
                       message.content,
                       style: TextStyle(
                         fontSize: 15,
-                        color: isMe ? AppColors.textWhite : AppColors.textPrimary,
+                        color: isMe ? Colors.white : AppColors.textPrimary,
                         fontFamily: 'Cairo',
                         height: 1.4,
                       ),
@@ -102,7 +107,7 @@ class MessageBubble extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 10,
                               color: isMe
-                                  ? AppColors.textWhite.withOpacity(0.6)
+                                  ? Colors.white.withOpacity(0.6)
                                   : AppColors.textHint,
                               fontFamily: 'Cairo',
                               fontStyle: FontStyle.italic,
@@ -114,7 +119,7 @@ class MessageBubble extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 11,
                           color: isMe
-                              ? AppColors.textWhite.withOpacity(0.6)
+                              ? Colors.white.withOpacity(0.6)
                               : AppColors.textHint,
                           fontFamily: 'Cairo',
                         ),
@@ -123,12 +128,12 @@ class MessageBubble extends StatelessWidget {
                         const SizedBox(width: 4),
                         Icon(
                           message.readBy.length > 1
-                              ? Icons.done_all
-                              : Icons.done,
+                              ? Icons.done_all_rounded
+                              : Icons.done_rounded,
                           size: 16,
                           color: message.readBy.length > 1
                               ? const Color(0xFF53BDEB)
-                              : AppColors.textWhite.withOpacity(0.6),
+                              : Colors.white.withOpacity(0.6),
                         ),
                       ],
                     ],
@@ -160,11 +165,7 @@ class MessageBubble extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.block,
-              size: 14,
-              color: AppColors.grey400,
-            ),
+            Icon(Icons.block_rounded, size: 14, color: AppColors.grey400),
             const SizedBox(width: 6),
             Text(
               'تم حذف هذه الرسالة',
