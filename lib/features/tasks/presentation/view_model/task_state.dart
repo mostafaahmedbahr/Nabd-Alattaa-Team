@@ -19,11 +19,17 @@ class TaskLoading extends TaskState {
 
 class TaskLoaded extends TaskState {
   final List<TaskModel> tasks;
+  final List<TaskModel> myAssignedTasks;
+  final List<TaskModel> assignedToMeTasks;
 
-  const TaskLoaded({required this.tasks});
+  const TaskLoaded({
+    required this.tasks,
+    this.myAssignedTasks = const [],
+    this.assignedToMeTasks = const [],
+  });
 
   @override
-  List<Object?> get props => [tasks];
+  List<Object?> get props => [tasks, myAssignedTasks, assignedToMeTasks];
 }
 
 class TaskCreating extends TaskState {

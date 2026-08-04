@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../core/constants/firestore_constants.dart';
 import '../../../../core/error/failures.dart';
+import '../../../../core/utils/enums.dart';
 import 'task_repo.dart';
 import '../models/task_model.dart';
 import '../models/task_comment_model.dart';
@@ -13,25 +14,40 @@ class TaskRepoImpl implements TaskRepository {
   TaskRepoImpl({required this.firestore});
 
   @override
-  Stream<List<TaskModel>> getTasks({String? assigneeId, String? status}) {
-    Query query = firestore.collection(FirestoreConstants.tasks);
+  Stream<List<TaskModel>> getTasks({required String currentUserId,
+    String? status,}) {
+    return firestore
+        .collection(FirestoreConstants.tasks)
+        .snapshots()
+        .map((snapshot) {
+      final tasks = snapshot.docs
+          .map((doc) {
+        final task = TaskModel.fromMap(doc.data());
 
-    if (assigneeId != null) {
-      query = query.where('assignee_id', isEqualTo: assigneeId);
-    }
-    if (status != null) {
-      query = query.where('status', isEqualTo: status);
-    }
+        if (task.creatorId == currentUserId &&
+            task.assigneeId == currentUserId) {
+          task.taskType = TaskType.myOwnTask;
+        } else if (task.creatorId == currentUserId) {
+          task.taskType = TaskType.createdByMe;
+        } else if (task.assigneeId == currentUserId) {
+          task.taskType = TaskType.assignedToMe;
+        }
 
-    return query.snapshots().map(
-          (snapshot) {
-        final tasks = snapshot.docs
-            .map((doc) => TaskModel.fromMap(doc.data() as Map<String, dynamic>))
-            .toList();
-        tasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-        return tasks;
-      },
-    );
+        return task;
+      })
+          .where((task) =>
+      task.creatorId == currentUserId ||
+          task.assigneeId == currentUserId)
+          .toList();
+
+      if (status != null) {
+        tasks.removeWhere((e) => e.status != status);
+      }
+
+      tasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+      return tasks;
+    });
   }
 
   @override

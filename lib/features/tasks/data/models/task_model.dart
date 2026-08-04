@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../../core/utils/enums.dart';
+
 class TaskModel extends Equatable {
   final String id;
   final String title;
@@ -14,8 +16,9 @@ class TaskModel extends Equatable {
   final DateTime createdAt;
   final DateTime updatedAt;
   final int completionPercentage;
+  TaskType taskType;
 
-  const TaskModel({
+  TaskModel({
     required this.id,
     required this.title,
     required this.description,
@@ -29,9 +32,25 @@ class TaskModel extends Equatable {
     required this.createdAt,
     required this.updatedAt,
     this.completionPercentage = 0,
+    this.taskType = TaskType.assignedToMe,
   });
 
   factory TaskModel.fromMap(Map<String, dynamic> map) {
+    TaskType parseTaskType(dynamic value) {
+      if (value is TaskType) return value;
+      if (value is String) {
+        switch (value) {
+          case 'myOwnTask':
+            return TaskType.myOwnTask;
+          case 'createdByMe':
+            return TaskType.createdByMe;
+          case 'assignedToMe':
+            return TaskType.assignedToMe;
+        }
+      }
+      return TaskType.assignedToMe;
+    }
+
     return TaskModel(
       id: map['task_id'] ?? '',
       title: map['title'] ?? '',
@@ -46,6 +65,7 @@ class TaskModel extends Equatable {
       createdAt: map['created_at']?.toDate() ?? DateTime.now(),
       updatedAt: map['updated_at']?.toDate() ?? DateTime.now(),
       completionPercentage: map['completion_percentage'] ?? 0,
+      taskType: parseTaskType(map['task_type']),
     );
   }
 
@@ -64,6 +84,7 @@ class TaskModel extends Equatable {
       'created_at': createdAt,
       'updated_at': updatedAt,
       'completion_percentage': completionPercentage,
+      'task_type': taskType.name,
     };
   }
 
@@ -81,6 +102,7 @@ class TaskModel extends Equatable {
     DateTime? createdAt,
     DateTime? updatedAt,
     int? completionPercentage,
+    TaskType? taskType,
   }) {
     return TaskModel(
       id: id ?? this.id,
@@ -96,6 +118,7 @@ class TaskModel extends Equatable {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       completionPercentage: completionPercentage ?? this.completionPercentage,
+      taskType: taskType ?? this.taskType,
     );
   }
 

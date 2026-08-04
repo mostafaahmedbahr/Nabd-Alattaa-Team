@@ -38,6 +38,14 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text("الرئيسية"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined),
+            onPressed: () {
+              context.push('/notifications');
+            },
+          ),
+        ],
       ),
       body: Directionality(
         textDirection: TextDirection.rtl,

@@ -2,6 +2,7 @@ import 'package:nabd_alattaa_team/features/tasks/data/models/task_model.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../common_imports.dart';
+import '../../../../../core/utils/enums.dart';
 import '../../view_model/task_cubit.dart';
 import '../../view_model/task_state.dart';
 
@@ -27,13 +28,16 @@ class SubmitButton extends StatelessWidget {
                   description: taskCubit.descriptionController.text,
                   assigneeId: taskCubit.selectedAssigneeId,
                   assigneeName: taskCubit.selectedAssigneeName,
-                  creatorId: taskCubit.currentUserId,
+                  creatorId: taskCubit.currentUserId.toString(),
                   creatorName: taskCubit.currentUserName,
                   priority: taskCubit.selectedPriority,
                   status: 'لم تبدأ',
                   dueDate: taskCubit.dueDate,
                   createdAt: DateTime.now(),
                   updatedAt: DateTime.now(),
+                  taskType: taskCubit.selectedAssigneeId == taskCubit.currentUserId
+                      ? TaskType.myOwnTask
+                      : TaskType.createdByMe,
                 );
                 context.read<TaskCubit>().createTask(task);
               }

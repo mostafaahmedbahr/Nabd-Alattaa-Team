@@ -21,10 +21,7 @@ class _TasksScreenState extends State<TasksScreen> {
   }
 
   void _loadMyTasks() {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      context.read<TaskCubit>().loadTasks(assigneeId: user.uid);
-    }
+    context.read<TaskCubit>().loadTasks();
   }
 
   @override

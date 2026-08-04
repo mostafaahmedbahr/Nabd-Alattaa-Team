@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart' as intl;
@@ -8,8 +9,29 @@ import '../../../../core/widgets/loading_widget.dart';
 import '../view_model/notification_cubit.dart';
 import '../view_model/notification_state.dart';
 
-class NotificationsScreen extends StatelessWidget {
+class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
+
+  @override
+  State<NotificationsScreen> createState() => _NotificationsScreenState();
+}
+
+class _NotificationsScreenState extends State<NotificationsScreen> {
+  String? _userId;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNotifications();
+  }
+
+  void _loadNotifications() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      _userId = user.uid;
+      context.read<NotificationCubit>().loadNotifications(user.uid);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +56,9 @@ class NotificationsScreen extends StatelessWidget {
                     child: CustomErrorWidget(
                       message: state.message,
                       onRetry: () {
-                        context.read<NotificationCubit>().loadNotifications('current_user_id');
+                        if (_userId != null) {
+                          context.read<NotificationCubit>().loadNotifications(_userId!);
+                        }
                       },
                     ),
                   );
@@ -97,7 +121,9 @@ class NotificationsScreen extends StatelessWidget {
             if (state is NotificationLoaded && state.unreadCount > 0) {
               return TextButton(
                 onPressed: () {
-                  context.read<NotificationCubit>().markAllAsRead('current_user_id');
+                  if (_userId != null) {
+                    context.read<NotificationCubit>().markAllAsRead(_userId!);
+                  }
                 },
                 child: const Text(
                   'قراءة الكل',

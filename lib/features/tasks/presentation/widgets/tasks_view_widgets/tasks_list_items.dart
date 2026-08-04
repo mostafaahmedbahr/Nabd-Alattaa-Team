@@ -43,18 +43,92 @@ class TasksListItems extends StatelessWidget {
 
           return SliverPadding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
-            sliver: SliverList.separated(
-              itemCount: state.tasks.length,
-              separatorBuilder: (_, _) => SizedBox(height: 10.h),
-              itemBuilder: (context, index) {
-                return TaskCard(task: state.tasks[index]);
-              },
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                if (state.myAssignedTasks.isNotEmpty) ...[
+                  _SectionHeader(
+                    title: "مهام أوكلتها للآخرين",
+                    icon: Icons.group_outlined,
+                    count: state.myAssignedTasks.length,
+                  ),
+                  SizedBox(height: 8.h),
+                  ...state.myAssignedTasks.map((task) => Padding(
+                        padding: EdgeInsets.only(bottom: 10.h),
+                        child: TaskCard(task: task),
+                      )),
+                  SizedBox(height: 16.h),
+                ],
+                if (state.assignedToMeTasks.isNotEmpty) ...[
+                  _SectionHeader(
+                    title: "مهام مسندة إليك",
+                    icon: Icons.person_outlined,
+                    count: state.assignedToMeTasks.length,
+                  ),
+                  SizedBox(height: 8.h),
+                  ...state.assignedToMeTasks.map((task) => Padding(
+                        padding: EdgeInsets.only(bottom: 10.h),
+                        child: TaskCard(task: task),
+                      )),
+                ],
+                if (state.myAssignedTasks.isEmpty &&
+                    state.assignedToMeTasks.isEmpty)
+                  EmptyStateWidget(
+                    message: "لا توجد مهام حالياً",
+                    icon: Icons.hourglass_empty,
+                  ),
+              ]),
             ),
           );
         }
 
         return const SliverFillRemaining(child: SizedBox.shrink());
       },
+    );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final int count;
+
+  const _SectionHeader({
+    required this.title,
+    required this.icon,
+    required this.count,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, size: 20.sp, color: AppColors.primary),
+        SizedBox(width: 8.w),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        const Spacer(),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+          decoration: BoxDecoration(
+            color: AppColors.primary.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8.r),
+          ),
+          child: Text(
+            "$count",
+            style: TextStyle(
+              fontSize: 13.sp,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primary,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
