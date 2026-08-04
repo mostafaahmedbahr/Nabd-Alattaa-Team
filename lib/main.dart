@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,23 @@ Future<void> initializeApp() async {
     _firebaseMessagingBackgroundHandler,
   );
   await FCMService.initialize();
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  // طلب الإذن (مهم في iOS)
+  await messaging.requestPermission();
+  // جيب الـ token الخاص بالجهاز ده
+  String? token = await messaging.getToken();
+  print("FCM Token: $token");
+
+  // لما التطبيق يكون شغال (foreground)
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('استلمت إشعار: ${message.notification?.title}');
+    // تقدر تعرضه بـ flutter_local_notifications
+  });
+
+// لما المستخدم يدوس على الإشعار والتطبيق في الخلفية
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    // تنقله لصفحة معينة مثلاً
+  });
   Bloc.observer = AppBlocObserver();
 
   await di.init();
