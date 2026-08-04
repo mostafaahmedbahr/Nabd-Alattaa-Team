@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../common_imports.dart';
 import '../view_model/task_cubit.dart';
 import '../view_model/task_state.dart';
@@ -16,7 +17,14 @@ class _TasksScreenState extends State<TasksScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<TaskCubit>().loadTasks();
+    _loadMyTasks();
+  }
+
+  void _loadMyTasks() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      context.read<TaskCubit>().loadTasks(assigneeId: user.uid);
+    }
   }
 
   @override
@@ -57,7 +65,7 @@ class _TasksScreenState extends State<TasksScreen> {
         onPressed: () async {
           await context.push('/create-task');
           if (mounted) {
-            context.read<TaskCubit>().loadTasks();
+            _loadMyTasks();
           }
         },
         backgroundColor: AppColors.primary,

@@ -37,4 +37,7 @@ class Routes {
   static const editProfile = '/edit-profile';
 
   static const admin = '/admin';
+
+  static const announcements = '/announcements';
+  static const createAnnouncement = '/create-announcement';
 }

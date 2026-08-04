@@ -26,6 +26,8 @@ import '../../features/good_deeds/presentation/views/good_deeds_screen.dart';
 import '../../features/good_deeds/presentation/views/create_good_deed_screen.dart';
 import '../../features/meals/presentation/views/meals_screen.dart';
 import '../../features/profile/presentation/views/edit_profile_screen.dart';
+import '../../features/announcements/presentation/views/announcements_screen.dart';
+import '../../features/announcements/presentation/views/create_announcement_screen.dart';
 
 class AppRouter {
   AppRouter._();
@@ -168,6 +170,14 @@ class AppRouter {
         builder: (_, _) => EditProfileScreen(
           userId: FirebaseAuth.instance.currentUser?.uid ?? '',
         ),
+      ),
+      GoRoute(
+        path: Routes.announcements,
+        builder: (_, _) => const AnnouncementsScreen(),
+      ),
+      GoRoute(
+        path: Routes.createAnnouncement,
+        builder: (_, _) => const CreateAnnouncementScreen(),
       ),
     ],
   );

@@ -41,9 +41,38 @@ class TaskRepoImpl implements TaskRepository {
           .collection(FirestoreConstants.tasks)
           .doc(task.id)
           .set(task.toMap());
+
+      await _sendNotificationToAssignee(
+        assigneeId: task.assigneeId,
+        title: 'مهمة جديدة',
+        body: 'تم تعيين لك مهمة: ${task.title}',
+        taskId: task.id,
+      );
+
       return const Right(null);
     } catch (e) {
       return Left(FirestoreFailure(message: 'خطأ في إنشاء المهمة: ${e.toString()}'));
+    }
+  }
+
+  Future<void> _sendNotificationToAssignee({
+    required String assigneeId,
+    required String title,
+    required String body,
+    required String taskId,
+  }) async {
+    try {
+      await firestore.collection(FirestoreConstants.notifications).add({
+        FirestoreConstants.userId: assigneeId,
+        FirestoreConstants.notificationTitle: title,
+        FirestoreConstants.notificationBody: body,
+        FirestoreConstants.notificationType: 'new_task',
+        FirestoreConstants.notificationReferenceId: taskId,
+        FirestoreConstants.notificationIsRead: false,
+        FirestoreConstants.notificationCreatedAt: Timestamp.now(),
+      });
+    } catch (e) {
+      print('Error sending task notification: $e');
     }
   }
 

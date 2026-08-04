@@ -21,7 +21,11 @@ class HomeCubit extends Cubit<HomeStates> {
     return 'مساء الخير';
   }
 
-  Future<void> loadHomeData(String userId) async {
+  bool _hasLoaded = false;
+
+  Future<void> loadHomeData(String userId, {bool forceRefresh = false}) async {
+    if (_hasLoaded && !forceRefresh) return;
+    
     emit(HomeLoading());
     try {
       final userDoc = await _firestore
@@ -57,6 +61,11 @@ class HomeCubit extends Cubit<HomeStates> {
           .limit(3)
           .get();
 
+      final allTasksSnap = await _firestore
+          .collection(FirestoreConstants.tasks)
+          .where(FirestoreConstants.taskAssigneeId, isEqualTo: userId)
+          .get();
+
       final tasks = tasksSnap.docs.map((doc) {
         final data = doc.data();
         final status = data[FirestoreConstants.taskStatus] ?? 'not_started';
@@ -69,12 +78,38 @@ class HomeCubit extends Cubit<HomeStates> {
         };
       }).toList();
 
+      final goodDeedsSnap = await _firestore
+          .collection(FirestoreConstants.goodDeeds)
+          .where(FirestoreConstants.goodDeedCreatorId, isEqualTo: userId)
+          .get();
+
+      final complaintsSnap = await _firestore
+          .collection(FirestoreConstants.complaints)
+          .where(FirestoreConstants.complaintCreatorId, isEqualTo: userId)
+          .get();
+
+      final reportsSnap = await _firestore
+          .collection(FirestoreConstants.reports)
+          .where(FirestoreConstants.reportCreatorId, isEqualTo: userId)
+          .get();
+
+      final ideasSnap = await _firestore
+          .collection(FirestoreConstants.ideas)
+          .where(FirestoreConstants.ideaCreatorId, isEqualTo: userId)
+          .get();
+
       emit(HomeLoaded(
         userName: userName,
         greeting: getGreeting(),
         announcements: announcements,
         tasks: tasks,
+        totalTasksCount: allTasksSnap.docs.length,
+        goodDeedsCount: goodDeedsSnap.docs.length,
+        complaintsCount: complaintsSnap.docs.length,
+        reportsCount: reportsSnap.docs.length,
+        ideasCount: ideasSnap.docs.length,
       ));
+      _hasLoaded = true;
     } catch (e) {
       emit(HomeError(message: 'فشل في تحميل البيانات: ${e.toString()}'));
     }

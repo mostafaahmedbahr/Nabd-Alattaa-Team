@@ -27,6 +27,7 @@ import 'features/notifications/data/repos_impl/notification_repo_impl.dart';
 import 'features/notifications/presentation/view_model/notification_cubit.dart';
 import 'features/users/data/repos/users_repo.dart';
 import 'features/users/presentation/view_model/users_cubit.dart';
+import 'features/announcements/presentation/view_model/announcement_cubit.dart';
 
 class NabdAlattaaApp extends StatelessWidget {
   const NabdAlattaaApp({super.key});
@@ -115,6 +116,9 @@ class NabdAlattaaApp extends StatelessWidget {
             create: (_) => IdeaCubit(
               ideaRepository: IdeaRepoImpl(firestore: di.sl()),
             ),
+          ),
+          BlocProvider(
+            create: (_) => AnnouncementCubit(),
           ),
 
         ],
