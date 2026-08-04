@@ -4,9 +4,13 @@ import 'common_imports.dart';
 import 'core/utils/service_locator.dart' as di;
 import 'features/chat/data/repos/chat_repo.dart';
 import 'features/chat/presentation/view_model/chat_cubit.dart';
+import 'features/complaints/data/repos_impl/complaint_repo_impl.dart';
+import 'features/complaints/presentation/view_model/complaint_cubit.dart';
 import 'features/good_deeds/data/repos/good_deed_repo_impl.dart';
 import 'features/good_deeds/presentation/view_model/good_deed_cubit.dart';
 import 'features/home/presentation/view_model/home_cubit.dart';
+import 'features/ideas/data/repos_impl/idea_repo_impl.dart';
+import 'features/ideas/presentation/view_model/idea_cubit.dart';
 import 'features/library/data/repos_impl/library_repo_impl.dart';
 import 'features/library/presentation/view_model/library_cubit.dart';
 import 'features/login/data/repos/login_repos_impl.dart';
@@ -19,6 +23,8 @@ import 'features/register/data/repos/register_repos_impl.dart';
 import 'features/register/presentation/view_model/register_cubit.dart';
 import 'features/tasks/data/repos/task_repo_impl.dart';
 import 'features/tasks/presentation/view_model/task_cubit.dart';
+import 'features/notifications/data/repos_impl/notification_repo_impl.dart';
+import 'features/notifications/presentation/view_model/notification_cubit.dart';
 import 'features/users/data/repos/users_repo.dart';
 import 'features/users/presentation/view_model/users_cubit.dart';
 
@@ -95,6 +101,22 @@ class NabdAlattaaApp extends StatelessWidget {
               libraryRepository: LibraryRepoImpl(firestore: di.sl()),
             ),
           ),
+          BlocProvider(
+            create: (_) => NotificationCubit(
+              repository: NotificationRepoImpl(),
+            ),
+          ),
+          BlocProvider(
+            create: (_) => ComplaintCubit(
+              complaintRepository: ComplaintRepoImpl(firestore: di.sl()),
+            ),
+          ),
+          BlocProvider(
+            create: (_) => IdeaCubit(
+              ideaRepository: IdeaRepoImpl(firestore: di.sl()),
+            ),
+          ),
+
         ],
         child: MaterialApp.router(
           title: AppStrings.appName,

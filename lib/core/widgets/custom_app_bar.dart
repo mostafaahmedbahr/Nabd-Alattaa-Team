@@ -44,7 +44,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onPressed: () => context.pop(),
               )
           : leading,
-      actions: actions,
+      actions: actions ?? [],
     );
   }
 }
