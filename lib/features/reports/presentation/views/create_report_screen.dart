@@ -93,7 +93,7 @@ class _CreateReportScreenState extends State<CreateReportScreen>
             expandedHeight: 200,
             pinned: true,
             stretch: true,
-            backgroundColor: AppColors.error,
+            backgroundColor: AppColors.primary,
             surfaceTintColor: Colors.transparent,
             leading: IconButton(
               icon: const Icon(Icons.arrow_forward_ios_rounded,
@@ -115,9 +115,9 @@ class _CreateReportScreenState extends State<CreateReportScreen>
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
                     colors: [
-                      Color(0xFFB71C1C),
-                      AppColors.error,
-                      Color(0xFFEF5350),
+                      AppColors.reportsGradientStart,
+                      AppColors.primary,
+                      AppColors.reportsGradientEnd,
                     ],
                   ),
                 ),
@@ -214,10 +214,10 @@ class _CreateReportScreenState extends State<CreateReportScreen>
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: AppColors.error.withValues(alpha: 0.1),
+            color: AppColors.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Icon(icon, size: 18, color: AppColors.error),
+          child: Icon(icon, size: 18, color: AppColors.primary),
         ),
         const SizedBox(width: 10),
         Text(
@@ -244,7 +244,7 @@ class _CreateReportScreenState extends State<CreateReportScreen>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.error.withValues(alpha: 0.04),
+            color: AppColors.primary.withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 2),
           ),
@@ -278,7 +278,7 @@ class _CreateReportScreenState extends State<CreateReportScreen>
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: AppColors.error, width: 2),
+            borderSide: const BorderSide(color: AppColors.primary, width: 2),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
@@ -308,7 +308,7 @@ class _CreateReportScreenState extends State<CreateReportScreen>
                 Icon(
                   type.$3,
                   size: 16,
-                  color: isSelected ? AppColors.textWhite : AppColors.error,
+                  color: isSelected ? AppColors.textWhite : AppColors.primary,
                 ),
                 const SizedBox(width: 6),
                 Text(type.$1),
@@ -320,7 +320,7 @@ class _CreateReportScreenState extends State<CreateReportScreen>
                 _selectedType = selected ? type.$2 : 'other';
               });
             },
-            selectedColor: AppColors.error,
+            selectedColor: AppColors.primary,
             backgroundColor: AppColors.surface,
             labelStyle: TextStyle(
               color: isSelected ? AppColors.textWhite : AppColors.textPrimary,
@@ -329,7 +329,7 @@ class _CreateReportScreenState extends State<CreateReportScreen>
             ),
             checkmarkColor: AppColors.textWhite,
             side: BorderSide(
-              color: isSelected ? AppColors.error : AppColors.border,
+              color: isSelected ? AppColors.primary : AppColors.border,
               width: isSelected ? 0 : 1,
             ),
             shape: RoundedRectangleBorder(
@@ -349,12 +349,12 @@ class _CreateReportScreenState extends State<CreateReportScreen>
       height: 56,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppColors.error, Color(0xFFEF5350)],
+          colors: [AppColors.primary, AppColors.reportsGradientEnd],
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.error.withValues(alpha: 0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
             blurRadius: 16,
             offset: const Offset(0, 6),
           ),

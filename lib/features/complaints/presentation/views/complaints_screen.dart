@@ -28,7 +28,7 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
   Color _getChipColor(String filter) {
     switch (filter) {
       case 'pending':
-        return AppColors.warning;
+        return AppColors.primary;
       case 'in_progress':
         return AppColors.info;
       default:
@@ -48,7 +48,7 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
                 expandedHeight: 160,
                 pinned: true,
                 stretch: true,
-                backgroundColor: AppColors.warning,
+                backgroundColor: AppColors.primary,
                 surfaceTintColor: Colors.transparent,
                 flexibleSpace: FlexibleSpaceBar(
                   title: const Text(
@@ -64,11 +64,11 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
                       gradient: LinearGradient(
                         begin: Alignment.topRight,
                         end: Alignment.bottomLeft,
-                        colors: [
-                          Color(0xFFF57F17),
-                          AppColors.warning,
-                          Color(0xFFFFCA28),
-                        ],
+                    colors: [
+                      AppColors.complaintsGradientStart,
+                      AppColors.primary,
+                      AppColors.complaintsGradientEnd,
+                    ],
                       ),
                     ),
                     child: Stack(
@@ -131,7 +131,7 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
             cubit.loadComplaints();
           }
         },
-        backgroundColor: AppColors.warning,
+        backgroundColor: AppColors.primary,
         elevation: 4,
         icon: const Icon(Icons.add_rounded, color: AppColors.textWhite, size: 28),
         label: const Text(
@@ -255,15 +255,15 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
                   begin: Alignment.topRight,
                   end: Alignment.bottomLeft,
                   colors: [
-                    AppColors.warning.withValues(alpha: 0.1),
-                    AppColors.warning.withValues(alpha: 0.05),
+                    AppColors.primary.withValues(alpha: 0.1),
+                    AppColors.primary.withValues(alpha: 0.05),
                   ],
                 ),
               ),
               child: const Icon(
                 Icons.feedback_outlined,
                 size: 56,
-                color: AppColors.warning,
+                color: AppColors.primary,
               ),
             ),
             const SizedBox(height: 24),
@@ -288,12 +288,12 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [AppColors.warning, Color(0xFFFFCA28)],
+                  colors: [AppColors.primary, AppColors.complaintsGradientEnd],
                 ),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.warning.withValues(alpha: 0.3),
+                    color: AppColors.primary.withValues(alpha: 0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),

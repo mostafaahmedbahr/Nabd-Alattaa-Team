@@ -95,7 +95,7 @@ class _CreateComplaintScreenState extends State<CreateComplaintScreen>
             expandedHeight: 200,
             pinned: true,
             stretch: true,
-            backgroundColor: AppColors.warning,
+            backgroundColor: AppColors.primary,
             surfaceTintColor: Colors.transparent,
             leading: IconButton(
               icon: const Icon(Icons.arrow_forward_ios_rounded,
@@ -117,9 +117,9 @@ class _CreateComplaintScreenState extends State<CreateComplaintScreen>
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
                     colors: [
-                      Color(0xFFF57F17),
-                      AppColors.warning,
-                      Color(0xFFFFCA28),
+                      AppColors.complaintsGradientStart,
+                      AppColors.primary,
+                      AppColors.complaintsGradientEnd,
                     ],
                   ),
                 ),
@@ -218,10 +218,10 @@ class _CreateComplaintScreenState extends State<CreateComplaintScreen>
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: AppColors.warning.withValues(alpha: 0.1),
+            color: AppColors.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Icon(icon, size: 18, color: AppColors.warning),
+          child: Icon(icon, size: 18, color: AppColors.primary),
         ),
         const SizedBox(width: 10),
         Text(
@@ -248,7 +248,7 @@ class _CreateComplaintScreenState extends State<CreateComplaintScreen>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.warning.withValues(alpha: 0.04),
+            color: AppColors.primary.withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 2),
           ),
@@ -282,7 +282,7 @@ class _CreateComplaintScreenState extends State<CreateComplaintScreen>
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: AppColors.warning, width: 2),
+            borderSide: const BorderSide(color: AppColors.primary, width: 2),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
@@ -312,7 +312,7 @@ class _CreateComplaintScreenState extends State<CreateComplaintScreen>
                 Icon(
                   type.$3,
                   size: 16,
-                  color: isSelected ? AppColors.textWhite : AppColors.warning,
+                  color: isSelected ? AppColors.textWhite : AppColors.primary,
                 ),
                 const SizedBox(width: 6),
                 Text(type.$1),
@@ -324,7 +324,7 @@ class _CreateComplaintScreenState extends State<CreateComplaintScreen>
                 _selectedType = selected ? type.$2 : 'other';
               });
             },
-            selectedColor: AppColors.warning,
+            selectedColor: AppColors.primary,
             backgroundColor: AppColors.surface,
             labelStyle: TextStyle(
               color: isSelected ? AppColors.textWhite : AppColors.textPrimary,
@@ -333,7 +333,7 @@ class _CreateComplaintScreenState extends State<CreateComplaintScreen>
             ),
             checkmarkColor: AppColors.textWhite,
             side: BorderSide(
-              color: isSelected ? AppColors.warning : AppColors.border,
+              color: isSelected ? AppColors.primary : AppColors.border,
               width: isSelected ? 0 : 1,
             ),
             shape: RoundedRectangleBorder(
@@ -361,7 +361,7 @@ class _CreateComplaintScreenState extends State<CreateComplaintScreen>
           Icon(
             _isAnonymous ? Icons.person_off_rounded : Icons.person_rounded,
             size: 22,
-            color: _isAnonymous ? AppColors.warning : AppColors.grey500,
+            color: _isAnonymous ? AppColors.primary : AppColors.grey500,
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -391,7 +391,7 @@ class _CreateComplaintScreenState extends State<CreateComplaintScreen>
             onChanged: (value) {
               setState(() => _isAnonymous = value);
             },
-            activeColor: AppColors.warning,
+            activeColor: AppColors.primary,
           ),
         ],
       ),
@@ -403,12 +403,12 @@ class _CreateComplaintScreenState extends State<CreateComplaintScreen>
       height: 56,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppColors.warning, Color(0xFFFFCA28)],
+          colors: [AppColors.primary, AppColors.complaintsGradientEnd],
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.warning.withValues(alpha: 0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
             blurRadius: 16,
             offset: const Offset(0, 6),
           ),

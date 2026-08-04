@@ -54,6 +54,12 @@ class AppColors {
   static const Color border = Color(0xFFD1D5DB);
   static const Color borderLight = Color(0xFFF3F4F6);
 
+  // Complaints & Reports Gradients
+  static const Color complaintsGradientStart = Color(0xFF3A1259);
+  static const Color complaintsGradientEnd = Color(0xFF7B4CA2);
+  static const Color reportsGradientStart = Color(0xFF3A1259);
+  static const Color reportsGradientEnd = Color(0xFF7B4CA2);
+
   // Grey Shades
   static const Color grey50 = Color(0xFFF9FAFB);
   static const Color grey100 = Color(0xFFF3F4F6);

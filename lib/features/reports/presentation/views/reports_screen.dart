@@ -49,7 +49,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 expandedHeight: 160,
                 pinned: true,
                 stretch: true,
-                backgroundColor: AppColors.error,
+                backgroundColor: AppColors.primary,
                 surfaceTintColor: Colors.transparent,
                 flexibleSpace: FlexibleSpaceBar(
                   title: const Text(
@@ -65,11 +65,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       gradient: LinearGradient(
                         begin: Alignment.topRight,
                         end: Alignment.bottomLeft,
-                        colors: [
-                          Color(0xFFB71C1C),
-                          AppColors.error,
-                          Color(0xFFEF5350),
-                        ],
+                    colors: [
+                      AppColors.reportsGradientStart,
+                      AppColors.primary,
+                      AppColors.reportsGradientEnd,
+                    ],
                       ),
                     ),
                     child: Stack(
@@ -132,7 +132,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             cubit.loadReports();
           }
         },
-        backgroundColor: AppColors.error,
+        backgroundColor: AppColors.primary,
         elevation: 4,
         icon: const Icon(Icons.add_rounded, color: AppColors.textWhite, size: 28),
         label: const Text(
@@ -256,15 +256,15 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   begin: Alignment.topRight,
                   end: Alignment.bottomLeft,
                   colors: [
-                    AppColors.error.withValues(alpha: 0.1),
-                    AppColors.error.withValues(alpha: 0.05),
+                    AppColors.primary.withValues(alpha: 0.1),
+                    AppColors.primary.withValues(alpha: 0.05),
                   ],
                 ),
               ),
               child: const Icon(
                 Icons.report_outlined,
                 size: 56,
-                color: AppColors.error,
+                color: AppColors.primary,
               ),
             ),
             const SizedBox(height: 24),
@@ -289,12 +289,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [AppColors.error, Color(0xFFEF5350)],
+                  colors: [AppColors.primary, AppColors.reportsGradientEnd],
                 ),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.error.withValues(alpha: 0.3),
+                    color: AppColors.primary.withValues(alpha: 0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
