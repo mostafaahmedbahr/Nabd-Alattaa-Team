@@ -33,11 +33,13 @@ class GoodDeedCubit extends Cubit<GoodDeedState> {
   }
 
   Future<void> addGoodDeed({
+    required String title,
     required String content,
     required String creatorId,
   }) async {
     final deed = GoodDeedModel(
       id: const Uuid().v4(),
+      title: title,
       content: content,
       creatorId: creatorId,
       createdAt: DateTime.now(),

@@ -4,6 +4,7 @@ import '../../../../core/constants/firestore_constants.dart';
 
 class GoodDeedModel extends Equatable {
   final String id;
+  final String title;
   final String content;
   final String creatorId;
   final int likesCount;
@@ -12,6 +13,7 @@ class GoodDeedModel extends Equatable {
 
   const GoodDeedModel({
     required this.id,
+    this.title = '',
     required this.content,
     required this.creatorId,
     this.likesCount = 0,
@@ -22,6 +24,7 @@ class GoodDeedModel extends Equatable {
   factory GoodDeedModel.fromMap(Map<String, dynamic> map) {
     return GoodDeedModel(
       id: map['id'] ?? '',
+      title: map['title'] ?? '',
       content: map[FirestoreConstants.goodDeedContent] ?? '',
       creatorId: map[FirestoreConstants.goodDeedCreatorId] ?? '',
       likesCount: map[FirestoreConstants.goodDeedLikesCount] ?? 0,
@@ -33,6 +36,7 @@ class GoodDeedModel extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'title': title,
       FirestoreConstants.goodDeedContent: content,
       FirestoreConstants.goodDeedCreatorId: creatorId,
       FirestoreConstants.goodDeedLikesCount: likesCount,
@@ -43,6 +47,7 @@ class GoodDeedModel extends Equatable {
 
   GoodDeedModel copyWith({
     String? id,
+    String? title,
     String? content,
     String? creatorId,
     int? likesCount,
@@ -51,6 +56,7 @@ class GoodDeedModel extends Equatable {
   }) {
     return GoodDeedModel(
       id: id ?? this.id,
+      title: title ?? this.title,
       content: content ?? this.content,
       creatorId: creatorId ?? this.creatorId,
       likesCount: likesCount ?? this.likesCount,
@@ -60,5 +66,5 @@ class GoodDeedModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, content, creatorId, likesCount, prayersCount, createdAt];
+  List<Object?> get props => [id, title, content, creatorId, likesCount, prayersCount, createdAt];
 }
