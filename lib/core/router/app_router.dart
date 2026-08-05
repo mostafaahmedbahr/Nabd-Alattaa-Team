@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nabd_alattaa_team/features/admin/presentation/views/admin_dashboard_screen.dart';
 import 'package:nabd_alattaa_team/features/layout/presentation/views/layout_view.dart';
 import 'package:nabd_alattaa_team/features/tasks/presentation/views/tasks_screen.dart';
 import '../../features/chat/presentation/views/chat_list_screen.dart';
@@ -114,6 +115,10 @@ class AppRouter {
       GoRoute(
         path: Routes.notifications,
         builder: (_, _) => const NotificationsScreen(),
+      ),
+      GoRoute(
+        path: Routes.admin,
+        builder: (_, _) => const AdminDashboardScreen(),
       ),
       // GoRoute(
       //   path: Routes.chat,

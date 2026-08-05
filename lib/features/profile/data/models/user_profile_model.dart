@@ -9,6 +9,7 @@ class UserProfileModel extends Equatable {
   final String phone;
   final String department;
   final String position;
+  final String role;
   final int points;
   final DateTime createdAt;
 
@@ -19,6 +20,7 @@ class UserProfileModel extends Equatable {
     this.phone = '',
     this.department = '',
     this.position = '',
+    this.role = 'employee',
     this.points = 0,
     required this.createdAt,
   });
@@ -31,6 +33,7 @@ class UserProfileModel extends Equatable {
       phone: map[FirestoreConstants.userPhone] ?? '',
       department: map[FirestoreConstants.userDepartment] ?? '',
       position: map[FirestoreConstants.userPosition] ?? '',
+      role: map[FirestoreConstants.userRole] ?? 'employee',
       points: map[FirestoreConstants.userPoints] ?? 0,
       createdAt: map[FirestoreConstants.userCreatedAt]?.toDate() ?? DateTime.now(),
     );
@@ -44,10 +47,16 @@ class UserProfileModel extends Equatable {
       FirestoreConstants.userPhone: phone,
       FirestoreConstants.userDepartment: department,
       FirestoreConstants.userPosition: position,
+      FirestoreConstants.userRole: role,
       FirestoreConstants.userPoints: points,
       FirestoreConstants.userCreatedAt: createdAt,
     };
   }
+
+  bool get isAdmin =>
+      role == UserRole.superAdmin ||
+      role == UserRole.manager ||
+      role == 'admin';
 
   UserProfileModel copyWith({
     String? id,
@@ -56,6 +65,7 @@ class UserProfileModel extends Equatable {
     String? phone,
     String? department,
     String? position,
+    String? role,
     int? points,
     DateTime? createdAt,
   }) {
@@ -66,6 +76,7 @@ class UserProfileModel extends Equatable {
       phone: phone ?? this.phone,
       department: department ?? this.department,
       position: position ?? this.position,
+      role: role ?? this.role,
       points: points ?? this.points,
       createdAt: createdAt ?? this.createdAt,
     );
@@ -79,6 +90,7 @@ class UserProfileModel extends Equatable {
         phone,
         department,
         position,
+        role,
         points,
         createdAt,
       ];

@@ -4,10 +4,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import '../../../../common_imports.dart';
 
 class SettingsSection extends StatelessWidget {
-  const SettingsSection({super.key});
+  final bool isAdmin;
+
+  const SettingsSection({super.key, this.isAdmin = false});
 
   @override
   Widget build(BuildContext context) {
+    print(isAdmin);
+    print("ssssss");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Card(
@@ -24,15 +28,26 @@ class SettingsSection extends StatelessWidget {
               },
             ),
               Divider(height: 1.h),
-            ListTile(
-              leading: const Icon(Icons.restaurant_menu_outlined, color: AppColors.primary),
-              title: const Text('إدارة قائمة الطعام'),
-              trailing:   Icon(Icons.arrow_forward_ios, size: 16.sp),
-              onTap: () {
-                context.push('/manage-meals');
-              },
-            ),
+            if (isAdmin) ...[
+              ListTile(
+                leading: const Icon(Icons.restaurant_menu_outlined, color: AppColors.primary),
+                title: const Text('إدارة قائمة الطعام'),
+                trailing:   Icon(Icons.arrow_forward_ios, size: 16.sp),
+                onTap: () {
+                  context.push('/manage-meals');
+                },
+              ),
+              // Divider(height: 1.h),
+              // ListTile(
+              //   leading: const Icon(Icons.admin_panel_settings, color: AppColors.primary),
+              //   title: const Text('لوحة التحكم'),
+              //   trailing:   Icon(Icons.arrow_forward_ios, size: 16.sp),
+              //   onTap: () {
+              //     context.push(Routes.admin);
+              //   },
+              // ),
               Divider(height: 1.h),
+            ],
             ListTile(
               leading: const Icon(Icons.lock_outline, color: AppColors.primary),
               title: const Text('تغيير كلمة المرور'),

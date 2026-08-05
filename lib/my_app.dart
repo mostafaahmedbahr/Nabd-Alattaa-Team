@@ -1,7 +1,9 @@
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:nabd_alattaa_team/features/admin/presentation/view_model/admin_cubit.dart';
 import 'package:nabd_alattaa_team/features/layout/presentation/view_model/layout_cubit.dart';
 import 'common_imports.dart';
 import 'core/utils/service_locator.dart' as di;
+import 'features/admin/data/repos_impl/admin_repo_impl.dart';
 import 'features/chat/data/repos/chat_repo.dart';
 import 'features/chat/presentation/view_model/chat_cubit.dart';
 import 'features/complaints/data/repos_impl/complaint_repo_impl.dart';
@@ -27,7 +29,6 @@ import 'features/tasks/data/repos/task_repo_impl.dart';
 import 'features/tasks/presentation/view_model/task_cubit.dart';
 import 'features/notifications/data/repos_impl/notification_repo_impl.dart';
 import 'features/notifications/presentation/view_model/notification_cubit.dart';
-import 'features/users/data/repos/users_repo.dart';
 import 'features/users/presentation/view_model/users_cubit.dart';
 import 'features/announcements/presentation/view_model/announcement_cubit.dart';
 
@@ -92,6 +93,11 @@ class NabdAlattaaApp extends StatelessWidget {
           BlocProvider(
             create: (_) => ChatCubit(
               chatRepository: di.sl<ChatRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (_) => AdminCubit(
+              AdminRepoImpl(),
             ),
           ),
           BlocProvider(
