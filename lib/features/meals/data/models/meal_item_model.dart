@@ -35,6 +35,22 @@ class MealItemModel extends Equatable {
     };
   }
 
+  MealItemModel copyWith({
+    String? id,
+    String? name,
+    double? price,
+    String? category,
+    bool? isAvailable,
+  }) {
+    return MealItemModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      price: price ?? this.price,
+      category: category ?? this.category,
+      isAvailable: isAvailable ?? this.isAvailable,
+    );
+  }
+
   @override
   List<Object?> get props => [id, name, price, category, isAvailable];
 }

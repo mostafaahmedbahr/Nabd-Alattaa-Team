@@ -22,12 +22,7 @@ Future<void> initializeApp() async {
     _firebaseMessagingBackgroundHandler,
   );
   await FCMService.initialize();
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  // طلب الإذن (مهم في iOS)
-  await messaging.requestPermission();
-  // جيب الـ token الخاص بالجهاز ده
-  String? token = await messaging.getToken();
-  print("FCM Token: $token");
+  print("FCM Token: ${FCMService.token}");
 
   // لما التطبيق يكون شغال (foreground)
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {

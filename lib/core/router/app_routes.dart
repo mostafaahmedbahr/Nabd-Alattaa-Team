@@ -32,6 +32,7 @@ class Routes {
   static const createGoodDeed = '/create-good-deed';
 
   static const meals = '/meals';
+  static const manageMeals = '/manage-meals';
 
   static const profile = '/profile';
   static const editProfile = '/edit-profile';

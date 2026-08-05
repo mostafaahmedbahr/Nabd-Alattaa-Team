@@ -132,6 +132,7 @@ class FirestoreConstants {
   static const String mealOrderDate = 'date';
   static const String mealOrderCreatedAt = 'created_at';
   static const String mealsCollection = 'meals_collection';
+  static const String mealItemsCollection = 'meal_items';
   static const String mealOrdersCollection = 'meal_orders_collection';
 
   // Notification Fields
@@ -264,6 +265,22 @@ class MealCategory {
   static const String pizza = 'بيتزا';
   static const String drinks = 'مشروبات';
   static const String desserts = 'حلويات';
+  static const String breakfast = 'إفطار';
+  static const String shawarma = 'شاورما';
+  static const String grills = 'مشويات';
+  static const String macaroni = 'مكرونات';
+
+  static const List<String> all = [
+    sandwiches,
+    pies,
+    pizza,
+    breakfast,
+    shawarma,
+    grills,
+    drinks,
+    desserts,
+    macaroni,
+  ];
 }
 
 class NotificationType {

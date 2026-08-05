@@ -40,6 +40,10 @@ class MealOrderSubmitting extends MealState {}
 
 class MealOrderSubmitted extends MealState {}
 
+class MealItemSaved extends MealState {}
+
+class MealItemDeleted extends MealState {}
+
 class MealOrdersLoaded extends MealState {
   final List<MealOrderModel> orders;
 

@@ -13,6 +13,8 @@ import 'features/ideas/data/repos_impl/idea_repo_impl.dart';
 import 'features/ideas/presentation/view_model/idea_cubit.dart';
 import 'features/library/data/repos_impl/library_repo_impl.dart';
 import 'features/library/presentation/view_model/library_cubit.dart';
+import 'features/meals/data/repos_impl/meal_repo_impl.dart';
+import 'features/meals/presentation/view_model/meal_cubit.dart';
 import 'features/login/data/repos/login_repos_impl.dart';
 import 'features/login/presentation/view_model/login_cubit.dart';
 
@@ -119,6 +121,9 @@ class NabdAlattaaApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => AnnouncementCubit(),
+          ),
+          BlocProvider(
+            create: (_) => MealCubit(MealRepoImpl()),
           ),
 
         ],

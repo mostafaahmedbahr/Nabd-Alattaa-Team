@@ -13,16 +13,64 @@ class MealRepoImpl implements MealRepository {
   Future<Either<String, List<MealItemModel>>> getMenu() async {
     try {
       final snapshot = await _firestore
-          .collection(FirestoreConstants.mealsCollection)
+          .collection(FirestoreConstants.mealItemsCollection)
           .get();
 
-      final items = snapshot.docs
-          .map((doc) => MealItemModel.fromMap(doc.data()))
-          .toList();
+      final items = snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id;
+        return MealItemModel.fromMap(data);
+      }).toList();
 
       return Right(items);
     } catch (e) {
       return Left('فشل في تحميل القائمة: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<Either<String, void>> addMealItem(MealItemModel item) async {
+    try {
+      final docRef = _firestore
+          .collection(FirestoreConstants.mealItemsCollection)
+          .doc();
+
+      await docRef.set({
+        ...item.toMap(),
+        'id': docRef.id,
+      });
+
+      return const Right(null);
+    } catch (e) {
+      return Left('فشل في إضافة الوجبة: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<Either<String, void>> updateMealItem(MealItemModel item) async {
+    try {
+      await _firestore
+          .collection(FirestoreConstants.mealItemsCollection)
+          .doc(item.id)
+          .update(item.toMap());
+
+      return const Right(null);
+    } catch (e) {
+      return Left('فشل في تعديل الوجبة: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<Either<String, void>> deleteMealItem(String itemId) async {
+    try {
+      await _firestore
+          .collection(FirestoreConstants.mealItemsCollection)
+          .doc(itemId)
+          .delete();
+
+      return const Right(null);
+    } catch (e) {
+      return Left('فشل في حذف الوجبة: ${e.toString()}');
     }
   }
 

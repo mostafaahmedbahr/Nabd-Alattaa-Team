@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/meal_item_model.dart';
 import '../../data/models/meal_order_model.dart';
@@ -10,7 +11,7 @@ class MealCubit extends Cubit<MealState> {
   MealCubit(this._mealRepo) : super(MealInitial());
 
   List<MealItemModel> _menuItems = [];
-  Map<String, int> _cartItems = {};
+  final Map<String, int> _cartItems = {};
 
   List<MealItemModel> get menuItems => _menuItems;
   Map<String, int> get cartItems => _cartItems;
@@ -18,22 +19,32 @@ class MealCubit extends Cubit<MealState> {
   double get cartTotal {
     double total = 0;
     _cartItems.forEach((itemId, quantity) {
-      final item = _menuItems.firstWhere((e) => e.id == itemId);
-      total += item.price * quantity;
+      for (final item in _menuItems) {
+        if (item.id == itemId) {
+          total += item.price * quantity;
+          break;
+        }
+      }
     });
     return total;
   }
 
   List<MealOrderItem> get cartOrderItems {
-    return _cartItems.entries.map((entry) {
-      final item = _menuItems.firstWhere((e) => e.id == entry.key);
-      return MealOrderItem(
-        itemId: item.id,
-        name: item.name,
-        quantity: entry.value,
-        price: item.price,
-      );
-    }).toList();
+    final result = <MealOrderItem>[];
+    _cartItems.forEach((itemId, quantity) {
+      for (final item in _menuItems) {
+        if (item.id == itemId) {
+          result.add(MealOrderItem(
+            itemId: item.id,
+            name: item.name,
+            quantity: quantity,
+            price: item.price,
+          ));
+          break;
+        }
+      }
+    });
+    return result;
   }
 
   Future<void> loadMenu() async {
@@ -78,13 +89,19 @@ class MealCubit extends Cubit<MealState> {
     ));
   }
 
-  Future<void> submitOrder(String userId, String userName) async {
+  Future<void> submitOrder() async {
     if (_cartItems.isEmpty) {
       emit(const MealError('السلة فارغة'));
       return;
     }
 
     emit(MealOrderSubmitting());
+
+    final user = FirebaseAuth.instance.currentUser;
+    final userId = user?.uid ?? '';
+    final userName = user?.displayName?.isNotEmpty == true
+        ? user!.displayName!
+        : 'مستخدم';
 
     final order = MealOrderModel(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -105,6 +122,47 @@ class MealCubit extends Cubit<MealState> {
         emit(MealOrderSubmitted());
       },
     );
+  }
+
+  Future<void> addMealItem(MealItemModel item) async {
+    final result = await _mealRepo.addMealItem(item);
+    result.fold(
+      (error) => emit(MealError(error)),
+      (_) {
+        emit(MealItemSaved());
+        loadMenu();
+      },
+    );
+  }
+
+  Future<void> updateMealItem(MealItemModel item) async {
+    final result = await _mealRepo.updateMealItem(item);
+    result.fold(
+      (error) => emit(MealError(error)),
+      (_) {
+        emit(MealItemSaved());
+        loadMenu();
+      },
+    );
+  }
+
+  Future<void> deleteMealItem(String itemId) async {
+    final result = await _mealRepo.deleteMealItem(itemId);
+    result.fold(
+      (error) => emit(MealError(error)),
+      (_) {
+        emit(MealItemDeleted());
+        loadMenu();
+      },
+    );
+  }
+
+  Future<void> toggleAvailability(String itemId) async {
+    final index = _menuItems.indexWhere((e) => e.id == itemId);
+    if (index == -1) return;
+
+    final item = _menuItems[index];
+    await updateMealItem(item.copyWith(isAvailable: !item.isAvailable));
   }
 
   Future<void> loadOrders(DateTime date) async {

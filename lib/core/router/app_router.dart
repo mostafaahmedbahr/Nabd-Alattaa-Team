@@ -25,6 +25,7 @@ import '../../features/notifications/presentation/views/notifications_screen.dar
 import '../../features/good_deeds/presentation/views/good_deeds_screen.dart';
 import '../../features/good_deeds/presentation/views/create_good_deed_screen.dart';
 import '../../features/meals/presentation/views/meals_screen.dart';
+import '../../features/meals/presentation/views/manage_meals_screen.dart';
 import '../../features/profile/presentation/views/edit_profile_screen.dart';
 import '../../features/announcements/presentation/views/announcements_screen.dart';
 import '../../features/announcements/presentation/views/create_announcement_screen.dart';
@@ -105,6 +106,10 @@ class AppRouter {
       GoRoute(
         path: Routes.meals,
         builder: (_, _) => const MealsScreen(),
+      ),
+      GoRoute(
+        path: Routes.manageMeals,
+        builder: (_, _) => const ManageMealsScreen(),
       ),
       GoRoute(
         path: Routes.notifications,

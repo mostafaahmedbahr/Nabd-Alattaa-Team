@@ -14,7 +14,7 @@ class QuickActionsGrid extends StatelessWidget {
             _buildAction(context, Icons.lightbulb_outline, "صندوق الأفكار", Routes.ideas),
             _buildAction(context, Icons.library_books_outlined, "المكتبة", Routes.library),
             _buildAction(context, Icons.volunteer_activism_outlined, "عملت خير", Routes.goodDeeds),
-            // _buildAction(context, Icons.restaurant_outlined, "طلبات الطعام", Routes.meals),
+            _buildAction(context, Icons.restaurant_outlined, "طلبات الطعام", Routes.meals),
           ],
         ),
         SizedBox(height: 12.h),

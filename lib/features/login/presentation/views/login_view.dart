@@ -1,3 +1,5 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import '../../../../common_imports.dart';
 import '../view_model/login_cubit.dart';
 import '../view_model/login_states.dart';
@@ -51,9 +53,12 @@ class _LoginViewState extends State<LoginView>
     return Scaffold(
       backgroundColor: AppColors.background,
       body: BlocListener<LoginCubit, LoginStates>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is LoginSuccessState) {
             context.go(Routes.layoutView);
+            await FirebaseMessaging.instance.subscribeToTopic(
+              "all_users",
+            );
           } else if (state is LoginErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

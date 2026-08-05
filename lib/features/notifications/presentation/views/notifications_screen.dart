@@ -23,6 +23,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   void initState() {
     super.initState();
     _loadNotifications();
+    // FirebaseFunctions.instance
+    //     .httpsCallable("sendNotificationToAll");
   }
 
   void _loadNotifications() {

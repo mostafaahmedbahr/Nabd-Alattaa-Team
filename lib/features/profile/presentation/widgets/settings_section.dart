@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../../../../common_imports.dart';
 
@@ -20,6 +21,15 @@ class SettingsSection extends StatelessWidget {
               trailing:   Icon(Icons.arrow_forward_ios, size: 16.sp),
               onTap: () {
                 context.push('/edit-profile');
+              },
+            ),
+              Divider(height: 1.h),
+            ListTile(
+              leading: const Icon(Icons.restaurant_menu_outlined, color: AppColors.primary),
+              title: const Text('إدارة قائمة الطعام'),
+              trailing:   Icon(Icons.arrow_forward_ios, size: 16.sp),
+              onTap: () {
+                context.push('/manage-meals');
               },
             ),
               Divider(height: 1.h),
@@ -235,6 +245,9 @@ class SettingsSection extends StatelessWidget {
                           Navigator.pop(context);
                           await FirebaseAuth.instance.signOut();
                           if (context.mounted) context.go('/login');
+                          await FirebaseMessaging.instance.unsubscribeFromTopic(
+                            "all_users",
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.error,
