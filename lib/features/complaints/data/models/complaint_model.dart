@@ -11,7 +11,6 @@ class ComplaintModel extends Equatable {
   final String status;
   final String creatorId;
   final String creatorName;
-  final String? assignedTo;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -24,7 +23,6 @@ class ComplaintModel extends Equatable {
     this.status = 'pending',
     required this.creatorId,
     required this.creatorName,
-    this.assignedTo,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -39,7 +37,6 @@ class ComplaintModel extends Equatable {
       status: map[FirestoreConstants.complaintStatus] ?? 'pending',
       creatorId: map[FirestoreConstants.complaintCreatorId] ?? '',
       creatorName: map[FirestoreConstants.complaintCreatorName] ?? '',
-      assignedTo: map[FirestoreConstants.complaintAssignedTo],
       createdAt: map[FirestoreConstants.complaintCreatedAt]?.toDate() ?? DateTime.now(),
       updatedAt: map[FirestoreConstants.complaintUpdatedAt]?.toDate() ?? DateTime.now(),
     );
@@ -55,7 +52,6 @@ class ComplaintModel extends Equatable {
       FirestoreConstants.complaintStatus: status,
       FirestoreConstants.complaintCreatorId: creatorId,
       FirestoreConstants.complaintCreatorName: creatorName,
-      FirestoreConstants.complaintAssignedTo: assignedTo,
       FirestoreConstants.complaintCreatedAt: createdAt,
       FirestoreConstants.complaintUpdatedAt: updatedAt,
     };
@@ -83,7 +79,6 @@ class ComplaintModel extends Equatable {
       status: status ?? this.status,
       creatorId: creatorId ?? this.creatorId,
       creatorName: creatorName ?? this.creatorName,
-      assignedTo: assignedTo ?? this.assignedTo,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -99,7 +94,6 @@ class ComplaintModel extends Equatable {
         status,
         creatorId,
         creatorName,
-        assignedTo,
         createdAt,
         updatedAt,
       ];

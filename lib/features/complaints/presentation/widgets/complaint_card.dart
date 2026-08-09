@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../../../core/constants/app_colors.dart';
+import '../../../../common_imports.dart';
 import '../../../../core/utils/helpers.dart';
 import '../../data/models/complaint_model.dart';
 
@@ -30,41 +28,41 @@ class ComplaintCard extends StatelessWidget {
         );
       },
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
+        margin:   EdgeInsets.only(bottom: 12.h),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: AppColors.grey100, width: 1),
+          borderRadius: BorderRadius.circular(24.r),
+          border: Border.all(color: AppColors.grey100, width: 1.w),
           boxShadow: [
             BoxShadow(
               color: _getStatusColor().withValues(alpha: 0.08),
-              blurRadius: 20,
+              blurRadius: 20.r,
               offset: const Offset(0, 8),
             ),
           ],
         ),
         child: Material(
           color: Colors.transparent,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(24.r),
           child: InkWell(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(24.r),
             onTap: () {},
             splashColor: _getStatusColor().withValues(alpha: 0.05),
             highlightColor: _getStatusColor().withValues(alpha: 0.03),
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding:   EdgeInsets.all(20.r),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
                       _buildAvatar(),
-                      const SizedBox(width: 14),
+                        SizedBox(width: 14.w),
                       Expanded(child: _buildContent()),
                       _buildStatusBadge(),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                   _buildFooter(),
                 ],
               ),
@@ -81,7 +79,7 @@ class ComplaintCard extends StatelessWidget {
         return AppColors.warning;
       case 'in_progress':
         return AppColors.info;
-      case 'resolved':
+      case 'complete':
         return AppColors.success;
       default:
         return AppColors.grey500;
@@ -109,8 +107,8 @@ class ComplaintCard extends StatelessWidget {
 
   Widget _buildAvatar() {
     return Container(
-      width: 48,
-      height: 48,
+      width: 48.w,
+      height: 48.h,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -120,11 +118,11 @@ class ComplaintCard extends StatelessWidget {
             _getStatusColor().withValues(alpha: 0.7),
           ],
         ),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
             color: _getStatusColor().withValues(alpha: 0.3),
-            blurRadius: 8,
+            blurRadius: 8.r,
             offset: const Offset(0, 4),
           ),
         ],
@@ -132,7 +130,7 @@ class ComplaintCard extends StatelessWidget {
       child: Icon(
         _getTypeIcon(),
         color: AppColors.textWhite,
-        size: 24,
+        size: 24.sp,
       ),
     );
   }
@@ -143,23 +141,23 @@ class ComplaintCard extends StatelessWidget {
       children: [
         Text(
           complaint.title,
-          style: const TextStyle(
-            fontSize: 16,
+          style:   TextStyle(
+            fontSize: 16.sp,
             fontWeight: FontWeight.w700,
             color: AppColors.textPrimary,
             letterSpacing: -0.2,
           ),
         ),
         if (complaint.content.isNotEmpty) ...[
-          const SizedBox(height: 6),
+            SizedBox(height: 6.h),
           Text(
             complaint.content,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
+            style:   TextStyle(
               color: AppColors.textSecondary,
-              fontSize: 14,
-              height: 1.5,
+              fontSize: 14.sp,
+              height: 1.5.h,
             ),
           ),
         ],
@@ -183,7 +181,7 @@ class ComplaintCard extends StatelessWidget {
         text = 'قيد التنفيذ';
         icon = Icons.autorenew_rounded;
         break;
-      case 'resolved':
+      case 'complete':
         color = AppColors.success;
         text = 'تم الحل';
         icon = Icons.check_circle_outline_rounded;
@@ -195,25 +193,26 @@ class ComplaintCard extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding:   EdgeInsets.symmetric(horizontal: 10.w,
+          vertical: 5.h),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10.r),
         border: Border.all(
           color: color.withValues(alpha: 0.2),
-          width: 1,
+          width: 1.w,
         ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: color),
-          const SizedBox(width: 4),
+          Icon(icon, size: 14.sp, color: color),
+            SizedBox(width: 4.w),
           Text(
             text,
             style: TextStyle(
               color: color,
-              fontSize: 11,
+              fontSize: 11.sp,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -233,30 +232,30 @@ class ComplaintCard extends StatelessWidget {
         children: [
           Icon(
             complaint.isAnonymous ? Icons.person_off_rounded : Icons.person_rounded,
-            size: 14,
+            size: 14.sp,
             color: AppColors.grey400,
           ),
-          const SizedBox(width: 6),
+            SizedBox(width: 6.w),
           Text(
             complaint.isAnonymous ? 'مجهول' : complaint.creatorName,
-            style: const TextStyle(
+            style:   TextStyle(
               color: AppColors.textSecondary,
-              fontSize: 12,
+              fontSize: 12.sp,
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(width: 12),
+            SizedBox(width: 12.w),
           Icon(
             Icons.schedule_rounded,
-            size: 14,
+            size: 14.sp,
             color: AppColors.grey400,
           ),
-          const SizedBox(width: 4),
+            SizedBox(width: 4.w),
           Text(
             Helpers.timeAgo(complaint.createdAt),
-            style: const TextStyle(
+            style:   TextStyle(
               color: AppColors.textHint,
-              fontSize: 12,
+              fontSize: 12.sp,
               fontWeight: FontWeight.w500,
             ),
           ),

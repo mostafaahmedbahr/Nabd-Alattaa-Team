@@ -5,14 +5,14 @@ import '../view_model/complaint_cubit.dart';
 import '../view_model/complaint_state.dart';
 import '../widgets/complaints_header.dart';
 
-class ComplaintsScreen extends StatefulWidget {
-  const ComplaintsScreen({super.key});
+class ComplaintsView extends StatefulWidget {
+  const ComplaintsView({super.key});
 
   @override
-  State<ComplaintsScreen> createState() => _ComplaintsScreenState();
+  State<ComplaintsView> createState() => _ComplaintsViewState();
 }
 
-class _ComplaintsScreenState extends State<ComplaintsScreen> {
+class _ComplaintsViewState extends State<ComplaintsView> {
   @override
   void initState() {
     super.initState();

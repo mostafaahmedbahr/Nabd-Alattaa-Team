@@ -14,7 +14,7 @@ import '../../features/onboarding/presentation/views/onboarding_view.dart';
 import '../../features/login/presentation/views/login_view.dart';
 import '../../features/tasks/presentation/views/create_task_screen.dart';
 import '../../features/tasks/presentation/views/task_details_screen.dart';
-import '../../features/complaints/presentation/views/complaints_screen.dart';
+import '../../features/complaints/presentation/views/complaints_view.dart';
 import '../../features/complaints/presentation/views/create_complaint_screen.dart';
 import '../../features/library/presentation/views/library_screen.dart';
 import '../../features/library/presentation/views/create_library_item_screen.dart';
@@ -82,7 +82,7 @@ class AppRouter {
 
       GoRoute(
         path: Routes.complaints,
-        builder: (_, _) => const ComplaintsScreen(),
+        builder: (_, _) => const ComplaintsView(),
       ),
       GoRoute(
         path: Routes.library,

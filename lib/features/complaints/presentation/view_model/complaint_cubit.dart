@@ -75,11 +75,22 @@ class ComplaintCubit extends Cubit<ComplaintState> {
 
       result.fold(
         (failure) => emit(ComplaintAddError(message: failure.message)),
-        (_) => emit(ComplaintAddSuccess(complaint: complaint)),
+        (_) {
+          clearForm();
+          emit(ComplaintAddSuccess(complaint: complaint));
+        },
       );
     } catch (e) {
       emit(ComplaintAddError(message: e.toString()));
     }
+  }
+
+  void clearForm() {
+    titleController.clear();
+    contentController.clear();
+    selectedType = ComplaintType.other;
+    isAnonymous = false;
+    selectedFilter = 'all';
   }
 
   Future<void> updateStatus(String complaintId, String status) async {
