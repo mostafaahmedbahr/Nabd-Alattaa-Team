@@ -23,10 +23,14 @@ class HomeCubit extends Cubit<HomeStates> {
 
   bool _hasLoaded = false;
 
-  Future<void> loadHomeData(String userId, {bool forceRefresh = false}) async {
+  Future<void> loadHomeData(String userId,
+      {bool forceRefresh = false, bool showLoading = true})
+  async {
     if (_hasLoaded && !forceRefresh) return;
-    
-    emit(HomeLoading());
+
+    if (showLoading) {
+      emit(HomeLoading());
+    }
     try {
       final userDoc = await _firestore
           .collection(FirestoreConstants.users)

@@ -26,7 +26,7 @@ class SubmitButton extends StatelessWidget {
           context.read<GoodDeedCubit>().loadGoodDeeds();
 
           context.read<HomeCubit>().loadHomeData(FirebaseAuth.instance.currentUser?.uid ?? 'current_user_id',
-              forceRefresh: false);
+              forceRefresh: true, showLoading: false);
           context.pop();
         }
         else if (state is GoodDeedActionError){
