@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../../../../common_imports.dart';
 import '../../data/models/good_deed_model.dart';
 import '../view_model/good_deed_cubit.dart';
@@ -56,11 +58,11 @@ class GoodDeedContent extends StatelessWidget {
             return GoodDeedCard(
               deed: deed,
               index: index,
-              isLiked: false,
+              isLiked: deed.likesCount>0,
               onLike: () {
                 context.read<GoodDeedCubit>().likeDeed(
                   deed.id,
-                  'current_user_id',
+                  FirebaseAuth.instance.currentUser?.uid ?? 'current_user_id',
                 );
               },
               onTap: () => _showDeedDetails(deed,context),
