@@ -1,49 +1,46 @@
-import 'package:equatable/equatable.dart';
 
 import '../../data/models/good_deed_model.dart';
 
-abstract class GoodDeedState extends Equatable {
-  const GoodDeedState();
-
-  @override
-  List<Object?> get props => [];
+abstract class GoodDeedStates {}
+class GoodDeedInitial extends GoodDeedStates {
 }
 
-class GoodDeedInitial extends GoodDeedState {
-  const GoodDeedInitial();
-}
+class GoodDeedLoading extends GoodDeedStates {}
 
-class GoodDeedLoading extends GoodDeedState {
-  const GoodDeedLoading();
-}
-
-class GoodDeedLoaded extends GoodDeedState {
+class GoodDeedLoaded extends GoodDeedStates {
   final List<GoodDeedModel> goodDeeds;
-
-  const GoodDeedLoaded({required this.goodDeeds});
-
-  @override
-  List<Object?> get props => [goodDeeds];
+    GoodDeedLoaded({required this.goodDeeds});
 }
 
-class GoodDeedError extends GoodDeedState {
+class GoodDeedError extends GoodDeedStates {
+  final String message;
+    GoodDeedError({required this.message});
+}
+
+class GoodDeedAdded extends GoodDeedStates {}
+
+class GoodDeedActionError extends GoodDeedStates {
   final String message;
 
-  const GoodDeedError({required this.message});
+    GoodDeedActionError({required this.message});
 
-  @override
-  List<Object?> get props => [message];
+
 }
 
-class GoodDeedAdded extends GoodDeedState {
-  const GoodDeedAdded();
+class GoodDeedAddLoading extends GoodDeedStates {}
+
+class GoodDeedAddSuccess extends GoodDeedStates {
+  final GoodDeedModel deed;
+
+  GoodDeedAddSuccess({
+    required this.deed,
+  });
 }
 
-class GoodDeedActionError extends GoodDeedState {
+class GoodDeedAddError extends GoodDeedStates {
   final String message;
 
-  const GoodDeedActionError({required this.message});
-
-  @override
-  List<Object?> get props => [message];
+  GoodDeedAddError({
+    required this.message,
+  });
 }

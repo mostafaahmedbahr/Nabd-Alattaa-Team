@@ -5,17 +5,17 @@ import '../../data/models/good_deed_model.dart';
 import '../../data/repos/good_deed_repo.dart';
 import 'good_deed_state.dart';
 
-class GoodDeedCubit extends Cubit<GoodDeedState> {
+class GoodDeedCubit extends Cubit<GoodDeedStates> {
   final GoodDeedRepository _repository;
   StreamSubscription? _subscription;
 
   GoodDeedCubit({required GoodDeedRepository repository})
       : _repository = repository,
-        super(const GoodDeedInitial());
+        super(  GoodDeedInitial());
 
   void loadGoodDeeds() {
     _subscription?.cancel();
-    emit(const GoodDeedLoading());
+    emit(  GoodDeedLoading());
 
     _subscription = _repository.getGoodDeeds().listen(
       (result) {
@@ -30,26 +30,51 @@ class GoodDeedCubit extends Cubit<GoodDeedState> {
     );
   }
 
+
   Future<void> addGoodDeed({
     required String title,
     required String content,
     required String creatorId,
-  })
-  async {
-    final deed = GoodDeedModel(
-      id: const Uuid().v4(),
-      title: title,
-      content: content,
-      creatorId: creatorId,
-      createdAt: DateTime.now(),
-    );
+  }) async {
+    emit(GoodDeedAddLoading());
 
-    final result = await _repository.addGoodDeed(deed);
-    result.fold(
-      (failure) => emit(GoodDeedActionError(message: failure.message)),
-      (_) {},
-    );
+    try {
+      final deed = GoodDeedModel(
+        id: const Uuid().v4(),
+        title: title,
+        content: content,
+        creatorId: creatorId,
+        createdAt: DateTime.now(),
+      );
+
+      final result = await _repository.addGoodDeed(deed);
+
+      result.fold(
+            (failure) {
+          emit(
+            GoodDeedAddError(
+              message: failure.message,
+            ),
+          );
+        },
+            (_) {
+          emit(
+            GoodDeedAddSuccess(
+              deed: deed,
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      emit(
+        GoodDeedAddError(
+          message: e.toString(),
+        ),
+      );
+    }
   }
+
+
 
   Future<void> likeDeed(String deedId, String userId) async {
     final result = await _repository.likeDeed(deedId, userId);

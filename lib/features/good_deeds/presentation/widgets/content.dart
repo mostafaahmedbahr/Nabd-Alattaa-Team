@@ -16,7 +16,7 @@ class GoodDeedContent extends StatelessWidget {
 
   });
 
-  final GoodDeedState state;
+  final GoodDeedStates state;
 
 
 

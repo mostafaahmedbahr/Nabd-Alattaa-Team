@@ -12,7 +12,7 @@ class CreateGoodDeedContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return   SliverToBoxAdapter(
-      child: BlocConsumer<GoodDeedCubit, GoodDeedState>(
+      child: BlocConsumer<GoodDeedCubit, GoodDeedStates>(
         builder: (context,state){
           var goodDeedCubit = context.read<GoodDeedCubit>();
           return FadeTransition(

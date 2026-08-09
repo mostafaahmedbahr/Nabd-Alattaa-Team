@@ -24,7 +24,7 @@ class _GoodDeedsScreenState extends State<GoodDeedsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: BlocBuilder<GoodDeedCubit, GoodDeedState>(
+      body: BlocBuilder<GoodDeedCubit, GoodDeedStates>(
         builder: (context, state) {
           return RefreshIndicator(
             onRefresh: () async {
