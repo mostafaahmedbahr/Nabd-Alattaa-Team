@@ -1,8 +1,6 @@
 import 'dart:async';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
-
+import '../../../../common_imports.dart';
 import '../../data/models/good_deed_model.dart';
 import '../../data/repos/good_deed_repo.dart';
 import 'good_deed_state.dart';
@@ -36,7 +34,8 @@ class GoodDeedCubit extends Cubit<GoodDeedState> {
     required String title,
     required String content,
     required String creatorId,
-  }) async {
+  })
+  async {
     final deed = GoodDeedModel(
       id: const Uuid().v4(),
       title: title,
@@ -71,6 +70,19 @@ class GoodDeedCubit extends Cubit<GoodDeedState> {
   @override
   Future<void> close() {
     _subscription?.cancel();
+    titleController.dispose();
+    descriptionController.dispose();
     return super.close();
   }
+
+
+  /// create good deed
+  final  titleController = TextEditingController();
+  final  descriptionController = TextEditingController();
+  final  formKey = GlobalKey<FormState>();
+
+
+
+
+
 }

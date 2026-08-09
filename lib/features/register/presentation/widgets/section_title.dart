@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import '../../../../core/constants/app_colors.dart';
+ import '../../../../common_imports.dart';
 
 class SectionTitle extends StatelessWidget {
   final String title;
@@ -10,9 +9,9 @@ class SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: const TextStyle(
+      style:   TextStyle(
         fontFamily: 'Cairo',
-        fontSize: 16,
+        fontSize: 16.sp,
         fontWeight: FontWeight.bold,
         color: AppColors.textPrimary,
       ),
