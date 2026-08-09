@@ -63,9 +63,10 @@ class _SplashViewState extends State<SplashView>
     _controller.forward();
 
     Timer(const Duration(milliseconds: 3500), () {
-      if (mounted) {
-        navigateToNext(context);
-      }
+      context.go(Routes.onboarding);
+      // if (mounted) {
+      //   navigateToNext(context);
+      // }
     });
   }
 

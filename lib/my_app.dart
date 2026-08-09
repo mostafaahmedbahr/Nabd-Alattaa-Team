@@ -1,6 +1,8 @@
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nabd_alattaa_team/features/admin/presentation/view_model/admin_cubit.dart';
 import 'package:nabd_alattaa_team/features/layout/presentation/view_model/layout_cubit.dart';
+import 'package:nabd_alattaa_team/features/login/presentation/views/login_view.dart';
+import 'package:nabd_alattaa_team/features/register/presentation/views/register_view.dart';
 import 'common_imports.dart';
 import 'core/utils/service_locator.dart' as di;
 import 'features/admin/data/repos_impl/admin_repo_impl.dart';
@@ -136,7 +138,8 @@ class NabdAlattaaApp extends StatelessWidget {
         child: MaterialApp.router(
           title: AppStrings.appName,
           theme: AppTheme.lightTheme,
-          routerConfig: AppRouter.router,
+          // home: LoginView(),
+           routerConfig: AppRouter.router,
           debugShowCheckedModeBanner: false,
           locale: const Locale('ar', 'SA'),
           supportedLocales: const [

@@ -13,3 +13,5 @@ export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:nabd_alattaa_team/core/utils/validators.dart';
 export 'package:nabd_alattaa_team/core/theme/app_text_styles.dart';
 export 'package:nabd_alattaa_team/core/constants/app_assets.dart';
+export 'package:nabd_alattaa_team/core/widgets/error_widget.dart';
+export 'package:nabd_alattaa_team/core/widgets/loading_widget.dart';
