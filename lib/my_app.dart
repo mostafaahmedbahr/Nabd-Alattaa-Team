@@ -24,6 +24,8 @@ import 'features/login/presentation/view_model/login_cubit.dart';
 
 import 'features/onboarding/presentation/view_model/onboarding_cubit.dart';
 import 'features/profile/data/repos/profile_repo_impl.dart';
+import 'features/reports/data/repos/report_repo_impl.dart';
+import 'features/reports/presentation/view_model/report_cubit.dart';
 import 'features/profile/presentation/view_model/profile_cubit.dart';
 import 'features/register/data/repos/register_repos_impl.dart';
 import 'features/register/presentation/view_model/register_cubit.dart';
@@ -120,6 +122,11 @@ class NabdAlattaaApp extends StatelessWidget {
           BlocProvider(
             create: (_) => ComplaintCubit(
               repository: ComplaintRepoImpl(),
+            ),
+          ),
+          BlocProvider(
+            create: (_) => ReportCubit(
+              repository: ReportRepoImpl(),
             ),
           ),
           BlocProvider(

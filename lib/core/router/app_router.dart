@@ -20,7 +20,7 @@ import '../../features/library/presentation/views/library_screen.dart';
 import '../../features/library/presentation/views/create_library_item_screen.dart';
 import '../../features/ideas/presentation/views/ideas_screen.dart';
 import '../../features/ideas/presentation/views/create_idea_screen.dart';
-import '../../features/reports/presentation/views/reports_screen.dart';
+import '../../features/reports/presentation/views/reports_view.dart';
 import '../../features/reports/presentation/views/create_report_screen.dart';
 import '../../features/notifications/presentation/views/notifications_screen.dart';
 import '../../features/good_deeds/presentation/views/good_deeds_screen.dart';
@@ -98,7 +98,7 @@ class AppRouter {
       ),
       GoRoute(
         path: Routes.reports,
-        builder: (_, _) => const ReportsScreen(),
+        builder: (_, _) => const ReportsView(),
       ),
       GoRoute(
         path: Routes.goodDeeds,

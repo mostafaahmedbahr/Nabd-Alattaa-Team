@@ -34,3 +34,34 @@ class ReportError extends ReportState {
   @override
   List<Object?> get props => [message];
 }
+
+class ReportAddLoading extends ReportState {
+  const ReportAddLoading();
+}
+
+class ReportAddSuccess extends ReportState {
+  final ReportModel report;
+
+  const ReportAddSuccess({required this.report});
+
+  @override
+  List<Object?> get props => [report];
+}
+
+class ReportAddError extends ReportState {
+  final String message;
+
+  const ReportAddError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class ReportActionError extends ReportState {
+  final String message;
+
+  const ReportActionError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
