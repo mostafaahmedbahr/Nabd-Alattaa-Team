@@ -34,3 +34,34 @@ class ComplaintError extends ComplaintState {
   @override
   List<Object?> get props => [message];
 }
+
+class ComplaintAddLoading extends ComplaintState {
+  const ComplaintAddLoading();
+}
+
+class ComplaintAddSuccess extends ComplaintState {
+  final ComplaintModel complaint;
+
+  const ComplaintAddSuccess({required this.complaint});
+
+  @override
+  List<Object?> get props => [complaint];
+}
+
+class ComplaintAddError extends ComplaintState {
+  final String message;
+
+  const ComplaintAddError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class ComplaintActionError extends ComplaintState {
+  final String message;
+
+  const ComplaintActionError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

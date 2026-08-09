@@ -8,7 +8,7 @@ import 'core/utils/service_locator.dart' as di;
 import 'features/admin/data/repos_impl/admin_repo_impl.dart';
 import 'features/chat/data/repos/chat_repo.dart';
 import 'features/chat/presentation/view_model/chat_cubit.dart';
-import 'features/complaints/data/repos_impl/complaint_repo_impl.dart';
+import 'features/complaints/data/repos/complaint_repo_impl.dart';
 import 'features/complaints/presentation/view_model/complaint_cubit.dart';
 import 'features/good_deeds/data/repos/good_deed_repo_impl.dart';
 import 'features/good_deeds/presentation/view_model/good_deed_cubit.dart';
@@ -119,7 +119,7 @@ class NabdAlattaaApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => ComplaintCubit(
-              complaintRepository: ComplaintRepoImpl(firestore: di.sl()),
+              repository: ComplaintRepoImpl(),
             ),
           ),
           BlocProvider(
