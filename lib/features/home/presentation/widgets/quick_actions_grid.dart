@@ -22,7 +22,7 @@ class QuickActionsGrid extends StatelessWidget {
           children: [
             // _buildAction(context, Icons.task_alt, "المهام", Routes.tasks),
             // _buildAction(context, Icons.campaign, "الإعلانات", Routes.notifications),
-            _buildAction(context, Icons.report_outlined, "البلاغات", Routes.complaints),
+            _buildAction(context, Icons.report_outlined, "البلاغات", Routes.reports),
             _buildAction(context, Icons.feedback_outlined, "الشكاوى", Routes.complaints),
           ],
         ),
