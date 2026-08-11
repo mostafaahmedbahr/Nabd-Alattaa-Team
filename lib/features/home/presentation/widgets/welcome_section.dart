@@ -15,18 +15,10 @@ class _WelcomeSectionState extends State<WelcomeSection> {
   @override
   void initState() {
     super.initState();
-    _loadUserProfile();
+    final user = FirebaseAuth.instance.currentUser;
+    context.read<ProfileCubit>().loadProfile(user!.uid);
   }
 
-  void _loadUserProfile() {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      logSuccess('🟢 [WelcomeSection] Loading profile for userId: ${user.uid}');
-      context.read<ProfileCubit>().loadProfile(user.uid);
-    } else {
-      logError('🔴 [WelcomeSection] No user logged in');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,44 +48,54 @@ class _WelcomeSectionState extends State<WelcomeSection> {
           ),
             SizedBox(width: 16.w),
           Expanded(
-            child: BlocBuilder<ProfileCubit, ProfileState>(
-              builder: (context, state) {
-                String userName = 'مستخدم';
-                if (state is ProfileLoaded) {
-                  userName = state.profile.name;
-                  logSuccess('🟢 [WelcomeSection] User name loaded: $userName');
-                } else if (state is ProfileLoading) {
-                  userName = 'جاري التحميل...';
-                } else if (state is ProfileError) {
+            child: BlocListener<ProfileCubit, ProfileState>(
+              listener: (context, state) {
+                if (state is ProfileError) {
                   logError('🔴 [WelcomeSection] Error: ${state.message}');
+                  FirebaseAuth.instance.signOut().then((_) {
+                    if (context.mounted) {
+                      context.pushReplacement(Routes.login);
+                    }
+                  });
                 }
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'مرحباً بك،',
-                      style: AppTextStyles.bodyLarge.copyWith(
-                        color: Colors.white70,
-                      ),
-                    ),
-                      SizedBox(height: 4.h),
-                    Text(
-                      userName,
-                      style: AppTextStyles.labelLarge.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                      SizedBox(height: 4.h),
-                    Text(
-                      'نتمنى لك يوماً موفقاً',
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: Colors.white60,
-                      ),
-                    ),
-                  ],
-                );
               },
+              child: BlocBuilder<ProfileCubit, ProfileState>(
+                builder: (context, state) {
+                  String userName = 'مستخدم';
+                  if (state is ProfileLoaded) {
+                    userName = state.profile.name;
+                    logSuccess('🟢 [WelcomeSection] User name loaded: $userName');
+                  } else if (state is ProfileLoading) {
+                    userName = 'جاري التحميل...';
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'مرحباً بك،',
+                        style: AppTextStyles.bodyLarge.copyWith(
+                          color: Colors.white70,
+                        ),
+                      ),
+                        SizedBox(height: 4.h),
+                      Text(
+                        userName,
+                        style: AppTextStyles.labelLarge.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                        SizedBox(height: 4.h),
+                      Text(
+                        'نتمنى لك يوماً موفقاً',
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: Colors.white60,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           ),
         ],

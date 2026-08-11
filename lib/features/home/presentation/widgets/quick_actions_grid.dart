@@ -11,7 +11,6 @@ class QuickActionsGrid extends StatelessWidget {
       children: [
         Row(
           children: [
-            _buildAction(context, Icons.lightbulb_outline, "صندوق الأفكار", Routes.ideas),
             _buildAction(context, Icons.library_books_outlined, "المكتبة", Routes.library),
             _buildAction(context, Icons.volunteer_activism_outlined, "عملت خير", Routes.goodDeeds),
             _buildAction(context, Icons.restaurant_outlined, "طلبات الطعام", Routes.meals),
@@ -20,9 +19,7 @@ class QuickActionsGrid extends StatelessWidget {
         SizedBox(height: 12.h),
         Row(
           children: [
-            // _buildAction(context, Icons.task_alt, "المهام", Routes.tasks),
-            // _buildAction(context, Icons.campaign, "الإعلانات", Routes.notifications),
-            _buildAction(context, Icons.report_outlined, "البلاغات", Routes.reports),
+            _buildAction(context, Icons.lightbulb_outline, "صندوق الأفكار", Routes.ideas),
             _buildAction(context, Icons.feedback_outlined, "الشكاوى", Routes.complaints),
           ],
         ),

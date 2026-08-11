@@ -1,10 +1,14 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/constants/firestore_constants.dart';
+import '../../../../core/utils/log_util.dart';
+import '../../../profile/presentation/view_model/profile_cubit.dart';
 import 'home_states.dart';
 
 class HomeCubit extends Cubit<HomeStates> {
@@ -14,6 +18,9 @@ class HomeCubit extends Cubit<HomeStates> {
       : _firestore = firestore ?? FirebaseFirestore.instance,
         super(HomeInitial());
 
+
+
+
   String getGreeting() {
     final hour = DateTime.now().hour;
     if (hour < 12) return 'صباح الخير';
@@ -22,6 +29,11 @@ class HomeCubit extends Cubit<HomeStates> {
   }
 
   bool _hasLoaded = false;
+
+  void reset() {
+    _hasLoaded = false;
+    emit(HomeInitial());
+  }
 
   Future<void> loadHomeData(String userId,
       {bool forceRefresh = false, bool showLoading = true})

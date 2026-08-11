@@ -258,11 +258,14 @@ class SettingsSection extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () async {
                           Navigator.pop(context);
-                          await FirebaseAuth.instance.signOut();
+                          try {
+                            await FirebaseMessaging.instance
+                                .unsubscribeFromTopic("all_users");
+                          } catch (_) {}
+                          try {
+                            await FirebaseAuth.instance.signOut();
+                          } catch (_) {}
                           if (context.mounted) context.go('/login');
-                          await FirebaseMessaging.instance.unsubscribeFromTopic(
-                            "all_users",
-                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.error,

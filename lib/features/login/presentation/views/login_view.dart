@@ -1,6 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../../../../common_imports.dart';
+import '../../../home/presentation/view_model/home_cubit.dart';
+import '../../../layout/presentation/view_model/layout_cubit.dart';
+import '../../../profile/presentation/view_model/profile_cubit.dart';
 import '../view_model/login_cubit.dart';
 import '../view_model/login_states.dart';
 import '../widgets/login_background.dart';
@@ -55,6 +58,10 @@ class _LoginViewState extends State<LoginView>
       body: BlocListener<LoginCubit, LoginStates>(
         listener: (context, state) async {
           if (state is LoginSuccessState) {
+            context.read<LoginCubit>().clearFields();
+            context.read<ProfileCubit>().reset();
+            context.read<HomeCubit>().reset();
+            context.read<LayoutCubit>().resetToHome();
             context.go(Routes.layoutView);
             await FirebaseMessaging.instance.subscribeToTopic(
               "all_users",

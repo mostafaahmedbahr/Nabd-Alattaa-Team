@@ -5,17 +5,12 @@ class UserModel {
   final String name;
   final String email;
   final String phone;
-  final String? password;
-
   final String role;
   final String department;
   final String position;
-
   final bool isActive;
   final String? fcmToken;
-
   final DateTime? createdAt;
-
   final int points;
   final String gender;
   final DateTime birthDate;
@@ -26,7 +21,6 @@ class UserModel {
     required this.name,
     required this.email,
     required this.phone,
-    this.password,
     required this.role,
     required this.department,
     required this.position,
@@ -45,19 +39,14 @@ class UserModel {
       name: json['user_name'] ?? '',
       email: json['user_email'] ?? '',
       phone: json['user_phone'] ?? '',
-      password: json['password'],
-
       role: json['user_role'] ?? '',
       department: json['user_department'] ?? '',
       position: json['user_position'] ?? '',
-
       isActive: json['is_active'] ?? true,
       fcmToken: json['fcm_token'],
-
       createdAt: json['created_at'] != null
           ? (json['created_at'] as Timestamp).toDate()
           : null,
-
       points: json['points'] ?? 0,
       gender: json['gender'] ?? '',
       birthDate: json['birth_date'] != null
@@ -73,17 +62,12 @@ class UserModel {
       'user_name': name,
       'user_email': email,
       'user_phone': phone,
-      'password': password,
-
       'user_role': role,
       'user_department': department,
       'user_position': position,
-
       'is_active': isActive,
       'fcm_token': fcmToken,
-
       'created_at': createdAt ?? FieldValue.serverTimestamp(),
-
       'points': points,
       'gender': gender,
       'birth_date': Timestamp.fromDate(birthDate),
@@ -96,7 +80,6 @@ class UserModel {
     String? name,
     String? email,
     String? phone,
-    String? password,
     String? role,
     String? department,
     String? position,
@@ -113,7 +96,6 @@ class UserModel {
       name: name ?? this.name,
       email: email ?? this.email,
       phone: phone ?? this.phone,
-      password: password ?? this.password,
       role: role ?? this.role,
       department: department ?? this.department,
       position: position ?? this.position,

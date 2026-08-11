@@ -26,6 +26,11 @@ class LayoutCubit extends Cubit<LayoutStates> {
     emit(MainNavigationChanged());
   }
 
+  void resetToHome() {
+    pageIndex = 0;
+    emit(MainNavigationChanged());
+  }
+
   DateTime? _lastPressed;
 
   void onPopInvoked(bool didPop, BuildContext context) {

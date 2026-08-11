@@ -53,6 +53,11 @@ class LoginCubit extends Cubit<LoginStates> {
     );
   }
 
+  void clearFields() {
+    emailController.clear();
+    passwordController.clear();
+  }
+
   @override
   Future<void> close() {
     emailController.dispose();

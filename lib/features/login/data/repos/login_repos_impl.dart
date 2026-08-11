@@ -79,13 +79,31 @@ class LoginRepoImpl implements LoginRepository {
   @override
   Future<Either<Failure, void>> resetPassword({required String email}) async {
     try {
-      await firebaseAuth.sendPasswordResetEmail(email: email);
+      final trimmedEmail = email.trim();
+
+      final userQuery = await firestore
+          .collection(FirestoreConstants.users)
+          .where(FirestoreConstants.userEmail, isEqualTo: trimmedEmail)
+          .limit(1)
+          .get();
+
+      if (userQuery.docs.isEmpty) {
+        logError('🔴 [LoginRepo] No user found with email: $trimmedEmail');
+        return const Left(AuthFailure(
+          message: 'لم يتم العثور على حساب بهذا البريد الإلكتروني',
+        ));
+      }
+
+      await firebaseAuth.sendPasswordResetEmail(email: trimmedEmail);
+      logSuccess('✅ [LoginRepo] Password reset email sent to: $trimmedEmail');
       return const Right(null);
     } on FirebaseAuthException catch (e) {
+      logError('🔴 [LoginRepo] FirebaseAuthException: ${e.code}');
       return Left(AuthFailure(
         message: _getErrorMessage(e.code),
       ));
     } catch (e) {
+      logError('🔴 [LoginRepo] Unexpected error: $e');
       return Left(AuthFailure(
         message: 'حدث خطأ أثناء إرسال رابط إعادة التعيين',
       ));

@@ -18,6 +18,10 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
   }
 
+  void reset() {
+    emit(const ProfileInitial());
+  }
+
   Future<void> refreshProfile(String userId) async {
     emit(const ProfileLoading());
     final result = await _profileRepo.getProfile(userId);
@@ -46,4 +50,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       (_) => emit(const ProfileUpdated()),
     );
   }
+
+
 }

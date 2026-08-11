@@ -13,6 +13,7 @@ class ForgotPasswordDialog extends StatefulWidget {
 
 class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
   late final TextEditingController _emailController;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -49,34 +50,46 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
       },
       child: AlertDialog(
         title: const Text(AppStrings.resetPassword),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور'),
-            SizedBox(height: 16.h),
-            CustomTextField(
-              controller: _emailController,
-              labelText: AppStrings.email,
-              prefixIcon: Icons.email_outlined,
-              keyboardType: TextInputType.emailAddress,
-            ),
-          ],
+        content: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور'),
+              SizedBox(height: 16.h),
+              CustomTextField(
+                controller: _emailController,
+                labelText: AppStrings.email,
+                prefixIcon: Icons.email_outlined,
+                keyboardType: TextInputType.emailAddress,
+                validator: AppValidators.email,
+              ),
+            ],
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: const Text(AppStrings.cancel),
           ),
-          CustomButton(
-            text: AppStrings.send,
-            onPressed: () {
-              if (_emailController.text.isNotEmpty) {
-                context.read<LoginCubit>().resetPassword(
-                      email: _emailController.text.trim(),
-                    );
-              }
+          BlocBuilder<LoginCubit, LoginStates>(
+            builder: (context, state) {
+              final isLoading = state is ResetPasswordLoading;
+              return CustomButton(
+                text: AppStrings.send,
+                isLoading: isLoading,
+                onPressed: isLoading
+                    ? null
+                    : () {
+                        if (_formKey.currentState!.validate()) {
+                          context.read<LoginCubit>().resetPassword(
+                                email: _emailController.text.trim(),
+                              );
+                        }
+                      },
+                width: 100.w,
+              );
             },
-            width: 100.w,
           ),
         ],
       ),
