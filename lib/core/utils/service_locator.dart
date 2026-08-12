@@ -10,6 +10,8 @@ import '../../features/chat/data/repos/chat_repo.dart';
 import '../../features/chat/data/repos/chat_repo_impl.dart';
 import '../../features/users/data/repos/users_repo.dart';
 import '../../features/users/presentation/view_model/users_cubit.dart';
+import '../../features/announcements/data/repos/announcement_repo.dart';
+import '../../features/announcements/data/repos/announcement_repo_impl.dart';
 
 
 final sl = GetIt.instance;
@@ -32,4 +34,8 @@ Future<void> init() async {
   sl.registerFactory(() => UsersCubit(
     usersRepo: sl(),
   ));
+
+  sl.registerLazySingleton<AnnouncementRepository>(
+    () => AnnouncementRepoImpl(firestore: sl()),
+  );
 }

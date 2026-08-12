@@ -1,138 +1,73 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'dart:async';
 
-import '../../../../core/constants/firestore_constants.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../data/models/announcement_model.dart';
+import '../../data/repos/announcement_repo.dart';
 import 'announcement_state.dart';
 
 class AnnouncementCubit extends Cubit<AnnouncementState> {
-  final FirebaseFirestore _firestore;
+  final AnnouncementRepository _announcementRepository;
+  StreamSubscription? _announcementsSubscription;
 
-  AnnouncementCubit({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance,
-        super(AnnouncementInitial());
+  AnnouncementCubit({
+    required AnnouncementRepository announcementRepository,
+  }) : _announcementRepository = announcementRepository,
+       super(const AnnouncementInitial());
 
-  Future<void> loadAnnouncements() async {
-    emit(AnnouncementLoading());
-    try {
-      final snapshot = await _firestore
-          .collection(FirestoreConstants.announcements)
-          .orderBy(FirestoreConstants.announcementCreatedAt, descending: true)
-          .get();
+  final formKey = GlobalKey<FormState>();
+  final titleController = TextEditingController();
+  final contentController = TextEditingController();
+  String selectedType = 'news';
 
-      final announcements = snapshot.docs.map((doc) {
-        final data = doc.data();
-        return {
-          'id': doc.id,
-          'title': data[FirestoreConstants.announcementTitle] ?? '',
-          'content': data[FirestoreConstants.announcementContent] ?? '',
-          'type': data[FirestoreConstants.announcementType] ?? 'news',
-          'creatorName': data[FirestoreConstants.announcementCreatorName] ?? '',
-          'isPinned': data[FirestoreConstants.announcementIsPinned] ?? false,
-          'createdAt': data[FirestoreConstants.announcementCreatedAt],
-        };
-      }).toList();
-
-      emit(AnnouncementLoaded(announcements: announcements));
-    } catch (e) {
-      emit(AnnouncementError(message: 'فشل في تحميل الإعلانات: ${e.toString()}'));
-    }
+  void loadAnnouncements() {
+    _announcementsSubscription?.cancel();
+    emit(const AnnouncementLoading());
+    _announcementsSubscription = _announcementRepository
+        .getAnnouncements()
+        .listen(
+      (result) {
+        result.fold(
+          (failure) => emit(AnnouncementError(message: failure.message)),
+          (announcements) => emit(AnnouncementLoaded(announcements: announcements)),
+        );
+      },
+      onError: (error) =>
+          emit(AnnouncementError(message: 'فشل في تحميل الإعلانات')),
+    );
   }
 
-  Future<void> createAnnouncement({
-    required String title,
-    required String content,
-    required String type,
-  }) async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        emit(AnnouncementError(message: 'يجب تسجيل الدخول أولاً'));
-        return;
-      }
+  Future<void> createAnnouncement() async {
+    emit(const AnnouncementCreating());
 
-      final userDoc = await _firestore.collection(FirestoreConstants.users).doc(user.uid).get();
-      final creatorName = userDoc.data()?[FirestoreConstants.userName] ?? 'مستخدم';
+    final announcement = AnnouncementModel(
+      id: '',
+      title: titleController.text.trim(),
+      content: contentController.text.trim(),
+      type: selectedType,
+      createdAt: DateTime.now(),
+    );
 
-      final docRef = await _firestore.collection(FirestoreConstants.announcements).add({
-        FirestoreConstants.announcementTitle: title,
-        FirestoreConstants.announcementContent: content,
-        FirestoreConstants.announcementType: type,
-        FirestoreConstants.announcementCreatorId: user.uid,
-        FirestoreConstants.announcementCreatorName: creatorName,
-        FirestoreConstants.announcementIsPinned: false,
-        FirestoreConstants.announcementCreatedAt: Timestamp.now(),
-      });
+    final result = await _announcementRepository.createAnnouncement(announcement);
 
-      await _sendNotificationsToAllUsers(
-        title: title,
-        body: content,
-        announcementId: docRef.id,
-      );
-
-      emit(AnnouncementCreated());
-      await loadAnnouncements();
-    } catch (e) {
-      emit(AnnouncementError(message: 'فشل في إنشاء الإعلان: ${e.toString()}'));
-    }
+    result.fold(
+      (failure) => emit(AnnouncementError(message: failure.message)),
+      (_) => emit(const AnnouncementCreated()),
+    );
   }
 
-  Future<void> _sendNotificationsToAllUsers({
-    required String title,
-    required String body,
-    required String announcementId,
-  }) async {
-    try {
-      final usersSnapshot = await _firestore.collection(FirestoreConstants.users).get();
-
-      final batch = _firestore.batch();
-
-      for (final userDoc in usersSnapshot.docs) {
-        final notificationRef = _firestore.collection(FirestoreConstants.notifications).doc();
-
-        batch.set(notificationRef, {
-          FirestoreConstants.userId: userDoc.id,
-          FirestoreConstants.notificationTitle: title,
-          FirestoreConstants.notificationBody: body,
-          FirestoreConstants.notificationType: 'new_announcement',
-          FirestoreConstants.notificationReferenceId: announcementId,
-          FirestoreConstants.notificationIsRead: false,
-          FirestoreConstants.notificationCreatedAt: Timestamp.now(),
-        });
-      }
-
-      await batch.commit();
-    } catch (e) {
-      print('Error sending notifications: $e');
-    }
+  void clearForm() {
+    titleController.clear();
+    contentController.clear();
+    selectedType = 'news';
   }
 
-  String formatDate(dynamic timestamp) {
-    if (timestamp == null) return '';
-    final date = (timestamp as Timestamp).toDate();
-    final now = DateTime.now();
-    final diff = now.difference(date);
-    if (diff.inHours < 1) return 'منذ ${diff.inMinutes} دقيقة';
-    if (diff.inHours < 24) return 'منذ ${diff.inHours} ساعات';
-    if (diff.inDays < 7) return 'منذ ${diff.inDays} أيام';
-    return DateFormat('dd/MM/yyyy').format(date);
-  }
-
-  String getAnnouncementTypeName(String type) {
-    switch (type) {
-      case 'meeting':
-        return 'اجتماع';
-      case 'holiday':
-        return 'عطلة';
-      case 'decision':
-        return 'قرار';
-      case 'news':
-        return 'أخبار';
-      case 'alert':
-        return 'تنبيه';
-      default:
-        return 'إعلان';
-    }
+  @override
+  Future<void> close() {
+    _announcementsSubscription?.cancel();
+    titleController.dispose();
+    contentController.dispose();
+    return super.close();
   }
 }

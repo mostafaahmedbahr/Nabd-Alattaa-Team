@@ -30,6 +30,7 @@ import 'features/tasks/presentation/view_model/task_cubit.dart';
 import 'features/notifications/data/repos_impl/notification_repo_impl.dart';
 import 'features/notifications/presentation/view_model/notification_cubit.dart';
 import 'features/users/presentation/view_model/users_cubit.dart';
+import 'features/announcements/data/repos/announcement_repo.dart';
 import 'features/announcements/presentation/view_model/announcement_cubit.dart';
 
 class NabdAlattaaApp extends StatelessWidget {
@@ -126,7 +127,9 @@ class NabdAlattaaApp extends StatelessWidget {
             ),
           ),
           BlocProvider(
-            create: (_) => AnnouncementCubit(),
+            create: (_) => AnnouncementCubit(
+              announcementRepository: di.sl<AnnouncementRepository>(),
+            ),
           ),
           BlocProvider(
             create: (_) => MealCubit(MealRepoImpl()),
