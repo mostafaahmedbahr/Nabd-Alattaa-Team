@@ -11,10 +11,6 @@ class CreateAnnouncementHeader extends StatelessWidget {
       stretch: true,
       backgroundColor: AppColors.primary,
       surfaceTintColor: Colors.transparent,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_forward_ios_rounded, color: AppColors.textWhite),
-        onPressed: () => context.pop(),
-      ),
       flexibleSpace: FlexibleSpaceBar(
         title: const Text(
           'إعلان جديد',
