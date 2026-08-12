@@ -115,7 +115,7 @@ class ChatCubit extends Cubit<ChatState> {
   // Edit Message
   // =========================================================
 
-  Future<void> editMessage({
+  Future<bool> editMessage({
     required String roomId,
     required String messageId,
     required String newContent,
@@ -125,9 +125,12 @@ class ChatCubit extends Cubit<ChatState> {
       messageId: messageId,
       newContent: newContent,
     );
-    result.fold(
-      (failure) => emit(ChatError(message: failure.message)),
-      (_) {},
+    return result.fold(
+      (failure) {
+        emit(ChatError(message: failure.message));
+        return false;
+      },
+      (_) => true,
     );
   }
 
@@ -135,7 +138,7 @@ class ChatCubit extends Cubit<ChatState> {
   // Delete Message
   // =========================================================
 
-  Future<void> deleteMessage({
+  Future<bool> deleteMessage({
     required String roomId,
     required String messageId,
   }) async {
@@ -143,9 +146,12 @@ class ChatCubit extends Cubit<ChatState> {
       roomId: roomId,
       messageId: messageId,
     );
-    result.fold(
-      (failure) => emit(ChatError(message: failure.message)),
-      (_) {},
+    return result.fold(
+      (failure) {
+        emit(ChatError(message: failure.message));
+        return false;
+      },
+      (_) => true,
     );
   }
 

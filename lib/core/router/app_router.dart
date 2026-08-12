@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nabd_alattaa_team/features/admin/presentation/views/admin_dashboard_screen.dart';
 import 'package:nabd_alattaa_team/features/layout/presentation/views/layout_view.dart';
 import 'package:nabd_alattaa_team/features/tasks/presentation/views/tasks_screen.dart';
-import '../../features/chat/presentation/views/chat_list_screen.dart';
 import '../../features/chat/presentation/views/chat_room_screen.dart';
 import '../../features/chat/presentation/views/users_list_screen.dart';
 import 'app_routes.dart';
@@ -124,13 +123,13 @@ class AppRouter {
           final roomId = state.pathParameters['roomId']!;
           final extras = state.extra as Map<String, dynamic>? ?? {};
           final roomName = extras['roomName'] as String? ?? '';
-          final senderId = extras['senderId'] as String? ?? '';
-          final senderName = extras['senderName'] as String? ?? '';
+          final currentUserId = extras['currentUserId'] as String? ?? '';
+          final currentUserName = extras['currentUserName'] as String? ?? '';
           return ChatRoomScreen(
             roomId: roomId,
             roomName: roomName,
-            senderId: senderId,
-            senderName: senderName,
+            currentUserId: currentUserId,
+            currentUserName: currentUserName,
           );
         },
       ),

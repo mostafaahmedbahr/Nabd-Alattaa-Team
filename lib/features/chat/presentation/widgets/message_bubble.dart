@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../../data/models/message_model.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -10,6 +11,7 @@ class MessageBubble extends StatelessWidget {
   final bool showSenderName;
   final String? senderName;
   final VoidCallback? onLongPress;
+  final VoidCallback? onMorePressed;
 
   const MessageBubble({
     super.key,
@@ -18,6 +20,7 @@ class MessageBubble extends StatelessWidget {
     this.showSenderName = false,
     this.senderName,
     this.onLongPress,
+    this.onMorePressed,
   });
 
   @override
@@ -99,11 +102,27 @@ class MessageBubble extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      if (isMe && onMorePressed != null)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 4),
+                          child: InkWell(
+                            onTap: onMorePressed,
+                            customBorder: const CircleBorder(),
+                            child: Padding(
+                              padding: const EdgeInsets.all(2),
+                              child: Icon(
+                                Icons.more_horiz,
+                                size: 16,
+                                color: Colors.white.withOpacity(0.7),
+                              ),
+                            ),
+                          ),
+                        ),
                       if (message.isEdited)
                         Padding(
                           padding: const EdgeInsets.only(left: 4),
                           child: Text(
-                            'تعديل',
+                            AppStrings.editedLabel,
                             style: TextStyle(
                               fontSize: 10,
                               color: isMe
@@ -127,11 +146,11 @@ class MessageBubble extends StatelessWidget {
                       if (isMe) ...[
                         const SizedBox(width: 4),
                         Icon(
-                          message.readBy.length > 1
+                          message.readBy.isNotEmpty
                               ? Icons.done_all_rounded
                               : Icons.done_rounded,
                           size: 16,
-                          color: message.readBy.length > 1
+                          color: message.readBy.isNotEmpty
                               ? const Color(0xFF53BDEB)
                               : Colors.white.withOpacity(0.6),
                         ),
@@ -168,7 +187,7 @@ class MessageBubble extends StatelessWidget {
             Icon(Icons.block_rounded, size: 14, color: AppColors.grey400),
             const SizedBox(width: 6),
             Text(
-              'تم حذف هذه الرسالة',
+              AppStrings.deletedMessageLabel,
               style: TextStyle(
                 fontSize: 13,
                 color: AppColors.grey400,

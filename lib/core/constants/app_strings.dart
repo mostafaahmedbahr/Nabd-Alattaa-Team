@@ -85,6 +85,15 @@ class AppStrings {
   static const String typeMessage = 'اكتب رسالة...';
   static const String sendMessage = 'إرسال';
   static const String noMessages = 'لا توجد رسائل';
+  static const String editMessage = 'تعديل الرسالة';
+  static const String deleteMessage = 'حذف الرسالة';
+  static const String editedLabel = 'تعديل';
+  static const String deletedMessageLabel = 'تم حذف هذه الرسالة';
+  static const String deleteMessageConfirm = 'هل أنت متأكد من حذف هذه الرسالة؟';
+  static const String messageEdited = 'تم تعديل الرسالة بنجاح';
+  static const String messageDeleted = 'تم حذف الرسالة بنجاح';
+  static const String startConversation = 'ابدأ المحادثة';
+  static const String startConversationHint = 'أرسل رسالة للبدء في المحادثة';
 
   // Good Deeds
   static const String shareGoodDeed = 'شارك عمل خير';

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 
+import '../../../../core/constants/app_strings.dart';
 import '../../../../core/error/failures.dart';
 import '../../../users/data/models/user_model.dart';
 import '../models/chat_room_model.dart';
@@ -291,14 +292,22 @@ class ChatRepositoryImpl implements ChatRepository {
           .get();
 
       final batch = firestore.batch();
+      var hasChanges = false;
 
-      // Reset unread count
-      batch.update(
-        roomRef,
-        {
-          'unreadCounts.$currentUserId': 0,
-        },
-      );
+      // Reset unread count only if it isn't already zero
+      final roomSnapshot = await roomRef.get();
+      final roomUnreadCounts =
+      Map<String, dynamic>.from(roomSnapshot.data()?['unreadCounts'] ?? {});
+
+      if ((roomUnreadCounts[currentUserId] ?? 0) != 0) {
+        batch.update(
+          roomRef,
+          {
+            'unreadCounts.$currentUserId': 0,
+          },
+        );
+        hasChanges = true;
+      }
 
       // Mark every unread message as read
       for (final doc in messagesQuery.docs) {
@@ -316,10 +325,13 @@ class ChatRepositoryImpl implements ChatRepository {
               ),
             },
           );
+          hasChanges = true;
         }
       }
 
-      await batch.commit();
+      if (hasChanges) {
+        await batch.commit();
+      }
 
       return const Right(unit);
     } on FirebaseException catch (e) {
@@ -350,39 +362,36 @@ class ChatRepositoryImpl implements ChatRepository {
           .collection('messages')
           .doc(messageId);
 
-      await firestore.runTransaction((transaction) async {
-        final messageSnapshot = await transaction.get(messageRef);
+      final messageSnapshot = await messageRef.get();
 
-        if (!messageSnapshot.exists) {
-          throw Exception('Message not found');
-        }
+      if (!messageSnapshot.exists) {
+        throw Exception('Message not found');
+      }
 
-        transaction.update(
-          messageRef,
-          {
-            'content': newContent,
-            'isEdited': true,
-          },
-        );
+      final oldContent = messageSnapshot.data()?['content']?.toString() ?? '';
 
-        final roomSnapshot = await transaction.get(roomRef);
+      // Update the message itself. This is the critical write and is done
+      // without a transaction to avoid conflicts with read-marking writes.
+      await messageRef.update(
+        {
+          'content': newContent,
+          'isEdited': true,
+        },
+      );
 
-        if (roomSnapshot.exists) {
-          final room = ChatRoomModel.fromJson(
-            roomSnapshot.data()!,
-            roomSnapshot.id,
+      // Best-effort refresh of the room's last-message preview (cosmetic).
+      // A failure here must not fail the whole edit.
+      try {
+        final roomSnapshot = await roomRef.get();
+        if (roomSnapshot.exists &&
+            roomSnapshot.data()?['lastMessage'] == oldContent) {
+          await roomRef.update(
+            {
+              'lastMessage': newContent,
+            },
           );
-
-          if (room.lastMessage == messageSnapshot['content']) {
-            transaction.update(
-              roomRef,
-              {
-                'lastMessage': newContent,
-              },
-            );
-          }
         }
-      });
+      } catch (_) {}
 
       return const Right(unit);
     } on FirebaseException catch (e) {
@@ -475,7 +484,7 @@ class ChatRepositoryImpl implements ChatRepository {
     }
   }
 
-  @override
+@override
   Future<Either<Failure, Unit>> deleteMessage({
     required String roomId,
     required String messageId,
@@ -488,49 +497,45 @@ class ChatRepositoryImpl implements ChatRepository {
           .collection('messages')
           .doc(messageId);
 
-      await firestore.runTransaction((transaction) async {
-        final messageSnapshot = await transaction.get(messageRef);
+      final messageSnapshot = await messageRef.get();
 
-        if (!messageSnapshot.exists) {
-          throw Exception('Message not found.');
+      if (!messageSnapshot.exists) {
+        throw Exception('Message not found.');
+      }
+
+      final oldContent = messageSnapshot.data()?['content']?.toString() ?? '';
+      final deletedContent = AppStrings.deletedMessageLabel;
+
+      // Soft delete the message. This is the critical write and is done
+      // without a transaction to avoid conflicts with read-marking writes.
+      await messageRef.update(
+        {
+          'content': deletedContent,
+          'isDeleted': true,
+          'isEdited': false,
+        },
+      );
+
+      // Best-effort refresh of the room's last-message preview (cosmetic).
+      // A failure here must not fail the whole delete.
+      try {
+        final roomSnapshot = await roomRef.get();
+
+        if (roomSnapshot.exists &&
+            roomSnapshot.data()?['lastMessage'] == oldContent) {
+          await roomRef.update(
+            {
+              'lastMessage': deletedContent,
+            },
+          );
         }
-
-        final messageData = messageSnapshot.data()!;
-
-        final deletedContent = 'تم حذف هذه الرسالة';
-
-        // Soft delete message
-        transaction.update(
-          messageRef,
-          {
-            'content': deletedContent,
-            'isDeleted': true,
-            'isEdited': false,
-          },
-        );
-
-        // Update last message if this was the latest one
-        final roomSnapshot = await transaction.get(roomRef);
-
-        if (roomSnapshot.exists) {
-          final roomData = roomSnapshot.data()!;
-
-          if (roomData['lastMessage'] == messageData['content']) {
-            transaction.update(
-              roomRef,
-              {
-                'lastMessage': deletedContent,
-              },
-            );
-          }
-        }
-      });
+      } catch (_) {}
 
       return const Right(unit);
     } on FirebaseException catch (e) {
       return Left(
         ServerFailure(
-         message:  e.message ?? 'Failed to delete message.',
+        message:   e.message ?? 'Failed to delete message.',
         ),
       );
     } catch (e) {
