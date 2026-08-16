@@ -128,8 +128,8 @@ class AppRouter {
           return ChatRoomScreen(
             roomId: roomId,
             roomName: roomName,
-            currentUserId: currentUserId,
-            currentUserName: currentUserName,
+            senderId: currentUserId,
+            senderName: currentUserName,
           );
         },
       ),

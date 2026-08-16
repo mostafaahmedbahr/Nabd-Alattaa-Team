@@ -11,6 +11,7 @@ class RegisterModel extends Equatable {
   final String department;
   final String position;
   final bool isActive;
+  final bool isBreakFast;
   final String? fcmToken;
   final DateTime? createdAt;
   final int points;
@@ -28,6 +29,7 @@ class RegisterModel extends Equatable {
     this.department = '',
     this.position = '',
     this.isActive = true,
+    this.isBreakFast = false,
     this.fcmToken,
     this.createdAt,
     this.points = 0,
@@ -46,6 +48,7 @@ class RegisterModel extends Equatable {
       department: map['user_department'] ?? '',
       position: map['user_position'] ?? '',
       isActive: map['is_active'] ?? false,
+      isBreakFast: map['is_breakfast'] ?? false,
       fcmToken: map['fcm_token'],
       createdAt: map['created_at']?.toDate() ?? DateTime.now(),
       points: map['points'] ?? 0,
@@ -65,6 +68,7 @@ class RegisterModel extends Equatable {
       'user_department': department,
       'user_position': position,
       'is_active': isActive,
+      'is_breakfast': isBreakFast,
       'fcm_token': fcmToken,
       'created_at': createdAt ?? FieldValue.serverTimestamp(),
       'points': points,
@@ -84,6 +88,7 @@ class RegisterModel extends Equatable {
     String? department,
     String? position,
     bool? isActive,
+    bool? isBreakFast,
     String? fcmToken,
     DateTime? createdAt,
     int? points,
@@ -100,6 +105,7 @@ class RegisterModel extends Equatable {
       department: department ?? this.department,
       position: position ?? this.position,
       isActive: isActive ?? this.isActive,
+      isBreakFast: isBreakFast ?? this.isBreakFast,
       fcmToken: fcmToken ?? this.fcmToken,
       createdAt: createdAt ?? this.createdAt,
       points: points ?? this.points,
@@ -123,6 +129,7 @@ class RegisterModel extends Equatable {
     department,
     position,
     isActive,
+    isBreakFast,
     fcmToken,
     createdAt,
     points,

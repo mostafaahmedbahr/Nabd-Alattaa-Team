@@ -33,6 +33,7 @@ class FirestoreConstants {
   static const String userDepartment = 'user_department';
   static const String userPosition = 'user_position';
   static const String userIsActive = 'is_active';
+  static const String isBreakFast = 'is_breakfast';
   static const String userFcmToken = 'fcm_token';
   static const String userCreatedAt = 'created_at';
   static const String userPoints = 'points';

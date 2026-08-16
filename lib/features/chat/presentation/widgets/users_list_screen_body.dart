@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nabd_alattaa_team/features/chat/presentation/view_model/chat_cubit.dart';
+import 'package:nabd_alattaa_team/features/chat/presentation/view_model/chat_state.dart';
 import 'package:nabd_alattaa_team/features/chat/presentation/widgets/user_tile.dart';
 
 import '../../../../common_imports.dart';
@@ -6,30 +8,21 @@ import '../../../users/presentation/view_model/users_cubit.dart';
 import '../../../users/presentation/view_model/users_states.dart';
 import '../../data/models/chat_room_model.dart';
 
-class UsersListScreenBody extends StatefulWidget {
-  const UsersListScreenBody({super.key, required this.chatRooms});
-final List<ChatRoomModel> chatRooms;
-  @override
-  State<UsersListScreenBody> createState() => _UsersListScreenBodyState();
-}
+class UsersListScreenBody extends StatelessWidget {
+  const UsersListScreenBody({super.key});
 
-class _UsersListScreenBodyState extends State<UsersListScreenBody> {
   String get _currentUserId => FirebaseAuth.instance.currentUser?.uid ?? '';
-  String get currentUserId => FirebaseAuth.instance.currentUser?.uid ?? '';
-  ChatRoomModel? _findChatRoom(String otherUserId) {
-    for (final room in widget.chatRooms) {
-      if (room.participants.contains(otherUserId)) {
-        return room;
-      }
-    }
-    return null;
-  }
+
   @override
   Widget build(BuildContext context) {
+    final chatRooms = context.select<ChatCubit, List<ChatRoomModel>>(
+      (cubit) => cubit.state is ChatRoomsLoaded
+          ? (cubit.state as ChatRoomsLoaded).chatRooms
+          : const <ChatRoomModel>[],
+    );
+
     return BlocBuilder<UsersCubit, UsersStates>(
-
       builder: (context, state) {
-
         if (state is UsersLoadingState) {
           return const LoadingWidget(message: AppStrings.loading);
         }
@@ -50,7 +43,7 @@ class _UsersListScreenBodyState extends State<UsersListScreenBody> {
 
         if (state is UsersSuccessState) {
           final users = state.users
-              .where((u) => u.id != currentUserId && u.isActive)
+              .where((u) => u.id != _currentUserId && u.isActive)
               .toList();
 
           if (users.isEmpty) {
@@ -62,17 +55,17 @@ class _UsersListScreenBodyState extends State<UsersListScreenBody> {
 
           return RefreshIndicator(
             color: AppColors.primary,
-            onRefresh: () async => context.read<UsersCubit>().getAllUsers(),
+            onRefresh: () => context.read<UsersCubit>().getAllUsers(),
             child: ListView.separated(
               physics: const AlwaysScrollableScrollPhysics(
                 parent: BouncingScrollPhysics(),
               ),
-              padding:   EdgeInsets.symmetric(vertical: 8.h),
+              padding: EdgeInsets.symmetric(vertical: 8.h),
               itemCount: users.length,
-              separatorBuilder: (_, _) =>   SizedBox(height: 2.h),
+              separatorBuilder: (_, _) => SizedBox(height: 2.h),
               itemBuilder: (context, index) {
                 final user = users[index];
-                final chatRoom = _findChatRoom(user.id ?? '');
+                final chatRoom = _findChatRoom(chatRooms, user.id ?? '');
                 final unread = chatRoom?.unreadCount(_currentUserId) ?? 0;
 
                 return UserTile(
@@ -90,5 +83,17 @@ class _UsersListScreenBodyState extends State<UsersListScreenBody> {
         return const SizedBox.shrink();
       },
     );
+  }
+
+  ChatRoomModel? _findChatRoom(
+    List<ChatRoomModel> chatRooms,
+    String otherUserId,
+  ) {
+    for (final room in chatRooms) {
+      if (room.participants.contains(otherUserId)) {
+        return room;
+      }
+    }
+    return null;
   }
 }

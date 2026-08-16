@@ -5,13 +5,13 @@ import '../../../../common_imports.dart';
 
 class SettingsSection extends StatelessWidget {
   final bool isAdmin;
+  final bool isBreakFast;
 
-  const SettingsSection({super.key, this.isAdmin = false});
+  const SettingsSection({super.key, this.isAdmin = false ,required this.isBreakFast});
 
   @override
   Widget build(BuildContext context) {
-    print(isAdmin);
-    print("ssssss");
+    print(isBreakFast);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Card(
@@ -28,7 +28,7 @@ class SettingsSection extends StatelessWidget {
               },
             ),
               Divider(height: 1.h),
-            if (isAdmin) ...[
+            if (isBreakFast) ...[
               ListTile(
                 leading: const Icon(Icons.restaurant_menu_outlined, color: AppColors.primary),
                 title: const Text('إدارة قائمة الطعام'),

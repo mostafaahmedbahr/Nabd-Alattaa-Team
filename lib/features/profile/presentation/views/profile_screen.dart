@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -100,7 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 20),
                 InfoSection(userProfileModel: profile),
                 const SizedBox(height: 16),
-                SettingsSection(isAdmin: profile.isAdmin),
+                SettingsSection(isBreakFast: profile.isBreakFast,isAdmin: profile.isAdmin,),
                 const SizedBox(height: 32),
 
               ],

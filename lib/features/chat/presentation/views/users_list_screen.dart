@@ -1,8 +1,7 @@
-import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nabd_alattaa_team/features/chat/presentation/widgets/users_list_screen_body.dart';
+
 import '../../../../common_imports.dart';
-import '../../data/models/chat_room_model.dart';
 import '../view_model/chat_cubit.dart';
 
 class UsersListScreen extends StatefulWidget {
@@ -14,43 +13,12 @@ class UsersListScreen extends StatefulWidget {
 
 class _UsersListScreenState extends State<UsersListScreen> {
   String get _currentUserId => FirebaseAuth.instance.currentUser?.uid ?? '';
-  List<ChatRoomModel> _chatRooms = [];
-  StreamSubscription? _chatRoomsSubscription;
 
   @override
   void initState() {
     super.initState();
-    _loadChatRooms();
+    context.read<ChatCubit>().loadChatRooms(currentUserId: _currentUserId);
   }
-
-  void _loadChatRooms() {
-    _chatRoomsSubscription?.cancel();
-    final chatCubit = context.read<ChatCubit>();
-    _chatRoomsSubscription = chatCubit.chatRepository
-        .getChatRooms(currentUserId: _currentUserId)
-        .listen(
-      (result) {
-        result.fold(
-          (failure) {},
-          (chatRooms) {
-            if (mounted) {
-              setState(() {
-                _chatRooms = chatRooms;
-              });
-            }
-          },
-        );
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _chatRoomsSubscription?.cancel();
-    super.dispose();
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -63,11 +31,7 @@ class _UsersListScreenState extends State<UsersListScreen> {
         foregroundColor: AppColors.textWhite,
         elevation: 0,
       ),
-      body: UsersListScreenBody(chatRooms:_chatRooms,),
+      body: const UsersListScreenBody(),
     );
   }
-
-  String get currentUserId => FirebaseAuth.instance.currentUser?.uid ?? '';
 }
-
-

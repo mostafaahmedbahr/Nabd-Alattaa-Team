@@ -10,6 +10,7 @@ class UserProfileModel extends Equatable {
   final String department;
   final String position;
   final String role;
+  final bool isBreakFast;
   final int points;
   final DateTime createdAt;
 
@@ -21,6 +22,7 @@ class UserProfileModel extends Equatable {
     this.department = '',
     this.position = '',
     this.role = 'employee',
+    required this.isBreakFast ,
     this.points = 0,
     required this.createdAt,
   });
@@ -33,6 +35,7 @@ class UserProfileModel extends Equatable {
       phone: map[FirestoreConstants.userPhone] ?? '',
       department: map[FirestoreConstants.userDepartment] ?? '',
       position: map[FirestoreConstants.userPosition] ?? '',
+      isBreakFast: map[FirestoreConstants.isBreakFast] ?? false,
       role: map[FirestoreConstants.userRole] ?? 'employee',
       points: map[FirestoreConstants.userPoints] ?? 0,
       createdAt: map[FirestoreConstants.userCreatedAt]?.toDate() ?? DateTime.now(),
@@ -48,6 +51,7 @@ class UserProfileModel extends Equatable {
       FirestoreConstants.userDepartment: department,
       FirestoreConstants.userPosition: position,
       FirestoreConstants.userRole: role,
+      FirestoreConstants.isBreakFast: isBreakFast,
       FirestoreConstants.userPoints: points,
       FirestoreConstants.userCreatedAt: createdAt,
     };
@@ -66,6 +70,7 @@ class UserProfileModel extends Equatable {
     String? department,
     String? position,
     String? role,
+    bool? isBreakFast,
     int? points,
     DateTime? createdAt,
   }) {
@@ -77,6 +82,7 @@ class UserProfileModel extends Equatable {
       department: department ?? this.department,
       position: position ?? this.position,
       role: role ?? this.role,
+      isBreakFast: isBreakFast ?? this.isBreakFast,
       points: points ?? this.points,
       createdAt: createdAt ?? this.createdAt,
     );
@@ -91,6 +97,7 @@ class UserProfileModel extends Equatable {
         department,
         position,
         role,
+    isBreakFast,
         points,
         createdAt,
       ];
