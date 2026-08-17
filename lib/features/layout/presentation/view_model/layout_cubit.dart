@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:nabd_alattaa_team/features/home/presentation/views/home_screen.dart';
-import 'package:nabd_alattaa_team/features/ideas/presentation/views/ideas_screen.dart';
+import 'package:nabd_alattaa_team/features/home/presentation/views/home_view.dart';
 import 'package:nabd_alattaa_team/features/announcements/presentation/views/announcements_screen.dart';
 import 'package:nabd_alattaa_team/features/profile/presentation/views/profile_screen.dart';
 import 'package:nabd_alattaa_team/features/tasks/presentation/views/tasks_screen.dart';
@@ -14,7 +13,7 @@ class LayoutCubit extends Cubit<LayoutStates> {
   static int pageIndex = 0;
 
   List screens = [
-    HomeScreen(),
+    HomeView(),
     TasksScreen(),
     AnnouncementsScreen(),
     UsersListScreen(),

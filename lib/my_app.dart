@@ -10,6 +10,7 @@ import 'features/complaints/data/repos/complaint_repo_impl.dart';
 import 'features/complaints/presentation/view_model/complaint_cubit.dart';
 import 'features/good_deeds/data/repos/good_deed_repo_impl.dart';
 import 'features/good_deeds/presentation/view_model/good_deed_cubit.dart';
+import 'features/home/data/repos/home_repo.dart';
 import 'features/home/presentation/view_model/home_cubit.dart';
 import 'features/ideas/data/repos_impl/idea_repo_impl.dart';
 import 'features/ideas/presentation/view_model/idea_cubit.dart';
@@ -89,7 +90,7 @@ class NabdAlattaaApp extends StatelessWidget {
             ),
           ),
           BlocProvider(
-            create: (_) => HomeCubit(),
+            create: (_) => HomeCubit(homeRepository: di.sl<HomeRepository>()),
           ),
           BlocProvider(
             create: (_) => ChatCubit(

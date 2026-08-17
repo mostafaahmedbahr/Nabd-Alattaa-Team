@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
@@ -38,6 +39,47 @@ class Helpers {
       return '${difference.inMinutes} دقيقة';
     } else {
       return 'الآن';
+    }
+  }
+  static String formatDate2(dynamic timestamp) {
+    if (timestamp == null) return '';
+    final date = (timestamp as Timestamp).toDate();
+    final now = DateTime.now();
+    final diff = now.difference(date);
+    if (diff.inHours < 1) return 'منذ ${diff.inMinutes} دقيقة';
+    if (diff.inHours < 24) return 'منذ ${diff.inHours} ساعات';
+    if (diff.inDays < 7) return 'منذ ${diff.inDays} أيام';
+    return DateFormat('dd/MM/yyyy').format(date);
+  }
+  static String translateStatus(String status) {
+    switch (status) {
+      case 'completed':
+        return 'مكتملة';
+      case 'in_progress':
+        return 'قيد التنفيذ';
+      case 'in_review':
+        return 'قيد المراجعة';
+      case 'late':
+        return 'متأخرة';
+      case 'not_started':
+      default:
+        return 'جديدة';
+    }
+  }
+
+  static Color statusColor(String status) {
+    switch (status) {
+      case 'completed':
+        return const Color(0xFF4CAF50);
+      case 'in_progress':
+        return const Color(0xFFFF9800);
+      case 'in_review':
+        return const Color(0xFF2196F3);
+      case 'late':
+        return const Color(0xFFF44336);
+      case 'not_started':
+      default:
+        return const Color(0xFF9E9E9E);
     }
   }
 

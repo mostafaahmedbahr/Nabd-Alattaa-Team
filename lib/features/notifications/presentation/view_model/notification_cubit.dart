@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/repos/notification_repo.dart';
@@ -59,5 +60,14 @@ class NotificationCubit extends Cubit<NotificationState> {
   Future<void> close() {
     _subscription?.cancel();
     return super.close();
+  }
+
+
+
+  void loadNotificationsData() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+       loadNotifications(user.uid);
+    }
   }
 }

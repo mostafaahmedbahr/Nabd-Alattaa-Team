@@ -35,7 +35,7 @@ class StatsSection extends StatelessWidget {
             Expanded(
               child: _StatCard(
                 icon: Icons.volunteer_activism_outlined,
-                label: 'عمل خير',
+                label: 'خير',
                 count: goodDeedsCount,
                 color: AppColors.secondary,
               ),

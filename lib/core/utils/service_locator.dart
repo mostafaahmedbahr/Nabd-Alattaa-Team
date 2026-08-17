@@ -15,6 +15,9 @@ import '../../features/announcements/data/repos/announcement_repo_impl.dart';
 import '../../features/admin/data/repos/admin_repo.dart';
 import '../../features/admin/data/repos_impl/admin_repo_impl.dart';
 import '../../features/admin/presentation/view_model/admin_cubit.dart';
+import '../../features/home/data/repos/home_repo.dart';
+import '../../features/home/data/repos/home_repo_impl.dart';
+import '../../features/home/presentation/view_model/home_cubit.dart';
 
 
 final sl = GetIt.instance;
@@ -44,4 +47,7 @@ Future<void> init() async {
 
   sl.registerLazySingleton<AdminRepository>(() => AdminRepoImpl());
   sl.registerFactory(() => AdminCubit(sl()));
+
+  sl.registerLazySingleton<HomeRepository>(() => HomeRepoImpl());
+  sl.registerFactory(() => HomeCubit(homeRepository: sl()));
 }

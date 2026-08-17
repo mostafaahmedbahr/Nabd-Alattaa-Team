@@ -1,19 +1,15 @@
 import 'dart:async';
-import 'dart:ui';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-
-import '../../../../core/constants/firestore_constants.dart';
+import '../../../../core/utils/helpers.dart';
+import '../../data/repos/home_repo.dart';
 import 'home_states.dart';
 
 class HomeCubit extends Cubit<HomeStates> {
-  final FirebaseFirestore _firestore;
+  final HomeRepository _homeRepo;
 
-  HomeCubit({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance,
+  HomeCubit({required HomeRepository homeRepository})
+      : _homeRepo = homeRepository,
         super(HomeInitial());
 
   String getGreeting() {
@@ -54,61 +50,46 @@ class HomeCubit extends Cubit<HomeStates> {
       emit(HomeLoading());
     }
     try {
-      final userDoc = await _firestore
-          .collection(FirestoreConstants.users)
-          .doc(userId)
-          .get();
+      final result = await _homeRepo.getHomeData(userId);
 
       String userName = 'مستخدم';
-      if (userDoc.exists) {
-        userName = userDoc.data()?[FirestoreConstants.userName] ?? 'مستخدم';
-      }
+      List<Map<String, dynamic>> announcements = const [];
+      List<Map<String, dynamic>> tasks = const [];
+      int totalTasksCount = 0;
 
-      final announcementsSnap = await _firestore
-          .collection(FirestoreConstants.announcements)
-          .orderBy(FirestoreConstants.announcementCreatedAt, descending: true)
-          .limit(3)
-          .get();
+      result.fold(
+        (failure) => emit(HomeError(message: failure.message)),
+        (data) {
+          userName = data.userName;
+          announcements = data.announcements.map((a) {
+            return {
+              'id': a['id'],
+              'title': a['title'],
+              'subtitle': a['subtitle'],
+              'time': Helpers.formatDate2(a['createdAt']),
+            };
+          }).toList();
+          tasks = data.tasks.map((t) {
+            final status = t['status'] ?? 'not_started';
+            return {
+              'id': t['id'],
+              'title': t['title'],
+              'subtitle': t['subtitle'],
+              'status':  Helpers.translateStatus(status),
+              'statusColor': Helpers.statusColor(status),
+            };
+          }).toList();
+          totalTasksCount = data.totalTasksCount;
+        },
+      );
 
-      final announcements = announcementsSnap.docs.map((doc) {
-        final data = doc.data();
-        return {
-          'id': doc.id,
-          'title': data[FirestoreConstants.announcementTitle] ?? '',
-          'subtitle': data[FirestoreConstants.announcementContent] ?? '',
-          'time': _formatDate(data[FirestoreConstants.announcementCreatedAt]),
-        };
-      }).toList();
-
-      final tasksSnap = await _firestore
-          .collection(FirestoreConstants.tasks)
-          .where(FirestoreConstants.taskAssigneeId, isEqualTo: userId)
-          .orderBy(FirestoreConstants.taskCreatedAt, descending: true)
-          .limit(3)
-          .get();
-
-      final allTasksSnap = await _firestore
-          .collection(FirestoreConstants.tasks)
-          .where(FirestoreConstants.taskAssigneeId, isEqualTo: userId)
-          .get();
-
-      final tasks = tasksSnap.docs.map((doc) {
-        final data = doc.data();
-        final status = data[FirestoreConstants.taskStatus] ?? 'not_started';
-        return {
-          'id': doc.id,
-          'title': data[FirestoreConstants.taskTitle] ?? '',
-          'subtitle': data[FirestoreConstants.taskDescription] ?? '',
-          'status': _translateStatus(status),
-          'statusColor': _statusColor(status),
-        };
-      }).toList();
+      if (state is HomeError) return;
 
       _userName = userName;
       _greeting = getGreeting();
       _announcements = announcements;
       _tasks = tasks;
-      _totalTasksCount = allTasksSnap.docs.length;
+      _totalTasksCount = totalTasksCount;
       _hasLoaded = true;
 
       _startCountStreams(userId);
@@ -121,47 +102,23 @@ class HomeCubit extends Cubit<HomeStates> {
   void _startCountStreams(String userId) {
     _cancelCountStreams();
     _countSubs.add(
-      _countStream(
-        FirestoreConstants.goodDeeds,
-        FirestoreConstants.goodDeedCreatorId,
-        userId,
-      ).listen((value) {
+      _homeRepo.getGoodDeedsCount(userId).listen((value) {
         _goodDeedsCount = value;
         _emitCurrent();
       }),
     );
     _countSubs.add(
-      _countStream(
-        FirestoreConstants.complaints,
-        FirestoreConstants.complaintCreatorId,
-        userId,
-      ).listen((value) {
+      _homeRepo.getComplaintsCount(userId).listen((value) {
         _complaintsCount = value;
         _emitCurrent();
       }),
     );
     _countSubs.add(
-      _countStream(
-        FirestoreConstants.ideas,
-        FirestoreConstants.ideaCreatorId,
-        userId,
-      ).listen((value) {
+      _homeRepo.getIdeasCount(userId).listen((value) {
         _ideasCount = value;
         _emitCurrent();
       }),
     );
-  }
-
-  Stream<int> _countStream(String collection, String creatorField, String userId) {
-    try {
-      return _firestore
-          .collection(collection)
-          .where(creatorField, isEqualTo: userId)
-          .snapshots()
-          .map((snapshot) => snapshot.docs.length);
-    } catch (e) {
-      return Stream.value(0);
-    }
   }
 
   void _emitCurrent() {
@@ -185,52 +142,22 @@ class HomeCubit extends Cubit<HomeStates> {
     _countSubs.clear();
   }
 
-  String _formatDate(dynamic timestamp) {
-    if (timestamp == null) return '';
-    final date = (timestamp as Timestamp).toDate();
-    final now = DateTime.now();
-    final diff = now.difference(date);
-    if (diff.inHours < 1) return 'منذ ${diff.inMinutes} دقيقة';
-    if (diff.inHours < 24) return 'منذ ${diff.inHours} ساعات';
-    if (diff.inDays < 7) return 'منذ ${diff.inDays} أيام';
-    return DateFormat('dd/MM/yyyy').format(date);
-  }
 
-  String _translateStatus(String status) {
-    switch (status) {
-      case 'completed':
-        return 'مكتملة';
-      case 'in_progress':
-        return 'قيد التنفيذ';
-      case 'in_review':
-        return 'قيد المراجعة';
-      case 'late':
-        return 'متأخرة';
-      case 'not_started':
-      default:
-        return 'جديدة';
-    }
-  }
 
-  Color _statusColor(String status) {
-    switch (status) {
-      case 'completed':
-        return const Color(0xFF4CAF50);
-      case 'in_progress':
-        return const Color(0xFFFF9800);
-      case 'in_review':
-        return const Color(0xFF2196F3);
-      case 'late':
-        return const Color(0xFFF44336);
-      case 'not_started':
-      default:
-        return const Color(0xFF9E9E9E);
-    }
-  }
+
 
   @override
   Future<void> close() {
     _cancelCountStreams();
     return super.close();
   }
+
+  void  loadData({bool forceRefresh = false}) {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+       loadHomeData(user.uid, forceRefresh: forceRefresh);
+    }
+  }
+
+
 }
