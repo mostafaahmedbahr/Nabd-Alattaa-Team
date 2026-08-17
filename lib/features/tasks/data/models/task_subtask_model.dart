@@ -5,6 +5,7 @@ import '../../../../core/constants/firestore_constants.dart';
 class TaskSubtask extends Equatable {
   final String id;
   final String title;
+  final String? description;
   final bool isCompleted;
   final DateTime? completedAt;
   final String? completedBy;
@@ -13,6 +14,7 @@ class TaskSubtask extends Equatable {
   const TaskSubtask({
     required this.id,
     required this.title,
+    this.description,
     this.isCompleted = false,
     this.completedAt,
     this.completedBy,
@@ -23,6 +25,7 @@ class TaskSubtask extends Equatable {
     return TaskSubtask(
       id: map[FirestoreConstants.taskSubtaskId] ?? '',
       title: map[FirestoreConstants.taskSubtaskTitle] ?? '',
+      description: map[FirestoreConstants.taskSubtaskDescription],
       isCompleted: map[FirestoreConstants.taskSubtaskIsCompleted] ?? false,
       completedAt: map[FirestoreConstants.taskSubtaskCompletedAt]?.toDate(),
       completedBy: map[FirestoreConstants.taskSubtaskCompletedBy],
@@ -34,6 +37,7 @@ class TaskSubtask extends Equatable {
     return {
       FirestoreConstants.taskSubtaskId: id,
       FirestoreConstants.taskSubtaskTitle: title,
+      FirestoreConstants.taskSubtaskDescription: description,
       FirestoreConstants.taskSubtaskIsCompleted: isCompleted,
       FirestoreConstants.taskSubtaskCompletedAt: completedAt,
       FirestoreConstants.taskSubtaskCompletedBy: completedBy,
@@ -44,6 +48,7 @@ class TaskSubtask extends Equatable {
   TaskSubtask copyWith({
     String? id,
     String? title,
+    String? description,
     bool? isCompleted,
     DateTime? completedAt,
     String? completedBy,
@@ -52,6 +57,7 @@ class TaskSubtask extends Equatable {
     return TaskSubtask(
       id: id ?? this.id,
       title: title ?? this.title,
+      description: description ?? this.description,
       isCompleted: isCompleted ?? this.isCompleted,
       completedAt: completedAt ?? this.completedAt,
       completedBy: completedBy ?? this.completedBy,
@@ -60,5 +66,5 @@ class TaskSubtask extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, title, isCompleted, completedAt, completedBy, order];
+  List<Object?> get props => [id, title, description, isCompleted, completedAt, completedBy, order];
 }

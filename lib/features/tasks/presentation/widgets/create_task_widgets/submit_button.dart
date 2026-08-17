@@ -21,7 +21,44 @@ class SubmitButton extends StatelessWidget {
             onPressed: isLoading
                 ? null
                 : () {
-              if (taskCubit.formKey.currentState!.validate()) {
+              if (taskCubit.selectedEntryType == 'multiple') {
+                final items = taskCubit.draftSubtasks;
+                if (items.isEmpty ||
+                    items.any((e) => e.title.trim().isEmpty)) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('أضف عنواناً لكل مهمة'),
+                      backgroundColor: Colors.red,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                    ),
+                  );
+                  return;
+                }
+                final first = items.first;
+                final task = TaskModel(
+                  id: const Uuid().v4(),
+                  title: first.title.trim(),
+                  description: first.description?.trim() ?? '',
+                  assigneeId: taskCubit.selectedAssigneeId,
+                  assigneeName: taskCubit.selectedAssigneeName,
+                  creatorId: taskCubit.currentUserId.toString(),
+                  creatorName: taskCubit.currentUserName,
+                  priority: taskCubit.selectedPriority,
+                  status: 'لم تبدأ',
+                  dueDate: taskCubit.dueDate,
+                  createdAt: DateTime.now(),
+                  updatedAt: DateTime.now(),
+                  taskType: taskCubit.selectedAssigneeId == taskCubit.currentUserId
+                      ? TaskType.myOwnTask
+                      : TaskType.createdByMe,
+                  subtasks: items,
+                  entryType: 'multiple',
+                );
+                context.read<TaskCubit>().createTask(task);
+              } else if (taskCubit.formKey.currentState!.validate()) {
                 final task = TaskModel(
                   id: const Uuid().v4(),
                   title: taskCubit.titleController.text,

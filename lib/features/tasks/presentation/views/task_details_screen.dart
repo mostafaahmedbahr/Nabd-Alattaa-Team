@@ -92,6 +92,39 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                               task.forwardedFromUserName != null)
                             _ForwardedBanner(name: task.forwardedFromUserName!),
                           if (canForward) _ForwardButton(task: task),
+                          if (task.entryType == 'multiple')
+                            Container(
+                              width: double.infinity,
+                              margin: const EdgeInsets.only(bottom: 12),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.info.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: AppColors.info.withValues(alpha: 0.3),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.playlist_add_check_rounded,
+                                      color: AppColors.info, size: 18),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      'مهمة متعددة - تحتوي على ${task.subtasks.length} عنصر',
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.info,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           TaskDescriptionCard(task: task),
                           const SizedBox(height: 12),
                           TaskInfoCard(task: task),

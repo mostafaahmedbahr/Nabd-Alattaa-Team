@@ -226,6 +226,7 @@ class TaskCubit extends Cubit<TaskState> {
   String selectedAssigneeName = '';
   DateTime dueDate = DateTime.now().add(const Duration(days: 1));
   String currentUserName = '';
+  String selectedEntryType = 'single';
 
   void loadCurrentUser() {
     final user = FirebaseAuth.instance.currentUser;
@@ -247,18 +248,20 @@ class TaskCubit extends Cubit<TaskState> {
     selectedAssigneeId = '';
     selectedAssigneeName = '';
     dueDate = DateTime.now().add(const Duration(days: 1));
+    selectedEntryType = 'single';
     clearDraftSubtasks();
   }
 
   // Draft subtasks for the create-task form (local UI state).
   List<TaskSubtask> draftSubtasks = const [];
 
-  void addDraftSubtask(String title) {
+  void addDraftSubtask(String title, [String description = '']) {
     draftSubtasks = [
       ...draftSubtasks,
       TaskSubtask(
         id: const Uuid().v4(),
         title: title,
+        description: description,
         order: draftSubtasks.length,
       ),
     ];
@@ -267,6 +270,12 @@ class TaskCubit extends Cubit<TaskState> {
   void updateDraftSubtask(String id, String title) {
     draftSubtasks = draftSubtasks
         .map((s) => s.id == id ? s.copyWith(title: title) : s)
+        .toList();
+  }
+
+  void updateDraftSubtaskFull(TaskSubtask updated) {
+    draftSubtasks = draftSubtasks
+        .map((s) => s.id == updated.id ? updated : s)
         .toList();
   }
 

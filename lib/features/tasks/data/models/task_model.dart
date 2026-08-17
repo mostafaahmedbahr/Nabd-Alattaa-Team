@@ -21,6 +21,8 @@ class TaskModel extends Equatable {
 
   final List<TaskSubtask> subtasks;
 
+  final String entryType;
+
   final bool isForwarded;
   final String? originalTaskId;
   final String? parentTaskId;
@@ -46,6 +48,7 @@ class TaskModel extends Equatable {
     this.completionPercentage = 0,
     this.taskType = TaskType.assignedToMe,
     this.subtasks = const [],
+    this.entryType = 'single',
     this.isForwarded = false,
     this.originalTaskId,
     this.parentTaskId,
@@ -97,6 +100,7 @@ class TaskModel extends Equatable {
       completionPercentage: map['completion_percentage'] ?? 0,
       taskType: parseTaskType(map['task_type']),
       subtasks: subtasks,
+      entryType: map['entry_type'] ?? 'single',
       isForwarded: map['is_forwarded'] ?? false,
       originalTaskId: map['original_task_id'],
       parentTaskId: map['parent_task_id'],
@@ -125,6 +129,7 @@ class TaskModel extends Equatable {
       'completion_percentage': completionPercentage,
       'task_type': taskType.name,
       'subtasks': subtasks.map((e) => e.toMap()).toList(),
+      'entry_type': entryType,
       'is_forwarded': isForwarded,
       'original_task_id': originalTaskId,
       'parent_task_id': parentTaskId,
@@ -200,6 +205,7 @@ class TaskModel extends Equatable {
       completionPercentage: completionPercentage ?? this.completionPercentage,
       taskType: taskType ?? this.taskType,
       subtasks: subtasks ?? this.subtasks,
+      entryType: entryType ?? this.entryType,
       isForwarded: isForwarded ?? this.isForwarded,
       originalTaskId:
           clearOriginalTaskId ? null : (originalTaskId ?? this.originalTaskId),
@@ -228,6 +234,7 @@ class TaskModel extends Equatable {
         updatedAt,
         completionPercentage,
         subtasks,
+        entryType,
         isForwarded,
         originalTaskId,
         parentTaskId,

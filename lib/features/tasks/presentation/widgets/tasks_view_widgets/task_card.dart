@@ -102,6 +102,14 @@ class TaskCard extends StatelessWidget {
                                 color: AppColors.warning,
                               ),
                             ),
+                          if (task.entryType == 'multiple')
+                            Padding(
+                              padding: const EdgeInsets.only(left: 6),
+                              child: _Badge(
+                                text: 'متعددة',
+                                color: AppColors.info,
+                              ),
+                            ),
                           _Badge(
                             text: task.status,
                             color: statusColor,

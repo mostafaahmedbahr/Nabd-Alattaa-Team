@@ -138,17 +138,37 @@ class _TaskSubtasksSectionState extends State<TaskSubtasksSection> {
                   value: subtask.isCompleted,
                   onChanged: (value) =>
                       widget.onToggle(subtask.id, value ?? false),
-                  title: Text(
-                    subtask.title,
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      decoration: subtask.isCompleted
-                          ? TextDecoration.lineThrough
-                          : null,
-                      color: subtask.isCompleted
-                          ? AppColors.grey400
-                          : AppColors.textPrimary,
-                    ),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        subtask.title,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          decoration: subtask.isCompleted
+                              ? TextDecoration.lineThrough
+                              : null,
+                          color: subtask.isCompleted
+                              ? AppColors.grey400
+                              : AppColors.textPrimary,
+                        ),
+                      ),
+                      if (subtask.description != null &&
+                          subtask.description!.isNotEmpty)
+                        Padding(
+                          padding: EdgeInsets.only(top: 2.h),
+                          child: Text(
+                            subtask.description!,
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: AppColors.grey400,
+                              decoration: subtask.isCompleted
+                                  ? TextDecoration.lineThrough
+                                  : null,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                   secondary: Row(
                     mainAxisSize: MainAxisSize.min,

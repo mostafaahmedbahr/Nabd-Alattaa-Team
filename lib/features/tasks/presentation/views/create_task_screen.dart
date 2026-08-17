@@ -10,7 +10,7 @@ import '../widgets/create_task_widgets/date_card.dart';
 import '../widgets/create_task_widgets/priority_selector.dart';
 import '../widgets/create_task_widgets/section_header.dart' show SectionHeader;
 import '../widgets/create_task_widgets/submit_button.dart';
-import '../widgets/create_task_widgets/subtasks_input.dart';
+import '../widgets/create_task_widgets/multiple_tasks_input.dart';
 
 class CreateTaskScreen extends StatefulWidget {
   const CreateTaskScreen({super.key});
@@ -72,29 +72,62 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SectionHeader(
+                          title: "نوع المهمة",
+                          icon: Icons.category_outlined,
+                        ),
+                        SizedBox(height: 14.h),
+                        _buildEntryTypeSelector(taskCubit),
+                        SizedBox(height: 24.h),
+                        SectionHeader(
                           title: "بيانات المهمة",
                           icon: Icons.edit_note_rounded,
                         ),
-                          SizedBox(height: 14.h),
-                        _buildTextField(
-                          controller: taskCubit.titleController,
-                          label: AppStrings.taskTitle,
-                          icon: Icons.title_rounded,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'عنوان المهمة مطلوب';
-                            }
-                            return null;
-                          },
-                        ),
+                        SizedBox(height: 14.h),
+                        if (taskCubit.selectedEntryType == 'single') ...[
+                          _buildTextField(
+                            controller: taskCubit.titleController,
+                            label: AppStrings.taskTitle,
+                            icon: Icons.title_rounded,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'عنوان المهمة مطلوب';
+                              }
+                              return null;
+                            },
+                          ),
                           SizedBox(height: 12.h),
-                        _buildTextField(
-                          controller: taskCubit.descriptionController,
-                          label: AppStrings.taskDescription,
-                          icon: Icons.description_outlined,
-                          maxLines: 3,
-                        ),
-                          SizedBox(height: 24.h),
+                          _buildTextField(
+                            controller: taskCubit.descriptionController,
+                            label: AppStrings.taskDescription,
+                            icon: Icons.description_outlined,
+                            maxLines: 3,
+                          ),
+                        ] else ...[
+                          MultipleTasksInput(
+                            items: taskCubit.draftSubtasks,
+                            onAdd: (title, description) {
+                              setState(() {
+                                taskCubit.addDraftSubtask(title, description);
+                              });
+                            },
+                            onUpdate: (updated) {
+                              setState(() {
+                                taskCubit.updateDraftSubtaskFull(updated);
+                              });
+                            },
+                            onRemove: (id) {
+                              setState(() {
+                                taskCubit.removeDraftSubtask(id);
+                              });
+                            },
+                            onReorder: (oldIndex, newIndex) {
+                              setState(() {
+                                taskCubit.reorderDraftSubtasks(oldIndex, newIndex);
+                              });
+                            },
+                          ),
+                        ],
+                        SizedBox(height: 24.h),
                         SectionHeader(
                           title: "المسؤول والموعد",
                           icon: Icons.person_pin_circle_outlined,
@@ -124,35 +157,6 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                           SizedBox(height: 32.h),
                         SubmitButton(isLoading: isLoading,),
                           SizedBox(height: 32.h),
-                        SubtasksInput(
-                          subtasks: taskCubit.draftSubtasks,
-                          onAdd: (title) {
-                            setState(() {
-                              taskCubit.addDraftSubtask(title);
-                            });
-                          },
-                          onUpdate: (id, title) {
-                            setState(() {
-                              taskCubit.updateDraftSubtask(id, title);
-                            });
-                          },
-                          onRemove: (id) {
-                            setState(() {
-                              taskCubit.removeDraftSubtask(id);
-                            });
-                          },
-                          onToggle: (id) {
-                            setState(() {
-                              taskCubit.toggleDraftSubtask(id);
-                            });
-                          },
-                          onReorder: (oldIndex, newIndex) {
-                            setState(() {
-                              taskCubit.reorderDraftSubtasks(oldIndex, newIndex);
-                            });
-                          },
-                        ),
-                        SizedBox(height: 32.h),
                       ],
                     ),
                   ),
@@ -185,6 +189,72 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
         maxLines: maxLines,
         validator: validator,
       ),
+    );
+  }
+
+  Widget _buildEntryTypeSelector(TaskCubit taskCubit) {
+    final options = [
+      (key: 'single', label: 'مهمة واحدة', icon: Icons.looks_one_rounded),
+      (
+        key: 'multiple',
+        label: 'اختيار من متعدد',
+        icon: Icons.playlist_add_check_rounded
+      ),
+    ];
+
+    return Row(
+      children: options.map((option) {
+        final isSelected = taskCubit.selectedEntryType == option.key;
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  taskCubit.selectedEntryType = option.key;
+                  if (option.key == 'single') {
+                    taskCubit.clearDraftSubtasks();
+                  }
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 14.h),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? AppColors.primary.withValues(alpha: 0.1)
+                      : Colors.white,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: isSelected
+                        ? AppColors.primary.withValues(alpha: 0.5)
+                        : AppColors.grey200,
+                    width: isSelected ? 1.5 : 1,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Icon(
+                      option.icon,
+                      color: isSelected ? AppColors.primary : AppColors.grey400,
+                      size: 24,
+                    ),
+                    SizedBox(height: 8.h),
+                    Text(
+                      option.label,
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.w500,
+                        color: isSelected ? AppColors.primary : AppColors.grey500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 

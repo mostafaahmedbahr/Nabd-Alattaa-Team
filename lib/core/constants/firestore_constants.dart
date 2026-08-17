@@ -56,10 +56,14 @@ class FirestoreConstants {
   static const String taskSubtasks = 'subtasks';
   static const String taskSubtaskId = 'subtask_id';
   static const String taskSubtaskTitle = 'title';
+  static const String taskSubtaskDescription = 'description';
   static const String taskSubtaskIsCompleted = 'is_completed';
   static const String taskSubtaskCompletedAt = 'completed_at';
   static const String taskSubtaskCompletedBy = 'completed_by';
   static const String taskSubtaskOrder = 'order';
+
+  // Task Entry Type
+  static const String taskEntryType = 'entry_type';
 
   // Task Forwarding Fields
   static const String taskIsForwarded = 'is_forwarded';
