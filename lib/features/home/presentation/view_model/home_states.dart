@@ -10,7 +10,6 @@ class HomeLoaded extends HomeStates {
   final int totalTasksCount;
   final int goodDeedsCount;
   final int complaintsCount;
-  final int reportsCount;
   final int ideasCount;
 
   HomeLoaded({
@@ -21,7 +20,6 @@ class HomeLoaded extends HomeStates {
     this.totalTasksCount = 0,
     this.goodDeedsCount = 0,
     this.complaintsCount = 0,
-    this.reportsCount = 0,
     this.ideasCount = 0,
   });
 }

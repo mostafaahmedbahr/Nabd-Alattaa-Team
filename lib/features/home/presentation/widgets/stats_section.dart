@@ -7,14 +7,14 @@ import '../../../../core/theme/app_text_styles.dart';
 class StatsSection extends StatelessWidget {
   final int goodDeedsCount;
   final int complaintsCount;
-  final int reportsCount;
+
   final int ideasCount;
 
   const StatsSection({
     super.key,
     required this.goodDeedsCount,
     required this.complaintsCount,
-    required this.reportsCount,
+
     required this.ideasCount,
   });
 
@@ -43,6 +43,15 @@ class StatsSection extends StatelessWidget {
             SizedBox(width: 8.w),
             Expanded(
               child: _StatCard(
+                icon: Icons.lightbulb_outline,
+                label: 'أفكار',
+                count: ideasCount,
+                color: AppColors.warning,
+              ),
+            ),
+            SizedBox(width: 8.w),
+            Expanded(
+              child: _StatCard(
                 icon: Icons.feedback_outlined,
                 label: 'شكاوى',
                 count: complaintsCount,
@@ -51,28 +60,7 @@ class StatsSection extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: 8.h),
-        Row(
-          children: [
-            Expanded(
-              child: _StatCard(
-                icon: Icons.report_outlined,
-                label: 'بلاغات',
-                count: reportsCount,
-                color: AppColors.primary,
-              ),
-            ),
-            SizedBox(width: 8.w),
-            Expanded(
-              child: _StatCard(
-                icon: Icons.lightbulb_outline,
-                label: 'أفكار',
-                count: ideasCount,
-                color: AppColors.warning,
-              ),
-            ),
-          ],
-        ),
+
       ],
     );
   }

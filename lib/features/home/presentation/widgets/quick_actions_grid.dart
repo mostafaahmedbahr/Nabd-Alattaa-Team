@@ -8,7 +8,15 @@ class QuickActionsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text(
+          'اجراءات سريعة',
+          style: AppTextStyles.labelLarge.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 12.h),
         Row(
           children: [
             _buildAction(context, Icons.library_books_outlined, "المكتبة", Routes.library),

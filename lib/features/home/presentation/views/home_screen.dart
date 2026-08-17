@@ -76,24 +76,12 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             }
             if (state is HomeError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.error_outline, size: 64, color: AppColors.error),
-                    SizedBox(height: 16.h),
-                    Text(
-                      state.message,
-                      style: AppTextStyles.bodyMedium,
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 16.h),
-                    ElevatedButton(
-                      onPressed: () => _loadData(forceRefresh: true),
-                      child: const Text('إعادة المحاولة'),
-                    ),
-                  ],
-                ),
+              return CustomErrorWidget(
+                onRetry: (){
+                  _loadData(forceRefresh: true);
+                },
+                message: 'إعادة المحاولة',
+
               );
             }
             if (state is HomeLoaded) {
@@ -111,7 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       StatsSection(
                         goodDeedsCount: state.goodDeedsCount,
                         complaintsCount: state.complaintsCount,
-                        reportsCount: state.reportsCount,
                         ideasCount: state.ideasCount,
                       ),
                       SizedBox(height: 20.h),

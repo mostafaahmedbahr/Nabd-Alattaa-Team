@@ -1,14 +1,12 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/constants/firestore_constants.dart';
-import '../../../../core/utils/log_util.dart';
-import '../../../profile/presentation/view_model/profile_cubit.dart';
 import 'home_states.dart';
 
 class HomeCubit extends Cubit<HomeStates> {
@@ -17,9 +15,6 @@ class HomeCubit extends Cubit<HomeStates> {
   HomeCubit({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance,
         super(HomeInitial());
-
-
-
 
   String getGreeting() {
     final hour = DateTime.now().hour;
@@ -30,15 +25,30 @@ class HomeCubit extends Cubit<HomeStates> {
 
   bool _hasLoaded = false;
 
+  String _userName = 'مستخدم';
+  String _greeting = '';
+  List<Map<String, dynamic>> _announcements = const [];
+  List<Map<String, dynamic>> _tasks = const [];
+  int _totalTasksCount = 0;
+
+  int _goodDeedsCount = 0;
+  int _complaintsCount = 0;
+  int _ideasCount = 0;
+
+  final List<StreamSubscription> _countSubs = [];
+
   void reset() {
     _hasLoaded = false;
+    _cancelCountStreams();
     emit(HomeInitial());
   }
 
   Future<void> loadHomeData(String userId,
-      {bool forceRefresh = false, bool showLoading = true})
-  async {
-    if (_hasLoaded && !forceRefresh) return;
+      {bool forceRefresh = false, bool showLoading = true}) async {
+    if (_hasLoaded && !forceRefresh) {
+      _startCountStreams(userId);
+      return;
+    }
 
     if (showLoading) {
       emit(HomeLoading());
@@ -94,41 +104,85 @@ class HomeCubit extends Cubit<HomeStates> {
         };
       }).toList();
 
-      final goodDeedsSnap = await _firestore
-          .collection(FirestoreConstants.goodDeeds)
-          .where(FirestoreConstants.goodDeedCreatorId, isEqualTo: userId)
-          .get();
-
-      final complaintsSnap = await _firestore
-          .collection(FirestoreConstants.complaints)
-          .where(FirestoreConstants.complaintCreatorId, isEqualTo: userId)
-          .get();
-
-      final reportsSnap = await _firestore
-          .collection(FirestoreConstants.reports)
-          .where(FirestoreConstants.reportCreatorId, isEqualTo: userId)
-          .get();
-
-      final ideasSnap = await _firestore
-          .collection(FirestoreConstants.ideas)
-          .where(FirestoreConstants.ideaCreatorId, isEqualTo: userId)
-          .get();
-
-      emit(HomeLoaded(
-        userName: userName,
-        greeting: getGreeting(),
-        announcements: announcements,
-        tasks: tasks,
-        totalTasksCount: allTasksSnap.docs.length,
-        goodDeedsCount: goodDeedsSnap.docs.length,
-        complaintsCount: complaintsSnap.docs.length,
-        reportsCount: reportsSnap.docs.length,
-        ideasCount: ideasSnap.docs.length,
-      ));
+      _userName = userName;
+      _greeting = getGreeting();
+      _announcements = announcements;
+      _tasks = tasks;
+      _totalTasksCount = allTasksSnap.docs.length;
       _hasLoaded = true;
+
+      _startCountStreams(userId);
+      _emitCurrent();
     } catch (e) {
       emit(HomeError(message: 'فشل في تحميل البيانات: ${e.toString()}'));
     }
+  }
+
+  void _startCountStreams(String userId) {
+    _cancelCountStreams();
+    _countSubs.add(
+      _countStream(
+        FirestoreConstants.goodDeeds,
+        FirestoreConstants.goodDeedCreatorId,
+        userId,
+      ).listen((value) {
+        _goodDeedsCount = value;
+        _emitCurrent();
+      }),
+    );
+    _countSubs.add(
+      _countStream(
+        FirestoreConstants.complaints,
+        FirestoreConstants.complaintCreatorId,
+        userId,
+      ).listen((value) {
+        _complaintsCount = value;
+        _emitCurrent();
+      }),
+    );
+    _countSubs.add(
+      _countStream(
+        FirestoreConstants.ideas,
+        FirestoreConstants.ideaCreatorId,
+        userId,
+      ).listen((value) {
+        _ideasCount = value;
+        _emitCurrent();
+      }),
+    );
+  }
+
+  Stream<int> _countStream(String collection, String creatorField, String userId) {
+    try {
+      return _firestore
+          .collection(collection)
+          .where(creatorField, isEqualTo: userId)
+          .snapshots()
+          .map((snapshot) => snapshot.docs.length);
+    } catch (e) {
+      return Stream.value(0);
+    }
+  }
+
+  void _emitCurrent() {
+    if (!_hasLoaded) return;
+    emit(HomeLoaded(
+      userName: _userName,
+      greeting: _greeting,
+      announcements: _announcements,
+      tasks: _tasks,
+      totalTasksCount: _totalTasksCount,
+      goodDeedsCount: _goodDeedsCount,
+      complaintsCount: _complaintsCount,
+      ideasCount: _ideasCount,
+    ));
+  }
+
+  void _cancelCountStreams() {
+    for (final sub in _countSubs) {
+      sub.cancel();
+    }
+    _countSubs.clear();
   }
 
   String _formatDate(dynamic timestamp) {
@@ -161,16 +215,22 @@ class HomeCubit extends Cubit<HomeStates> {
   Color _statusColor(String status) {
     switch (status) {
       case 'completed':
-        return Color(0xFF4CAF50);
+        return const Color(0xFF4CAF50);
       case 'in_progress':
-        return Color(0xFFFF9800);
+        return const Color(0xFFFF9800);
       case 'in_review':
-        return Color(0xFF2196F3);
+        return const Color(0xFF2196F3);
       case 'late':
-        return Color(0xFFF44336);
+        return const Color(0xFFF44336);
       case 'not_started':
       default:
-        return Color(0xFF9E9E9E);
+        return const Color(0xFF9E9E9E);
     }
+  }
+
+  @override
+  Future<void> close() {
+    _cancelCountStreams();
+    return super.close();
   }
 }

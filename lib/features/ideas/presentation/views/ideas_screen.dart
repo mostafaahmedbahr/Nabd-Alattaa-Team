@@ -287,37 +287,6 @@ class _IdeasScreenState extends State<IdeasScreen> {
                 color: AppColors.textSecondary,
               ),
             ),
-            const SizedBox(height: 32),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.primary, AppColors.primaryLight],
-                ),
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.3),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.add_rounded, color: AppColors.textWhite, size: 20),
-                  SizedBox(width: 8),
-                  Text(
-                    'اضغط على + لإضافة فكرة',
-                    style: TextStyle(
-                      color: AppColors.textWhite,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
