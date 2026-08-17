@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:nabd_alattaa_team/features/users/data/repos/users_repo_impl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../features/chat/data/repos/chat_repo.dart';
@@ -36,7 +37,7 @@ Future<void> init() async {
     firestore: sl(),
   ));
 
-  sl.registerLazySingleton<UsersRepo>(() => UsersRepo());
+  sl.registerLazySingleton<UsersRepo>(() => UsersRepoImpl());
   sl.registerFactory(() => UsersCubit(
     usersRepo: sl(),
   ));

@@ -3,7 +3,7 @@ import 'package:nabd_alattaa_team/features/home/presentation/views/home_view.dar
 import 'package:nabd_alattaa_team/features/announcements/presentation/views/announcements_screen.dart';
 import 'package:nabd_alattaa_team/features/profile/presentation/views/profile_screen.dart';
 import 'package:nabd_alattaa_team/features/tasks/presentation/views/tasks_screen.dart';
-import 'package:nabd_alattaa_team/features/chat/presentation/views/users_list_screen.dart';
+import 'package:nabd_alattaa_team/features/users/presentation/views/users_list_view.dart';
 import '../../../../common_imports.dart';
 import 'layout_states.dart';
 

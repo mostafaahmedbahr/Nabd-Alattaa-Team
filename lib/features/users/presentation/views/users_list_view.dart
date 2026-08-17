@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:nabd_alattaa_team/features/chat/presentation/widgets/users_list_screen_body.dart';
+import 'package:nabd_alattaa_team/features/users/presentation/widgets/users_list_screen_body.dart';
 
 import '../../../../common_imports.dart';
-import '../view_model/chat_cubit.dart';
+import '../../../chat/presentation/view_model/chat_cubit.dart';
 
 class UsersListScreen extends StatefulWidget {
   const UsersListScreen({super.key});

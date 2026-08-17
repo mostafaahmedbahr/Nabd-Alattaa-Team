@@ -14,7 +14,7 @@ import 'package:nabd_alattaa_team/core/utils/service_locator.dart';
 import 'package:nabd_alattaa_team/features/layout/presentation/views/layout_view.dart';
 import 'package:nabd_alattaa_team/features/tasks/presentation/views/tasks_screen.dart';
 import '../../features/chat/presentation/views/chat_room_screen.dart';
-import '../../features/chat/presentation/views/users_list_screen.dart';
+import '../../features/users/presentation/views/users_list_view.dart';
 import 'app_routes.dart';
 import '../../features/register/presentation/views/register_view.dart';
 import '../../features/splash/presentation/views/splash_view.dart';
