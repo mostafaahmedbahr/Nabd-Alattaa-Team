@@ -8,13 +8,16 @@ import 'notification_state.dart';
 class NotificationCubit extends Cubit<NotificationState> {
   final NotificationRepository _repository;
   StreamSubscription? _subscription;
+  String? _loadedUserId;
 
   NotificationCubit({required NotificationRepository repository})
       : _repository = repository,
         super(const NotificationInitial());
 
   void loadNotifications(String userId) {
+    if (_loadedUserId == userId && _subscription != null) return;
     _subscription?.cancel();
+    _loadedUserId = userId;
     emit(const NotificationLoading());
 
     _subscription = _repository.getNotifications(userId).listen(

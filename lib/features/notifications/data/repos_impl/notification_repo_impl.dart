@@ -26,12 +26,7 @@ class NotificationRepoImpl implements NotificationRepository {
             .map((doc) => NotificationModel.fromMap(doc.data()..['id'] = doc.id))
             .toList();
 
-        notifications.sort((a, b) {
-          if (a.isRead == b.isRead) {
-            return b.createdAt.compareTo(a.createdAt);
-          }
-          return a.isRead ? 1 : -1;
-        });
+        notifications.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
         return Right(notifications);
       });

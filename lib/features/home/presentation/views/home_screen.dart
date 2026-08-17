@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nabd_alattaa_team/common_imports.dart';
 import 'package:nabd_alattaa_team/features/layout/presentation/view_model/layout_cubit.dart';
+import '../../../notifications/presentation/view_model/notification_cubit.dart';
+import '../../../notifications/presentation/view_model/notification_state.dart';
 import '../view_model/home_cubit.dart';
 import '../view_model/home_states.dart';
 import '../widgets/welcome_section.dart';
@@ -23,12 +25,20 @@ class _HomeScreenState extends State<HomeScreen> {
     if (state is! HomeLoaded) {
       _loadData();
     }
+    _loadNotifications();
   }
 
   void _loadData({bool forceRefresh = false}) {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       context.read<HomeCubit>().loadHomeData(user.uid, forceRefresh: forceRefresh);
+    }
+  }
+
+  void _loadNotifications() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      context.read<NotificationCubit>().loadNotifications(user.uid);
     }
   }
 
@@ -39,10 +49,19 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         title: const Text("الرئيسية"),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              context.push('/notifications');
+          BlocBuilder<NotificationCubit, NotificationState>(
+            builder: (context, state) {
+              final count = state is NotificationLoaded ? state.unreadCount : 0;
+              return Badge(
+                label: Text(count.toString()),
+                isLabelVisible: count > 0,
+                child: IconButton(
+                  icon: const Icon(Icons.notifications_outlined),
+                  onPressed: () {
+                    context.push('/notifications');
+                  },
+                ),
+              );
             },
           ),
         ],
