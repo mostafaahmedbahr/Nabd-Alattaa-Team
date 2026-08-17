@@ -66,7 +66,7 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
               hintText: 'بحث بالاسم أو البريد أو القسم',
               prefixIcon: Icons.search,
               onChanged: (value) {
-                // تصفية محلية بسيطة عند الحاجة
+                context.read<AdminCubit>().filterEmployees(value ?? '');
               },
             ),
           ),
@@ -125,7 +125,6 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
                       final employee = state.filteredEmployees[index];
                       return EmployeeCard(
                         employee: employee,
-                        onRoleTap: () => _showRoleDialog(employee),
                         onToggleActive: (value) {
                           context
                               .read<AdminCubit>()
@@ -147,71 +146,13 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
     );
   }
 
-  void _openDetails(UserModel employee) {
-    context.push(
+  Future<void> _openDetails(UserModel employee) async {
+    await context.push(
       '/employee-details',
       extra: employee,
     );
-  }
-
-  void _showRoleDialog(UserModel employee) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('تغيير الصلاحية'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('المستخدم: ${employee.name}'),
-            const SizedBox(height: 16),
-            RadioListTile<String>(
-              title: const Text('موظف'),
-              value: UserRole.employee,
-              groupValue: employee.role,
-              onChanged: (value) {
-                if (value != null) {
-                  Navigator.pop(context);
-                  context
-                      .read<AdminCubit>()
-                      .updateEmployeeRole(employee.id ?? '', value);
-                }
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('مدير'),
-              value: UserRole.manager,
-              groupValue: employee.role,
-              onChanged: (value) {
-                if (value != null) {
-                  Navigator.pop(context);
-                  context
-                      .read<AdminCubit>()
-                      .updateEmployeeRole(employee.id ?? '', value);
-                }
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('مدير عام'),
-              value: UserRole.superAdmin,
-              groupValue: employee.role,
-              onChanged: (value) {
-                if (value != null) {
-                  Navigator.pop(context);
-                  context
-                      .read<AdminCubit>()
-                      .updateEmployeeRole(employee.id ?? '', value);
-                }
-              },
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text(AppStrings.cancel),
-          ),
-        ],
-      ),
-    );
+    if (mounted) {
+      context.read<AdminCubit>().loadEmployees();
+    }
   }
 }

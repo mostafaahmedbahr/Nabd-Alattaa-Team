@@ -52,23 +52,6 @@ class AdminRepoImpl implements AdminRepository {
   }
 
   @override
-  Future<Either<Failure, void>> updateEmployeeRole(
-      String userId, String newRole) async {
-    try {
-      await _firestore
-          .collection(FirestoreConstants.users)
-          .doc(userId)
-          .update({FirestoreConstants.userRole: newRole});
-
-      return const Right(null);
-    } catch (e) {
-      return Left(FirestoreFailure(
-        message: 'فشل في تحديث الصلاحية: ${e.toString()}',
-      ));
-    }
-  }
-
-  @override
   Future<Either<Failure, void>> createDepartment(
       DepartmentModel department) async {
     try {

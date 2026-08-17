@@ -5,7 +5,6 @@ import '../../../users/data/models/user_model.dart';
 
 class EmployeeCard extends StatelessWidget {
   final UserModel employee;
-  final VoidCallback? onRoleTap;
   final ValueChanged<bool>? onToggleActive;
   final VoidCallback? onAddPoints;
   final VoidCallback? onTap;
@@ -13,7 +12,6 @@ class EmployeeCard extends StatelessWidget {
   const EmployeeCard({
     super.key,
     required this.employee,
-    this.onRoleTap,
     this.onToggleActive,
     this.onAddPoints,
     this.onTap,
@@ -134,12 +132,6 @@ class EmployeeCard extends StatelessWidget {
                   ],
                 ),
               ),
-              if (onRoleTap != null)
-                IconButton(
-                  icon: const Icon(Icons.edit_outlined, size: 20),
-                  color: AppColors.primary,
-                  onPressed: onRoleTap,
-                ),
             ],
           ),
         ),
@@ -171,9 +163,7 @@ class EmployeeCard extends StatelessWidget {
     final roleText = _getRoleText(employee.role);
     final roleColor = _getRoleColor(employee.role);
 
-    return GestureDetector(
-      onTap: onRoleTap,
-      child: Container(
+    return Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         decoration: BoxDecoration(
           color: roleColor.withOpacity(0.1),
@@ -194,7 +184,6 @@ class EmployeeCard extends StatelessWidget {
             Icon(Icons.arrow_drop_down, size: 14, color: roleColor),
           ],
         ),
-      ),
     );
   }
 

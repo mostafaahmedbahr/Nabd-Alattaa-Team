@@ -65,6 +65,29 @@ class AdminCubit extends Cubit<AdminState> {
     );
   }
 
+  void filterEmployees(String query) {
+    final lowered = query.trim().toLowerCase();
+    if (lowered.isEmpty) {
+      emit(EmployeesLoaded(
+        employees: allEmployees,
+        filteredEmployees: allEmployees,
+      ));
+      return;
+    }
+
+    final filtered = allEmployees.where((emp) {
+      return emp.name.toLowerCase().contains(lowered) ||
+          emp.email.toLowerCase().contains(lowered) ||
+          emp.department.toLowerCase().contains(lowered) ||
+          emp.position.toLowerCase().contains(lowered);
+    }).toList();
+
+    emit(EmployeesLoaded(
+      employees: allEmployees,
+      filteredEmployees: filtered,
+    ));
+  }
+
   Future<void> toggleUserActive(String userId, bool isActive) async {
     emit(const AdminLoading());
     final result = await _adminRepo.updateUserActive(userId, isActive);
@@ -130,14 +153,6 @@ class AdminCubit extends Cubit<AdminState> {
     result.fold(
       (failure) => emit(AdminError(message: failure.message)),
       (_) => emit(const AdminSuccess(message: 'تم تحديث حالة الفكرة')),
-    );
-  }
-
-  Future<void> updateEmployeeRole(String userId, String newRole) async {
-    final result = await _adminRepo.updateEmployeeRole(userId, newRole);
-    result.fold(
-      (failure) => emit(AdminError(message: failure.message)),
-      (_) => emit(const AdminSuccess(message: 'تم تحديث الصلاحية بنجاح')),
     );
   }
 
