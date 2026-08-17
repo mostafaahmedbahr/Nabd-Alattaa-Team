@@ -6,11 +6,17 @@ import '../../../users/data/models/user_model.dart';
 class EmployeeCard extends StatelessWidget {
   final UserModel employee;
   final VoidCallback? onRoleTap;
+  final ValueChanged<bool>? onToggleActive;
+  final VoidCallback? onAddPoints;
+  final VoidCallback? onTap;
 
   const EmployeeCard({
     super.key,
     required this.employee,
     this.onRoleTap,
+    this.onToggleActive,
+    this.onAddPoints,
+    this.onTap,
   });
 
   @override
@@ -19,63 +25,123 @@ class EmployeeCard extends StatelessWidget {
       elevation: 1,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 24,
-              backgroundColor: AppColors.primary.withOpacity(0.1),
-              child: Text(
-                employee.name.isNotEmpty ? employee.name[0] : '?',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 24,
+                backgroundColor: AppColors.primary.withOpacity(0.1),
+                child: Text(
+                  employee.name.isNotEmpty ? employee.name[0] : '?',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    employee.name,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      employee.name,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    employee.email,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.textSecondary,
+                    const SizedBox(height: 2),
+                    Text(
+                      employee.email,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: AppColors.textSecondary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      _buildChip(employee.department, AppColors.info),
-                      const SizedBox(width: 6),
-                      _buildRoleChip(),
-                    ],
-                  ),
-                ],
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        _buildChip(employee.department, AppColors.info),
+                        const SizedBox(width: 6),
+                        _buildRoleChip(),
+                        const SizedBox(width: 6),
+                        _buildChip('${employee.points} نقطة', AppColors.accent),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        const Text(
+                          'مفعل',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        Switch(
+                          value: employee.isActive,
+                          onChanged: onToggleActive,
+                          activeColor: AppColors.primary,
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        if (onAddPoints != null) ...[
+                          const SizedBox(width: 4),
+                          GestureDetector(
+                            onTap: onAddPoints,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.accent.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.add_circle_outline,
+                                    size: 14,
+                                    color: AppColors.accent,
+                                  ),
+                                  const SizedBox(width: 2),
+                                  Text(
+                                    'نقاط',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: AppColors.accent,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            if (onRoleTap != null)
-              IconButton(
-                icon: const Icon(Icons.edit_outlined, size: 20),
-                color: AppColors.primary,
-                onPressed: onRoleTap,
-              ),
-          ],
+              if (onRoleTap != null)
+                IconButton(
+                  icon: const Icon(Icons.edit_outlined, size: 20),
+                  color: AppColors.primary,
+                  onPressed: onRoleTap,
+                ),
+            ],
+          ),
         ),
       ),
     );

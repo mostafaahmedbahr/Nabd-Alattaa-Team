@@ -1,7 +1,10 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../complaints/data/models/complaint_model.dart';
+import '../../../ideas/data/models/idea_model.dart';
 import '../../../users/data/models/user_model.dart';
 import '../../data/models/department_model.dart';
+import '../../data/models/employee_stats_model.dart';
 
 abstract class AdminState extends Equatable {
   const AdminState();
@@ -42,6 +45,37 @@ class EmployeesLoaded extends AdminState {
 
   @override
   List<Object?> get props => [employees, filteredEmployees];
+}
+
+class EmployeeStatsLoaded extends AdminState {
+  final UserModel user;
+  final EmployeeStats stats;
+
+  const EmployeeStatsLoaded({
+    required this.user,
+    required this.stats,
+  });
+
+  @override
+  List<Object?> get props => [user, stats];
+}
+
+class ComplaintsLoaded extends AdminState {
+  final List<ComplaintModel> complaints;
+
+  const ComplaintsLoaded({required this.complaints});
+
+  @override
+  List<Object?> get props => [complaints];
+}
+
+class IdeasLoaded extends AdminState {
+  final List<IdeaModel> ideas;
+
+  const IdeasLoaded({required this.ideas});
+
+  @override
+  List<Object?> get props => [ideas];
 }
 
 class DepartmentsLoaded extends AdminState {

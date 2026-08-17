@@ -7,7 +7,7 @@ class SettingsSection extends StatelessWidget {
   final bool isAdmin;
   final bool isBreakFast;
 
-  const SettingsSection({super.key, this.isAdmin = false ,required this.isBreakFast});
+  const SettingsSection({super.key,required this.isAdmin  ,required this.isBreakFast});
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +37,18 @@ class SettingsSection extends StatelessWidget {
                   context.push('/manage-meals');
                 },
               ),
-              // Divider(height: 1.h),
-              // ListTile(
-              //   leading: const Icon(Icons.admin_panel_settings, color: AppColors.primary),
-              //   title: const Text('لوحة التحكم'),
-              //   trailing:   Icon(Icons.arrow_forward_ios, size: 16.sp),
-              //   onTap: () {
-              //     context.push(Routes.admin);
-              //   },
-              // ),
+              if(isAdmin)...[
+                Divider(height: 1.h),
+                ListTile(
+                  leading: const Icon(Icons.admin_panel_settings, color: AppColors.primary),
+                  title: const Text('لوحة التحكم'),
+                  trailing:   Icon(Icons.arrow_forward_ios, size: 16.sp),
+                  onTap: () {
+                    context.push(Routes.admin);
+                  },
+                ),
+              ],
+
               Divider(height: 1.h),
             ],
             ListTile(

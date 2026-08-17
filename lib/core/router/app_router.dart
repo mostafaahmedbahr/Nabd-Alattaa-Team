@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nabd_alattaa_team/features/admin/presentation/views/admin_dashboard_screen.dart';
+import 'package:nabd_alattaa_team/features/admin/presentation/views/manage_employees_screen.dart';
+import 'package:nabd_alattaa_team/features/admin/presentation/views/employee_details_screen.dart';
+import 'package:nabd_alattaa_team/features/admin/presentation/views/manage_complaints_screen.dart';
+import 'package:nabd_alattaa_team/features/admin/presentation/views/manage_ideas_screen.dart';
+import 'package:nabd_alattaa_team/features/admin/presentation/views/manage_departments_screen.dart';
+import 'package:nabd_alattaa_team/features/admin/presentation/view_model/admin_cubit.dart';
+import 'package:nabd_alattaa_team/features/users/data/models/user_model.dart';
+import 'package:nabd_alattaa_team/core/utils/service_locator.dart';
 import 'package:nabd_alattaa_team/features/layout/presentation/views/layout_view.dart';
 import 'package:nabd_alattaa_team/features/tasks/presentation/views/tasks_screen.dart';
 import '../../features/chat/presentation/views/chat_room_screen.dart';
@@ -111,7 +120,48 @@ class AppRouter {
       ),
       GoRoute(
         path: Routes.admin,
-        builder: (_, _) => const AdminDashboardScreen(),
+        builder: (_, _) => BlocProvider(
+          create: (_) => sl<AdminCubit>(),
+          child: const AdminDashboardScreen(),
+        ),
+      ),
+      GoRoute(
+        path: Routes.manageEmployees,
+        builder: (_, _) => BlocProvider(
+          create: (_) => sl<AdminCubit>(),
+          child: const ManageEmployeesScreen(),
+        ),
+      ),
+      GoRoute(
+        path: Routes.employeeDetails,
+        builder: (context, state) {
+          final user = state.extra as UserModel;
+          return BlocProvider(
+            create: (_) => sl<AdminCubit>(),
+            child: EmployeeDetailsScreen(user: user),
+          );
+        },
+      ),
+      GoRoute(
+        path: Routes.manageComplaints,
+        builder: (_, _) => BlocProvider(
+          create: (_) => sl<AdminCubit>(),
+          child: const ManageComplaintsScreen(),
+        ),
+      ),
+      GoRoute(
+        path: Routes.manageIdeas,
+        builder: (_, _) => BlocProvider(
+          create: (_) => sl<AdminCubit>(),
+          child: const ManageIdeasScreen(),
+        ),
+      ),
+      GoRoute(
+        path: Routes.manageDepartments,
+        builder: (_, _) => BlocProvider(
+          create: (_) => sl<AdminCubit>(),
+          child: const ManageDepartmentsScreen(),
+        ),
       ),
       // GoRoute(
       //   path: Routes.chat,

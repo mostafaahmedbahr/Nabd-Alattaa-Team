@@ -1,7 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../complaints/data/models/complaint_model.dart';
+import '../../../ideas/data/models/idea_model.dart';
 import '../../../users/data/models/user_model.dart';
 import '../../data/models/department_model.dart';
+import '../../data/models/employee_stats_model.dart';
 import '../../data/repos/admin_repo.dart';
 import 'admin_state.dart';
 
@@ -24,7 +28,11 @@ class AdminCubit extends Cubit<AdminState> {
         employeesResult.fold(
           (failure) => emit(AdminError(message: failure.message)),
           (employees) {
-            final sortedByPoints = List<UserModel>.from(employees)
+            final currentUid = FirebaseAuth.instance.currentUser?.uid;
+            final visible = currentUid != null
+                ? employees.where((e) => e.id != currentUid).toList()
+                : employees;
+            final sortedByPoints = List<UserModel>.from(visible)
               ..sort((a, b) => b.points.compareTo(a.points));
             final topEmployees = sortedByPoints.take(5).toList();
 
@@ -44,36 +52,86 @@ class AdminCubit extends Cubit<AdminState> {
     result.fold(
       (failure) => emit(AdminError(message: failure.message)),
       (employees) {
-        allEmployees = employees;
+        final currentUid = FirebaseAuth.instance.currentUser?.uid;
+        final visible = currentUid != null
+            ? employees.where((e) => e.id != currentUid).toList()
+            : employees;
+        allEmployees = visible;
         emit(EmployeesLoaded(
-          employees: employees,
-          filteredEmployees: employees,
+          employees: visible,
+          filteredEmployees: visible,
         ));
       },
     );
   }
 
-  // void filterEmployees(String query) {
-  //   final currentState = state;
-  //   if (currentState is EmployeesLoaded) {
-  //     if (query.isEmpty) {
-  //       emit(EmployeesLoaded(
-  //         employees: currentState.employees,
-  //         filteredEmployees: currentState.employees,
-  //       ));
-  //     } else {
-  //       final filtered = currentState.employees.where((emp) {
-  //         return emp.toLowerCase().contains(query.toLowerCase()) ||
-  //             emp.email.toLowerCase().contains(query.toLowerCase()) ||
-  //             emp.department.toLowerCase().contains(query.toLowerCase());
-  //       }).toList();
-  //       emit(EmployeesLoaded(
-  //         employees: currentState.employees,
-  //         filteredEmployees: filtered,
-  //       ));
-  //     }
-  //   }
-  // }
+  Future<void> toggleUserActive(String userId, bool isActive) async {
+    emit(const AdminLoading());
+    final result = await _adminRepo.updateUserActive(userId, isActive);
+    result.fold(
+      (failure) => emit(AdminError(message: failure.message)),
+      (_) => emit(AdminSuccess(
+        message: isActive
+            ? 'تم تفعيل المستخدم بنجاح'
+            : 'تم إيقاف تفعيل المستخدم',
+      )),
+    );
+  }
+
+  Future<void> addUserPoints(String userId, int amount) async {
+    emit(const AdminLoading());
+    final result = await _adminRepo.addUserPoints(userId, amount);
+    result.fold(
+      (failure) => emit(AdminError(message: failure.message)),
+      (_) => emit(AdminSuccess(message: 'تم إضافة النقاط بنجاح')),
+    );
+  }
+
+  Future<void> loadEmployeeStats(UserModel user) async {
+    emit(const AdminLoading());
+    final result = await _adminRepo.getEmployeeStats(user.id ?? '');
+    result.fold(
+      (failure) => emit(AdminError(message: failure.message)),
+      (stats) => emit(EmployeeStatsLoaded(user: user, stats: stats)),
+    );
+  }
+
+  Future<void> loadComplaints() async {
+    emit(const AdminLoading());
+    final result = await _adminRepo.getComplaints();
+    result.fold(
+      (failure) => emit(AdminError(message: failure.message)),
+      (complaints) => emit(ComplaintsLoaded(complaints: complaints)),
+    );
+  }
+
+  Future<void> changeComplaintStatus(String complaintId, String status) async {
+    emit(const AdminLoading());
+    final result =
+        await _adminRepo.updateComplaintStatus(complaintId, status);
+    result.fold(
+      (failure) => emit(AdminError(message: failure.message)),
+      (_) => emit(const AdminSuccess(message: 'تم تحديث حالة الشكوى')),
+    );
+  }
+
+  Future<void> loadIdeas() async {
+    emit(const AdminLoading());
+    final result = await _adminRepo.getIdeas();
+    result.fold(
+      (failure) => emit(AdminError(message: failure.message)),
+      (ideas) => emit(IdeasLoaded(ideas: ideas)),
+    );
+  }
+
+  Future<void> changeIdeaStatus(String ideaId, String status, int rating) async {
+    emit(const AdminLoading());
+    final result = await _adminRepo.updateIdeaStatus(ideaId, status, rating);
+    result.fold(
+      (failure) => emit(AdminError(message: failure.message)),
+      (_) => emit(const AdminSuccess(message: 'تم تحديث حالة الفكرة')),
+    );
+  }
 
   Future<void> updateEmployeeRole(String userId, String newRole) async {
     final result = await _adminRepo.updateEmployeeRole(userId, newRole);

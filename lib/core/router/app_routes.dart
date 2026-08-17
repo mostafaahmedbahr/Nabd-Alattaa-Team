@@ -39,6 +39,12 @@ class Routes {
 
   static const admin = '/admin';
 
+  static const manageEmployees = '/manage-employees';
+  static const employeeDetails = '/employee-details';
+  static const manageComplaints = '/manage-complaints';
+  static const manageIdeas = '/manage-ideas';
+  static const manageDepartments = '/manage-departments';
+
   static const announcements = '/announcements';
   static const createAnnouncement = '/create-announcement';
 }

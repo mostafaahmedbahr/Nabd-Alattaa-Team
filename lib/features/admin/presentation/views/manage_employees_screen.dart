@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/firestore_constants.dart';
 import '../../../../core/widgets/custom_text_field.dart';
-import '../../../../core/widgets/loading_widget.dart';
 import '../../../../core/widgets/error_widget.dart';
+import '../../../../core/widgets/loading_widget.dart';
+import '../../../users/data/models/user_model.dart';
 import '../view_model/admin_cubit.dart';
 import '../view_model/admin_state.dart';
 import '../widgets/employee_card.dart';
+import 'employee_details_screen.dart';
 
 class ManageEmployeesScreen extends StatefulWidget {
   const ManageEmployeesScreen({super.key});
@@ -37,6 +40,22 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+          onPressed: () => context.pop(),
+        ),
+        title: const Text(
+          'إدارة الموظفين',
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: Column(
         children: [
           Padding(
@@ -47,12 +66,38 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
               hintText: 'بحث بالاسم أو البريد أو القسم',
               prefixIcon: Icons.search,
               onChanged: (value) {
-                // context.read<AdminCubit>().filterEmployees(value ?? '');
+                // تصفية محلية بسيطة عند الحاجة
               },
             ),
           ),
           Expanded(
-            child: BlocBuilder<AdminCubit, AdminState>(
+            child: BlocConsumer<AdminCubit, AdminState>(
+              listener: (context, state) {
+                if (state is AdminSuccess) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.message),
+                      backgroundColor: Colors.green,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  );
+                  context.read<AdminCubit>().loadEmployees();
+                } else if (state is AdminError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.message),
+                      backgroundColor: Colors.red,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  );
+                }
+              },
               builder: (context, state) {
                 if (state is AdminLoading) {
                   return const LoadingWidget(message: AppStrings.loading);
@@ -81,6 +126,13 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
                       return EmployeeCard(
                         employee: employee,
                         onRoleTap: () => _showRoleDialog(employee),
+                        onToggleActive: (value) {
+                          context
+                              .read<AdminCubit>()
+                              .toggleUserActive(employee.id ?? '', value);
+                        },
+                        onAddPoints: () => _openDetails(employee),
+                        onTap: () => _openDetails(employee),
                       );
                     },
                   );
@@ -95,7 +147,14 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
     );
   }
 
-  void _showRoleDialog(employee) {
+  void _openDetails(UserModel employee) {
+    context.push(
+      '/employee-details',
+      extra: employee,
+    );
+  }
+
+  void _showRoleDialog(UserModel employee) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -114,7 +173,7 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
                   Navigator.pop(context);
                   context
                       .read<AdminCubit>()
-                      .updateEmployeeRole(employee.id, value);
+                      .updateEmployeeRole(employee.id ?? '', value);
                 }
               },
             ),
@@ -127,7 +186,7 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
                   Navigator.pop(context);
                   context
                       .read<AdminCubit>()
-                      .updateEmployeeRole(employee.id, value);
+                      .updateEmployeeRole(employee.id ?? '', value);
                 }
               },
             ),
@@ -140,7 +199,7 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
                   Navigator.pop(context);
                   context
                       .read<AdminCubit>()
-                      .updateEmployeeRole(employee.id, value);
+                      .updateEmployeeRole(employee.id ?? '', value);
                 }
               },
             ),
