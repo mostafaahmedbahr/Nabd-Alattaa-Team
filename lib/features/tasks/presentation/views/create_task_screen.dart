@@ -10,6 +10,7 @@ import '../widgets/create_task_widgets/date_card.dart';
 import '../widgets/create_task_widgets/priority_selector.dart';
 import '../widgets/create_task_widgets/section_header.dart' show SectionHeader;
 import '../widgets/create_task_widgets/submit_button.dart';
+import '../widgets/create_task_widgets/subtasks_input.dart';
 
 class CreateTaskScreen extends StatefulWidget {
   const CreateTaskScreen({super.key});
@@ -123,6 +124,35 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                           SizedBox(height: 32.h),
                         SubmitButton(isLoading: isLoading,),
                           SizedBox(height: 32.h),
+                        SubtasksInput(
+                          subtasks: taskCubit.draftSubtasks,
+                          onAdd: (title) {
+                            setState(() {
+                              taskCubit.addDraftSubtask(title);
+                            });
+                          },
+                          onUpdate: (id, title) {
+                            setState(() {
+                              taskCubit.updateDraftSubtask(id, title);
+                            });
+                          },
+                          onRemove: (id) {
+                            setState(() {
+                              taskCubit.removeDraftSubtask(id);
+                            });
+                          },
+                          onToggle: (id) {
+                            setState(() {
+                              taskCubit.toggleDraftSubtask(id);
+                            });
+                          },
+                          onReorder: (oldIndex, newIndex) {
+                            setState(() {
+                              taskCubit.reorderDraftSubtasks(oldIndex, newIndex);
+                            });
+                          },
+                        ),
+                        SizedBox(height: 32.h),
                       ],
                     ),
                   ),

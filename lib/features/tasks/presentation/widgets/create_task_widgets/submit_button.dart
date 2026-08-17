@@ -38,6 +38,7 @@ class SubmitButton extends StatelessWidget {
                   taskType: taskCubit.selectedAssigneeId == taskCubit.currentUserId
                       ? TaskType.myOwnTask
                       : TaskType.createdByMe,
+                  subtasks: taskCubit.draftSubtasks,
                 );
                 context.read<TaskCubit>().createTask(task);
               }

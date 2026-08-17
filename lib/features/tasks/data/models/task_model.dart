@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../../core/utils/enums.dart';
+import 'task_subtask_model.dart';
 
 class TaskModel extends Equatable {
   final String id;
@@ -18,6 +19,17 @@ class TaskModel extends Equatable {
   final int completionPercentage;
   TaskType taskType;
 
+  final List<TaskSubtask> subtasks;
+
+  final bool isForwarded;
+  final String? originalTaskId;
+  final String? parentTaskId;
+  final String? forwardedFromUserId;
+  final String? forwardedFromUserName;
+  final String? forwardedToUserId;
+  final DateTime? forwardedAt;
+  final String? forwardNote;
+
   TaskModel({
     required this.id,
     required this.title,
@@ -33,6 +45,15 @@ class TaskModel extends Equatable {
     required this.updatedAt,
     this.completionPercentage = 0,
     this.taskType = TaskType.assignedToMe,
+    this.subtasks = const [],
+    this.isForwarded = false,
+    this.originalTaskId,
+    this.parentTaskId,
+    this.forwardedFromUserId,
+    this.forwardedFromUserName,
+    this.forwardedToUserId,
+    this.forwardedAt,
+    this.forwardNote,
   });
 
   factory TaskModel.fromMap(Map<String, dynamic> map) {
@@ -51,6 +72,15 @@ class TaskModel extends Equatable {
       return TaskType.assignedToMe;
     }
 
+    final subtasksRaw = map['subtasks'];
+    final List<TaskSubtask> subtasks = subtasksRaw is List
+        ? subtasksRaw
+            .map((e) => e is Map<String, dynamic>
+                ? TaskSubtask.fromMap(e)
+                : TaskSubtask.fromMap(Map<String, dynamic>.from(e as Map)))
+            .toList()
+        : const <TaskSubtask>[];
+
     return TaskModel(
       id: map['task_id'] ?? '',
       title: map['title'] ?? '',
@@ -66,6 +96,15 @@ class TaskModel extends Equatable {
       updatedAt: map['updated_at']?.toDate() ?? DateTime.now(),
       completionPercentage: map['completion_percentage'] ?? 0,
       taskType: parseTaskType(map['task_type']),
+      subtasks: subtasks,
+      isForwarded: map['is_forwarded'] ?? false,
+      originalTaskId: map['original_task_id'],
+      parentTaskId: map['parent_task_id'],
+      forwardedFromUserId: map['forwarded_from_user_id'],
+      forwardedFromUserName: map['forwarded_from_user_name'],
+      forwardedToUserId: map['forwarded_to_user_id'],
+      forwardedAt: map['forwarded_at']?.toDate(),
+      forwardNote: map['forward_note'],
     );
   }
 
@@ -85,8 +124,38 @@ class TaskModel extends Equatable {
       'updated_at': updatedAt,
       'completion_percentage': completionPercentage,
       'task_type': taskType.name,
+      'subtasks': subtasks.map((e) => e.toMap()).toList(),
+      'is_forwarded': isForwarded,
+      'original_task_id': originalTaskId,
+      'parent_task_id': parentTaskId,
+      'forwarded_from_user_id': forwardedFromUserId,
+      'forwarded_from_user_name': forwardedFromUserName,
+      'forwarded_to_user_id': forwardedToUserId,
+      'forwarded_at': forwardedAt,
+      'forward_note': forwardNote,
     };
   }
+
+  /// Effective completion percentage.
+  /// If the task has subtasks it is derived from them, otherwise the
+  /// manually stored [completionPercentage] is used.
+  int get effectiveCompletionPercentage {
+    if (subtasks.isEmpty) return completionPercentage;
+    final done = subtasks.where((s) => s.isCompleted).length;
+    return ((done / subtasks.length) * 100).round();
+  }
+
+  /// Status derived from the effective completion percentage.
+  /// 0% -> 'لم تبدأ', 1%-99% -> 'جاري التنفيذ', 100% -> 'مكتملة'.
+  String get derivedStatus {
+    final p = effectiveCompletionPercentage;
+    if (p >= 100) return 'مكتملة';
+    if (p <= 0) return 'لم تبدأ';
+    return 'جاري التنفيذ';
+  }
+
+  /// Whether the status should be derived automatically (task has subtasks).
+  bool get hasChecklist => subtasks.isNotEmpty;
 
   TaskModel copyWith({
     String? id,
@@ -103,6 +172,17 @@ class TaskModel extends Equatable {
     DateTime? updatedAt,
     int? completionPercentage,
     TaskType? taskType,
+    List<TaskSubtask>? subtasks,
+    bool? isForwarded,
+    String? originalTaskId,
+    bool clearOriginalTaskId = false,
+    String? parentTaskId,
+    bool clearParentTaskId = false,
+    String? forwardedFromUserId,
+    String? forwardedFromUserName,
+    String? forwardedToUserId,
+    DateTime? forwardedAt,
+    String? forwardNote,
   }) {
     return TaskModel(
       id: id ?? this.id,
@@ -119,13 +199,37 @@ class TaskModel extends Equatable {
       updatedAt: updatedAt ?? this.updatedAt,
       completionPercentage: completionPercentage ?? this.completionPercentage,
       taskType: taskType ?? this.taskType,
+      subtasks: subtasks ?? this.subtasks,
+      isForwarded: isForwarded ?? this.isForwarded,
+      originalTaskId:
+          clearOriginalTaskId ? null : (originalTaskId ?? this.originalTaskId),
+      parentTaskId: clearParentTaskId ? null : (parentTaskId ?? this.parentTaskId),
+      forwardedFromUserId: forwardedFromUserId ?? this.forwardedFromUserId,
+      forwardedFromUserName: forwardedFromUserName ?? this.forwardedFromUserName,
+      forwardedToUserId: forwardedToUserId ?? this.forwardedToUserId,
+      forwardedAt: forwardedAt ?? this.forwardedAt,
+      forwardNote: forwardNote ?? this.forwardNote,
     );
   }
 
   @override
   List<Object?> get props => [
-        id, title, description, assigneeId, assigneeName,
-        creatorId, creatorName, priority, status, dueDate,
-        createdAt, updatedAt, completionPercentage,
+        id,
+        title,
+        description,
+        assigneeId,
+        assigneeName,
+        creatorId,
+        creatorName,
+        priority,
+        status,
+        dueDate,
+        createdAt,
+        updatedAt,
+        completionPercentage,
+        subtasks,
+        isForwarded,
+        originalTaskId,
+        parentTaskId,
       ];
 }

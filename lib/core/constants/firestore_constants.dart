@@ -52,6 +52,25 @@ class FirestoreConstants {
   static const String taskUpdatedAt = 'updated_at';
   static const String taskCompletionPercentage = 'completion_percentage';
 
+  // Task Subtask Fields
+  static const String taskSubtasks = 'subtasks';
+  static const String taskSubtaskId = 'subtask_id';
+  static const String taskSubtaskTitle = 'title';
+  static const String taskSubtaskIsCompleted = 'is_completed';
+  static const String taskSubtaskCompletedAt = 'completed_at';
+  static const String taskSubtaskCompletedBy = 'completed_by';
+  static const String taskSubtaskOrder = 'order';
+
+  // Task Forwarding Fields
+  static const String taskIsForwarded = 'is_forwarded';
+  static const String taskOriginalTaskId = 'original_task_id';
+  static const String taskParentTaskId = 'parent_task_id';
+  static const String taskForwardedFromUserId = 'forwarded_from_user_id';
+  static const String taskForwardedFromUserName = 'forwarded_from_user_name';
+  static const String taskForwardedToUserId = 'forwarded_to_user_id';
+  static const String taskForwardedAt = 'forwarded_at';
+  static const String taskForwardNote = 'forward_note';
+
   // Announcement Fields
   static const String announcementTitle = 'title';
   static const String announcementContent = 'content';

@@ -94,6 +94,14 @@ class TaskCard extends StatelessWidget {
                             textColor: isOverdue ? AppColors.error : null,
                           ),
                           const Spacer(),
+                          if (task.isForwarded)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 6),
+                              child: _Badge(
+                                text: 'موجهة',
+                                color: AppColors.warning,
+                              ),
+                            ),
                           _Badge(
                             text: task.status,
                             color: statusColor,

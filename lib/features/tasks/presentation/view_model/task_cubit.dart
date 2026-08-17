@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uuid/uuid.dart';
 import '../../../../common_imports.dart';
-import '../../../../core/utils/enums.dart';
 import '../../data/repos/task_repo.dart';
 import '../../data/models/task_model.dart';
 import '../../data/models/task_comment_model.dart';
+import '../../data/models/task_subtask_model.dart';
 import 'task_state.dart';
 
 class TaskCubit extends Cubit<TaskState> {
@@ -90,6 +91,96 @@ class TaskCubit extends Cubit<TaskState> {
     );
   }
 
+  Future<void> addSubtask(String taskId, TaskSubtask subtask) async {
+    final result = await taskRepository.addSubtask(taskId, subtask);
+    result.fold(
+      (failure) => emit(TaskError(message: failure.message)),
+      (_) => loadTasks(status: currentStatus),
+    );
+  }
+
+  Future<void> updateSubtask(String taskId, TaskSubtask subtask) async {
+    final result = await taskRepository.updateSubtask(taskId, subtask);
+    result.fold(
+      (failure) => emit(TaskError(message: failure.message)),
+      (_) => loadTasks(status: currentStatus),
+    );
+  }
+
+  Future<void> deleteSubtask(String taskId, String subtaskId) async {
+    final result = await taskRepository.deleteSubtask(taskId, subtaskId);
+    result.fold(
+      (failure) => emit(TaskError(message: failure.message)),
+      (_) => loadTasks(status: currentStatus),
+    );
+  }
+
+  Future<void> toggleSubtask({
+    required String taskId,
+    required String subtaskId,
+    required bool isCompleted,
+    required String userId,
+  }) async {
+    final result = await taskRepository.toggleSubtask(
+      taskId: taskId,
+      subtaskId: subtaskId,
+      isCompleted: isCompleted,
+      userId: userId,
+    );
+    result.fold(
+      (failure) => emit(TaskError(message: failure.message)),
+      (_) => loadTasks(status: currentStatus),
+    );
+  }
+
+  Future<void> forwardTask({
+    required TaskModel originalTask,
+    required String toUserId,
+    required String toUserName,
+    String? note,
+  }) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      emit(const TaskError(message: 'لم يتم تسجيل الدخول'));
+      return;
+    }
+
+    String fromUserName = currentUserName;
+    if (fromUserName.isEmpty) {
+      try {
+        final ud = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+        fromUserName = ud.data()?['user_name'] ?? '';
+      } catch (_) {}
+    }
+
+    emit(const TaskForwarding());
+
+    final result = await taskRepository.forwardTask(
+      originalTask: originalTask,
+      fromUserId: user.uid,
+      fromUserName: fromUserName,
+      toUserId: toUserId,
+      toUserName: toUserName,
+      note: note,
+    );
+
+    result.fold(
+      (failure) => emit(TaskError(message: failure.message)),
+      (newTaskId) {
+        final previous = state is TaskLoaded ? state as TaskLoaded : null;
+        emit(TaskForwarded(
+          newTaskId: newTaskId,
+          tasks: previous?.tasks ?? const [],
+          myAssignedTasks: previous?.myAssignedTasks ?? const [],
+          assignedToMeTasks: previous?.assignedToMeTasks ?? const [],
+        ));
+      },
+    );
+  }
+
   void loadComments(String taskId) {
     _commentsSubscription?.cancel();
     _commentsSubscription = taskRepository.getComments(taskId).listen(
@@ -156,5 +247,53 @@ class TaskCubit extends Cubit<TaskState> {
     selectedAssigneeId = '';
     selectedAssigneeName = '';
     dueDate = DateTime.now().add(const Duration(days: 1));
+    clearDraftSubtasks();
+  }
+
+  // Draft subtasks for the create-task form (local UI state).
+  List<TaskSubtask> draftSubtasks = const [];
+
+  void addDraftSubtask(String title) {
+    draftSubtasks = [
+      ...draftSubtasks,
+      TaskSubtask(
+        id: const Uuid().v4(),
+        title: title,
+        order: draftSubtasks.length,
+      ),
+    ];
+  }
+
+  void updateDraftSubtask(String id, String title) {
+    draftSubtasks = draftSubtasks
+        .map((s) => s.id == id ? s.copyWith(title: title) : s)
+        .toList();
+  }
+
+  void removeDraftSubtask(String id) {
+    draftSubtasks = draftSubtasks.where((s) => s.id != id).toList();
+  }
+
+  void toggleDraftSubtask(String id) {
+    draftSubtasks = draftSubtasks
+        .map((s) => s.id == id ? s.copyWith(isCompleted: !s.isCompleted) : s)
+        .toList();
+  }
+
+  void reorderDraftSubtasks(int oldIndex, int newIndex) {
+    final list = [...draftSubtasks];
+    if (oldIndex < 0 || oldIndex >= list.length) return;
+    final target = newIndex;
+    final item = list.removeAt(oldIndex);
+    list.insert(target, item);
+    draftSubtasks = list
+        .asMap()
+        .entries
+        .map((e) => e.value.copyWith(order: e.key))
+        .toList();
+  }
+
+  void clearDraftSubtasks() {
+    draftSubtasks = const [];
   }
 }

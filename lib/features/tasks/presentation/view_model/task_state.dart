@@ -132,6 +132,24 @@ class TaskCreated extends TaskState {
   const TaskCreated();
 }
 
+class TaskForwarding extends TaskState {
+  const TaskForwarding();
+}
+
+class TaskForwarded extends TaskLoaded {
+  final String newTaskId;
+
+  const TaskForwarded({
+    required this.newTaskId,
+    required super.tasks,
+    super.myAssignedTasks = const [],
+    super.assignedToMeTasks = const [],
+  });
+
+  @override
+  List<Object?> get props => [newTaskId, tasks, myAssignedTasks, assignedToMeTasks];
+}
+
 class TaskError extends TaskState {
   final String message;
 

@@ -6,12 +6,14 @@ class TaskProgressCard extends StatelessWidget {
   final double percentage;
   final ValueChanged<double> onChanged;
   final ValueChanged<double> onChangeEnd;
+  final bool enabled;
 
   const TaskProgressCard({
     super.key,
     required this.percentage,
     required this.onChanged,
     required this.onChangeEnd,
+    this.enabled = true,
   });
 
   Color get _progressColor {
@@ -68,30 +70,50 @@ class TaskProgressCard extends StatelessWidget {
               ],
             ),
               SizedBox(height: 12.h),
-            SliderTheme(
-              data: SliderTheme.of(context).copyWith(
-                activeTrackColor: _progressColor,
-                thumbColor: _progressColor,
-                overlayColor: _progressColor.withValues(alpha: .15),
-                inactiveTrackColor: AppColors.grey200,
-                thumbShape: const RoundSliderThumbShape(
-                  enabledThumbRadius: 8,
+            if (enabled)
+              SliderTheme(
+                data: SliderTheme.of(context).copyWith(
+                  activeTrackColor: _progressColor,
+                  thumbColor: _progressColor,
+                  overlayColor: _progressColor.withValues(alpha: .15),
+                  inactiveTrackColor: AppColors.grey200,
+                  thumbShape: const RoundSliderThumbShape(
+                    enabledThumbRadius: 8,
+                  ),
+                  overlayShape: const RoundSliderOverlayShape(
+                    overlayRadius: 18,
+                  ),
+                  trackHeight: 4.h,
                 ),
-                overlayShape: const RoundSliderOverlayShape(
-                  overlayRadius: 18,
+                child: Slider(
+                  value: percentage,
+                  min: 0,
+                  max: 100,
+                  divisions: 20,
+                  label: "${percentage.round()}%",
+                  onChanged: onChanged,
+                  onChangeEnd: onChangeEnd,
                 ),
-                trackHeight: 4.h,
+              )
+            else
+              Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: LinearProgressIndicator(
+                      value: percentage / 100,
+                      minHeight: 6.h,
+                      backgroundColor: AppColors.grey200,
+                      valueColor: AlwaysStoppedAnimation<Color>(_progressColor),
+                    ),
+                  ),
+                  SizedBox(height: 6.h),
+                  const Text(
+                    'تُحسب تلقائياً من المهام الفرعية',
+                    style: TextStyle(fontSize: 12, color: AppColors.grey400),
+                  ),
+                ],
               ),
-              child: Slider(
-                value: percentage,
-                min: 0,
-                max: 100,
-                divisions: 20,
-                label: "${percentage.round()}%",
-                onChanged: onChanged,
-                onChangeEnd: onChangeEnd,
-              ),
-            ),
           ],
         ),
       ),
