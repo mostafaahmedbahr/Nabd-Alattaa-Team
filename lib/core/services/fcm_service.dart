@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 
 class FCMService {
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
@@ -7,13 +7,19 @@ class FCMService {
   static String? token;
 
   static Future<void> initialize() async {
+    if (kIsWeb) {
+      // FCM on web requires a VAPID key + service worker setup.
+      // The admin web app skips push notifications for now.
+      return;
+    }
+
     await _messaging.requestPermission(
       alert: true,
       badge: true,
       sound: true,
     );
 
-    if (Platform.isIOS) {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
       String? apnsToken;
 
       for (int i = 0; i < 10; i++) {
