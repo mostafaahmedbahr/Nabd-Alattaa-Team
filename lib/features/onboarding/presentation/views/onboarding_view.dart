@@ -14,67 +14,69 @@ class OnboardingView extends StatelessWidget {
     final cubit = context.read<OnboardingCubit>();
     return Scaffold(
       body: OnboardingBackground(
-        child: Column(
-            children: [
-              Padding(
-                padding:   EdgeInsets.only(top: 20.h,left: 10.w),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: TextButton(
-                    onPressed: () => cubit.onSkip(context),
-                    child: Text(
-                      'تخطي',
-                      style: TextStyle(
-                        fontFamily: 'Cairo',
-                        fontSize: 14.sp,
-                        color: Colors.white.withValues(alpha: 0.8),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 460),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 20.h, left: 10.w),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: TextButton(
+                      onPressed: () => cubit.onSkip(context),
+                      child: Text(
+                        'تخطي',
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
+                          fontSize: 14.sp,
+                          color: Colors.white.withValues(alpha: 0.8),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: PageView.builder(
-                  controller: cubit.pageController,
-                  itemCount: cubit.pages.length,
-                  onPageChanged: cubit.onPageChanged,
-                  itemBuilder: (context, index) => OnboardingPage(page: cubit.pages[index]),
+                Expanded(
+                  child: PageView.builder(
+                    controller: cubit.pageController,
+                    itemCount: cubit.pages.length,
+                    onPageChanged: cubit.onPageChanged,
+                    itemBuilder: (context, index) =>
+                        OnboardingPage(page: cubit.pages[index]),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 50),
-                child: BlocBuilder<OnboardingCubit, OnboardingStates>(
-                  builder: (context, state) {
-                    final currentPage = state is OnboardingPageChanged
-                        ? state.currentPage
-                        : 0;
-                    final isLastPage = state is OnboardingPageChanged
-                        ? state.isLastPage
-                        : false;
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(30, 0, 30, 50),
+                  child: BlocBuilder<OnboardingCubit, OnboardingStates>(
+                    builder: (context, state) {
+                      final currentPage = state is OnboardingPageChanged
+                          ? state.currentPage
+                          : 0;
+                      final isLastPage = state is OnboardingPageChanged
+                          ? state.isLastPage
+                          : false;
 
-                    return Column(
-                      children: [
-                        OnboardingDots(
-                          currentPage: currentPage,
-                          totalPages: cubit.pages.length,
-                        ),
+                      return Column(
+                        children: [
+                          OnboardingDots(
+                            currentPage: currentPage,
+                            totalPages: cubit.pages.length,
+                          ),
                           SizedBox(height: 30.h),
-                        OnboardingButton(
-                          isLastPage: isLastPage,
-                          onPressed: () => cubit.onNext(context),
-                        ),
-                      ],
-                    );
-                  },
+                          OnboardingButton(
+                            isLastPage: isLastPage,
+                            onPressed: () => cubit.onNext(context),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      );
+      ),
+    );
   }
-
-
 }
-
-

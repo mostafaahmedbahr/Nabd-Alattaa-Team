@@ -9,18 +9,28 @@ class OnboardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:   EdgeInsets.symmetric(horizontal: 40.w),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          OnboardingIconWidget(icon: page.icon),
-          SizedBox(height: 50.h),
-          OnboardingTextWidget(
-            title: page.title,
-            subtitle: page.subtitle,
-            description: page.description,
-          ),
-        ],
+      padding: EdgeInsets.symmetric(horizontal: 40.w),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  OnboardingIconWidget(icon: page.icon),
+                  SizedBox(height: 50.h),
+                  OnboardingTextWidget(
+                    title: page.title,
+                    subtitle: page.subtitle,
+                    description: page.description,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
