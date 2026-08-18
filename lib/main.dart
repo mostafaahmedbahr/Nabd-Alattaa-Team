@@ -7,16 +7,21 @@ import 'package:flutter/services.dart';
 import 'core/services/fcm_service.dart';
 import 'core/utils/app_bloc_observer.dart';
 import 'core/utils/service_locator.dart' as di;
+import 'firebase_options.dart';
 import 'my_app.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 Future<void> initializeApp() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   FirebaseMessaging.onBackgroundMessage(
     _firebaseMessagingBackgroundHandler,

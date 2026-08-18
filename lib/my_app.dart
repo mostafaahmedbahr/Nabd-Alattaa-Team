@@ -1,4 +1,5 @@
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:nabd_alattaa_team/features/admin/presentation/view_model/admin_cubit.dart';
 import 'package:nabd_alattaa_team/features/layout/presentation/view_model/layout_cubit.dart';
 import 'common_imports.dart';
@@ -143,6 +144,15 @@ class NabdAlattaaApp extends StatelessWidget {
           // home: LoginView(),
            routerConfig: AppRouter.router,
           debugShowCheckedModeBanner: false,
+          builder: (context, child) => ResponsiveBreakpoints.builder(
+            child: BouncingScrollWrapper.builder(context, child!),
+            breakpoints: const [
+              Breakpoint(start: 0, end: 450, name: MOBILE),
+              Breakpoint(start: 451, end: 800, name: TABLET),
+              Breakpoint(start: 801, end: 1920, name: DESKTOP),
+              Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+            ],
+          ),
           locale: const Locale('ar', 'SA'),
           supportedLocales: const [
             Locale('ar', 'SA'),
