@@ -7,7 +7,7 @@ import '../../../ideas/data/models/idea_model.dart';
 import '../../../users/data/models/user_model.dart';
 import '../models/department_model.dart';
 import '../models/employee_stats_model.dart';
-import '../repos/admin_repo.dart';
+import 'admin_repo.dart';
 
 class AdminRepoImpl implements AdminRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

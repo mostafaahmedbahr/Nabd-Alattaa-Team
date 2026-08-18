@@ -14,7 +14,7 @@ import '../../features/users/presentation/view_model/users_cubit.dart';
 import '../../features/announcements/data/repos/announcement_repo.dart';
 import '../../features/announcements/data/repos/announcement_repo_impl.dart';
 import '../../features/admin/data/repos/admin_repo.dart';
-import '../../features/admin/data/repos_impl/admin_repo_impl.dart';
+import '../../features/admin/data/repos/admin_repo_impl.dart';
 import '../../features/admin/presentation/view_model/admin_cubit.dart';
 import '../../features/home/data/repos/home_repo.dart';
 import '../../features/home/data/repos/home_repo_impl.dart';

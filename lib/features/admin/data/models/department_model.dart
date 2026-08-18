@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-
 import '../../../../core/constants/firestore_constants.dart';
 
 class DepartmentModel extends Equatable {

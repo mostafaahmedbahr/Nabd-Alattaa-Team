@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_colors.dart';
+
+import '../../../../../common_imports.dart';
 
 class StatCard extends StatelessWidget {
   final String title;
@@ -21,14 +21,14 @@ class StatCard extends StatelessWidget {
     final cardColor = color ?? AppColors.primary;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding:   EdgeInsets.all(16.r),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10.r,
             offset: const Offset(0, 2),
           ),
         ],
@@ -37,27 +37,27 @@ class StatCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding:   EdgeInsets.all(8.r),
             decoration: BoxDecoration(
-              color: cardColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
+              color: cardColor.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8.r),
             ),
-            child: Icon(icon, color: cardColor, size: 24),
+            child: Icon(icon, color: cardColor, size: 24.sp),
           ),
-          const SizedBox(height: 12),
+            SizedBox(height: 12.h),
           Text(
             value,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 24.sp,
               fontWeight: FontWeight.bold,
               color: cardColor,
             ),
           ),
-          const SizedBox(height: 4),
+            SizedBox(height: 4.h),
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 12,
+            style:   TextStyle(
+              fontSize: 12.sp,
               color: AppColors.textSecondary,
             ),
             maxLines: 1,

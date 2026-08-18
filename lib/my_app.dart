@@ -3,7 +3,7 @@ import 'package:nabd_alattaa_team/features/admin/presentation/view_model/admin_c
 import 'package:nabd_alattaa_team/features/layout/presentation/view_model/layout_cubit.dart';
 import 'common_imports.dart';
 import 'core/utils/service_locator.dart' as di;
-import 'features/admin/data/repos_impl/admin_repo_impl.dart';
+import 'features/admin/data/repos/admin_repo_impl.dart';
 import 'features/chat/data/repos/chat_repo.dart';
 import 'features/chat/presentation/view_model/chat_cubit.dart';
 import 'features/complaints/data/repos/complaint_repo_impl.dart';

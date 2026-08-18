@@ -262,7 +262,7 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
                 Switch(
                   value: item.isAvailable,
                   onChanged: (_) => cubit.toggleAvailability(item.id),
-                  activeThumbColor: AppColors.success,
+                  activeTrackColor: AppColors.success,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 Text(
@@ -411,7 +411,7 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
                         }),
                         title: const Text('متاحة للطلب'),
                         contentPadding: EdgeInsets.zero,
-                        activeThumbColor: AppColors.success,
+                        activeTrackColor: AppColors.success,
                       ),
                       const SizedBox(height: 16),
                       SizedBox(

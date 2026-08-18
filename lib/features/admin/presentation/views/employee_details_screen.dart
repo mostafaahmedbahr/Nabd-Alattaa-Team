@@ -9,7 +9,7 @@ import '../../../users/data/models/user_model.dart';
 import '../../data/models/employee_stats_model.dart';
 import '../view_model/admin_cubit.dart';
 import '../view_model/admin_state.dart';
-import '../widgets/stat_card.dart';
+import '../widgets/admin_dashboard_widgets/stat_card.dart';
 
 class EmployeeDetailsScreen extends StatefulWidget {
   final UserModel user;
