@@ -10,6 +10,7 @@ class UsersListScreen extends StatefulWidget {
   @override
   State<UsersListScreen> createState() => _UsersListScreenState();
 }
+
 ///
 class _UsersListScreenState extends State<UsersListScreen> {
   String get _currentUserId => FirebaseAuth.instance.currentUser?.uid ?? '';
@@ -32,6 +33,7 @@ class _UsersListScreenState extends State<UsersListScreen> {
         elevation: 0,
       ),
       body: AdaptiveContainer(
+        maxWidth: 620,
         child: const UsersListScreenBody(),
       ),
     );

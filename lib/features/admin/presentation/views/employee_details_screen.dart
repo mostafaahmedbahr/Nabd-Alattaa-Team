@@ -104,119 +104,127 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
 
     return AdaptiveContainer(
       child: RefreshIndicator(
-      onRefresh: () => context.read<AdminCubit>().loadEmployeeStats(user),
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildProfileHeader(user, stats),
-            const SizedBox(height: 20),
-            const Text(
-              'الإحصائيات',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+        onRefresh: () => context.read<AdminCubit>().loadEmployeeStats(user),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildProfileHeader(user, stats),
+              const SizedBox(height: 20),
+              const Text(
+                'الإحصائيات',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            GridView(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 260,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                childAspectRatio: 1.4,
-              ),
-              children: [
-                StatCard(
-                  title: 'إجمالي المهام',
-                  value: '${stats.totalTasks}',
-                  icon: Icons.task_alt_outlined,
-                  color: AppColors.primary,
+              const SizedBox(height: 12),
+              GridView(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 190,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: 0.85,
                 ),
-                StatCard(
-                  title: 'المهام المكتملة',
-                  value: '${stats.completedTasks}',
-                  icon: Icons.check_circle_outline,
-                  color: Colors.green,
-                ),
-                StatCard(
-                  title: 'قيد التنفيذ',
-                  value: '${stats.inProgressTasks}',
-                  icon: Icons.pending_actions_outlined,
-                  color: AppColors.warning,
-                ),
-                StatCard(
-                  title: 'المهام المفتوحة',
-                  value: '${stats.openTasks}',
-                  icon: Icons.assignment_outlined,
-                  color: AppColors.info,
-                ),
-                statCardForCount('الشكاوى', stats.totalComplaints,
-                    Icons.report_outlined, AppColors.error),
-                statCardForCount('الأفكار', stats.totalIdeas,
-                    Icons.lightbulb_outline, AppColors.accent),
-              ],
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'النقاط',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
+                children: [
+                  StatCard(
+                    title: 'إجمالي المهام',
+                    value: '${stats.totalTasks}',
+                    icon: Icons.task_alt_outlined,
+                    color: AppColors.primary,
+                  ),
+                  StatCard(
+                    title: 'المهام المكتملة',
+                    value: '${stats.completedTasks}',
+                    icon: Icons.check_circle_outline,
+                    color: Colors.green,
+                  ),
+                  StatCard(
+                    title: 'قيد التنفيذ',
+                    value: '${stats.inProgressTasks}',
+                    icon: Icons.pending_actions_outlined,
+                    color: AppColors.warning,
+                  ),
+                  StatCard(
+                    title: 'المهام المفتوحة',
+                    value: '${stats.openTasks}',
+                    icon: Icons.assignment_outlined,
+                    color: AppColors.info,
+                  ),
+                  statCardForCount(
+                    'الشكاوى',
+                    stats.totalComplaints,
+                    Icons.report_outlined,
+                    AppColors.error,
+                  ),
+                  statCardForCount(
+                    'الأفكار',
+                    stats.totalIdeas,
+                    Icons.lightbulb_outline,
+                    AppColors.accent,
                   ),
                 ],
               ),
-              child: Row(
-                children: [
-                  const Icon(Icons.stars_rounded, color: AppColors.accent),
-                  const SizedBox(width: 10),
-                  Text(
-                    '${stats.points}',
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.accent,
+              const SizedBox(height: 24),
+              const Text(
+                'النقاط',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
                     ),
-                  ),
-                  const Spacer(),
-                  ElevatedButton.icon(
-                    onPressed: () => _showAddPointsDialog(context, user),
-                    icon: const Icon(Icons.add),
-                    label: const Text('إضافة نقاط'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.accent,
-                      foregroundColor: AppColors.textPrimary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.stars_rounded, color: AppColors.accent),
+                    const SizedBox(width: 10),
+                    Text(
+                      '${stats.points}',
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.accent,
                       ),
                     ),
-                  ),
-                ],
+                    const Spacer(),
+                    ElevatedButton.icon(
+                      onPressed: () => _showAddPointsDialog(context, user),
+                      icon: const Icon(Icons.add),
+                      label: const Text('إضافة نقاط'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.accent,
+                        foregroundColor: AppColors.textPrimary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
       ),
     );
   }
@@ -236,84 +244,146 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
           ),
         ],
       ),
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 36,
-            backgroundColor: AppColors.primary.withOpacity(0.1),
-            child: Text(
-              user.name.isNotEmpty ? user.name[0] : '?',
-              style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: AppColors.primary,
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            user.name,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            user.email,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.textSecondary,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '${user.department} • ${user.position}',
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.textSecondary,
-            ),
-          ),
-          const SizedBox(height: 14),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'حساب مفعل',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: AppColors.textSecondary,
+      child: context.isWideScreen
+          ? Row(
+              children: [
+                CircleAvatar(
+                  radius: 36,
+                  backgroundColor: AppColors.primary.withOpacity(0.1),
+                  child: Text(
+                    user.name.isNotEmpty ? user.name[0] : '?',
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
+                  ),
                 ),
-              ),
-              Switch(
-                value: stats.isActive,
-                onChanged: (value) {
-                  context
-                      .read<AdminCubit>()
-                      .toggleUserActive(user.id ?? '', value);
-                },
-                activeColor: AppColors.primary,
-              ),
-            ],
-          ),
-        ],
-      ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        user.name,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        user.email,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '${user.department} • ${user.position}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'حساب مفعل',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    Switch(
+                      value: stats.isActive,
+                      onChanged: (value) {
+                        context.read<AdminCubit>().toggleUserActive(
+                          user.id ?? '',
+                          value,
+                        );
+                      },
+                      activeColor: AppColors.primary,
+                    ),
+                  ],
+                ),
+              ],
+            )
+          : Column(
+              children: [
+                CircleAvatar(
+                  radius: 36,
+                  backgroundColor: AppColors.primary.withOpacity(0.1),
+                  child: Text(
+                    user.name.isNotEmpty ? user.name[0] : '?',
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  user.name,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  user.email,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  '${user.department} • ${user.position}',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+                const SizedBox(height: 14),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'حساب مفعل',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    Switch(
+                      value: stats.isActive,
+                      onChanged: (value) {
+                        context.read<AdminCubit>().toggleUserActive(
+                          user.id ?? '',
+                          value,
+                        );
+                      },
+                      activeColor: AppColors.primary,
+                    ),
+                  ],
+                ),
+              ],
+            ),
     );
   }
 
-  Widget statCardForCount(
-    String title,
-    int value,
-    IconData icon,
-    Color color,
-  ) {
-    return StatCard(
-      title: title,
-      value: '$value',
-      icon: icon,
-      color: color,
-    );
+  Widget statCardForCount(String title, int value, IconData icon, Color color) {
+    return StatCard(title: title, value: '$value', icon: icon, color: color);
   }
 
   void _showAddPointsDialog(BuildContext context, UserModel user) {

@@ -10,7 +10,8 @@ class UserTile extends StatelessWidget {
   final String lastMessage;
   final DateTime? lastMessageTime;
 
-  const UserTile({super.key,
+  const UserTile({
+    super.key,
     required this.user,
     required this.currentUserId,
     required this.unreadCount,
@@ -25,7 +26,8 @@ class UserTile extends StatelessWidget {
 
     return ListTile(
       onTap: () async {
-        final currentUserName = FirebaseAuth.instance.currentUser?.displayName ?? 'مستخدم';
+        final currentUserName =
+            FirebaseAuth.instance.currentUser?.displayName ?? 'مستخدم';
 
         if (!context.mounted) return;
 
@@ -39,8 +41,7 @@ class UserTile extends StatelessWidget {
           },
         );
       },
-      contentPadding:   EdgeInsets.symmetric(horizontal: 16.w,
-          vertical: 4.h),
+      contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
       leading: Container(
         width: 52.w,
         height: 52.h,
@@ -55,7 +56,7 @@ class UserTile extends StatelessWidget {
         child: Center(
           child: Text(
             user.name.isNotEmpty ? user.name[0] : '?',
-            style:   TextStyle(
+            style: TextStyle(
               fontSize: 22.sp,
               fontWeight: FontWeight.bold,
               color: AppColors.textWhite,
@@ -75,75 +76,82 @@ class UserTile extends StatelessWidget {
       ),
       subtitle: hasConversation
           ? Text(
-        lastMessage,
-        style: TextStyle(
-          fontSize: 13.sp,
-          fontWeight: hasUnread ? FontWeight.w500 : FontWeight.normal,
-          color: hasUnread
-              ? AppColors.textPrimary
-              : AppColors.textSecondary,
-          fontFamily: 'Cairo',
-        ),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      )
-          : Text(
-        user.position.isNotEmpty ? user.position : user.department,
-        style:   TextStyle(
-          fontSize: 13.sp,
-          color: AppColors.textSecondary,
-          fontFamily: 'Cairo',
-        ),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
-      trailing: hasConversation
-          ? Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          if (lastMessageTime != null)
-            Text(
-              _formatTime(lastMessageTime!),
+              lastMessage,
               style: TextStyle(
-                fontSize: 11.sp,
-                fontWeight:
-                hasUnread ? FontWeight.w600 : FontWeight.normal,
-                color:
-                hasUnread ? AppColors.primary : AppColors.textHint,
+                fontSize: 13.sp,
+                fontWeight: hasUnread ? FontWeight.w500 : FontWeight.normal,
+                color: hasUnread
+                    ? AppColors.textPrimary
+                    : AppColors.textSecondary,
                 fontFamily: 'Cairo',
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            )
+          : Text(
+              user.position.isNotEmpty ? user.position : user.department,
+              style: TextStyle(
+                fontSize: 13.sp,
+                color: AppColors.textSecondary,
+                fontFamily: 'Cairo',
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            SizedBox(height: 6.h),
-          if (hasUnread)
-            Container(
-              padding:   EdgeInsets.symmetric(
-                horizontal: 8.w,
-                vertical: 3.h,
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                '$unreadCount',
-                style:   TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textWhite,
-                  fontFamily: 'Cairo',
-                ),
+      trailing: hasConversation
+          ? FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  if (lastMessageTime != null)
+                    Text(
+                      _formatTime(lastMessageTime!),
+                      style: TextStyle(
+                        fontSize: 11.sp,
+                        fontWeight: hasUnread
+                            ? FontWeight.w600
+                            : FontWeight.normal,
+                        color: hasUnread
+                            ? AppColors.primary
+                            : AppColors.textHint,
+                        fontFamily: 'Cairo',
+                      ),
+                    ),
+                  SizedBox(height: 6.h),
+                  if (hasUnread)
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.w,
+                        vertical: 3.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        '$unreadCount',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textWhite,
+                          fontFamily: 'Cairo',
+                        ),
+                      ),
+                    )
+                  else
+                    SizedBox(height: 22.h),
+                ],
               ),
             )
-          else
-              SizedBox(height: 22.h),
-        ],
-      )
-          :   Icon(
-        Icons.chat_bubble_outline,
-        color: AppColors.primary,
-        size: 20.sp,
-      ),
+          : Icon(
+              Icons.chat_bubble_outline,
+              color: AppColors.primary,
+              size: 20.sp,
+            ),
     );
   }
 
