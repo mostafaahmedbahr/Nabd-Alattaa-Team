@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -208,11 +207,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
   void _openChatRoom(ChatRoomModel room) async {
     final otherUserName = room.otherUserName(_currentUserId);
 
-    final currentUserSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(_currentUserId)
-        .get();
-    final currentUserName = currentUserSnapshot.data()?['user_name'] as String? ?? '';
+    final currentUserName = FirebaseAuth.instance.currentUser?.displayName ?? '';
 
     if (!mounted) return;
 

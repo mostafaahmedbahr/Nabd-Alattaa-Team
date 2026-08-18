@@ -175,11 +175,13 @@ class AppRouter {
           final roomName = extras['roomName'] as String? ?? '';
           final currentUserId = extras['currentUserId'] as String? ?? '';
           final currentUserName = extras['currentUserName'] as String? ?? '';
+          final otherUserId = extras['otherUserId'] as String?;
           return ChatRoomScreen(
-            roomId: roomId,
+            roomId: roomId == 'new' ? '' : roomId,
             roomName: roomName,
             senderId: currentUserId,
             senderName: currentUserName,
+            otherUserId: otherUserId,
           );
         },
       ),

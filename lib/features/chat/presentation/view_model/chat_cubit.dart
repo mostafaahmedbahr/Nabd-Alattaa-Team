@@ -11,6 +11,7 @@ class ChatCubit extends Cubit<ChatState> {
   final ChatRepository chatRepository;
   StreamSubscription? _chatRoomsSubscription;
   StreamSubscription? _messagesSubscription;
+  List<ChatRoomModel> _cachedChatRooms = [];
 
   ChatCubit({required this.chatRepository}) : super(const ChatInitial());
 
@@ -20,14 +21,18 @@ class ChatCubit extends Cubit<ChatState> {
 
   void loadChatRooms({required String currentUserId}) {
     _chatRoomsSubscription?.cancel();
-    emit(const ChatLoading());
     _chatRoomsSubscription = chatRepository
         .getChatRooms(currentUserId: currentUserId)
         .listen(
       (result) {
         result.fold(
           (failure) => emit(ChatError(message: failure.message)),
-          (chatRooms) => emit(ChatRoomsLoaded(chatRooms: chatRooms)),
+          (chatRooms) {
+            _cachedChatRooms = chatRooms;
+            if (_messagesSubscription == null) {
+              emit(ChatRoomsLoaded(chatRooms: chatRooms));
+            }
+          },
         );
       },
       onError: (error) =>
@@ -78,7 +83,6 @@ class ChatCubit extends Cubit<ChatState> {
 
   void loadMessages({required String roomId}) {
     _messagesSubscription?.cancel();
-    emit(const ChatLoading());
     _messagesSubscription = chatRepository
         .getMessages(roomId: roomId)
         .listen(
@@ -180,6 +184,9 @@ class ChatCubit extends Cubit<ChatState> {
   void stopMessagesStream() {
     _messagesSubscription?.cancel();
     _messagesSubscription = null;
+    if (_cachedChatRooms.isNotEmpty) {
+      emit(ChatRoomsLoaded(chatRooms: _cachedChatRooms));
+    }
   }
 
   @override

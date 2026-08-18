@@ -69,6 +69,9 @@ class ChatMessagesContent extends StatelessWidget {
                 onMessageLongPress(message);
               }
             },
+            onMorePressed: (isMe && !message.isDeleted)
+                ? () => onMessageLongPress(message)
+                : null,
           );
         },
       );
