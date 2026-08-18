@@ -68,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               final profile = state is ProfileLoaded
                   ? state.profile
                   : (state as ProfileUpdating).profile;
-              return ProfileContent(profile : profile);
+              return AdaptiveContainer(child: ProfileContent(profile: profile));
             }
 
             return const SizedBox.shrink();
@@ -77,9 +77,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-
-
-
-
-
 }

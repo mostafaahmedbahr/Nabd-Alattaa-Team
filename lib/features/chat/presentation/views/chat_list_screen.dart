@@ -46,43 +46,44 @@ class _ChatListScreenState extends State<ChatListScreen> {
       child: Scaffold(
         backgroundColor: AppColors.background,
         body: AdaptiveContainer(
+          maxWidth: 620,
           child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            _buildSliverAppBar(),
-            SliverToBoxAdapter(
-              child: BlocBuilder<ChatCubit, ChatState>(
-                builder: (context, state) {
-                  if (state is ChatLoading) {
-                    return const Padding(
-                      padding: EdgeInsets.only(top: 100),
-                      child: Center(child: LoadingWidget()),
-                    );
-                  }
-
-                  if (state is ChatError) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 100),
-                      child: CustomErrorWidget(
-                        message: state.message,
-                        onRetry: _loadChatRooms,
-                      ),
-                    );
-                  }
-
-                  if (state is ChatRoomsLoaded) {
-                    if (state.chatRooms.isEmpty) {
-                      return _buildEmptyState();
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              _buildSliverAppBar(),
+              SliverToBoxAdapter(
+                child: BlocBuilder<ChatCubit, ChatState>(
+                  builder: (context, state) {
+                    if (state is ChatLoading) {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 100),
+                        child: Center(child: LoadingWidget()),
+                      );
                     }
-                    return _buildChatList(state.chatRooms);
-                  }
 
-                  return const SizedBox.shrink();
-                },
+                    if (state is ChatError) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 100),
+                        child: CustomErrorWidget(
+                          message: state.message,
+                          onRetry: _loadChatRooms,
+                        ),
+                      );
+                    }
+
+                    if (state is ChatRoomsLoaded) {
+                      if (state.chatRooms.isEmpty) {
+                        return _buildEmptyState();
+                      }
+                      return _buildChatList(state.chatRooms);
+                    }
+
+                    return const SizedBox.shrink();
+                  },
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
         ),
         floatingActionButton: Container(
           decoration: BoxDecoration(
@@ -107,7 +108,11 @@ class _ChatListScreenState extends State<ChatListScreen> {
             },
             backgroundColor: Colors.transparent,
             elevation: 0,
-            child: const Icon(Icons.add_comment_rounded, color: Colors.white, size: 26),
+            child: const Icon(
+              Icons.add_comment_rounded,
+              color: Colors.white,
+              size: 26,
+            ),
           ),
         ),
       ),
@@ -121,10 +126,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
       centerTitle: true,
       title: const Text(
         'المحادثات',
-        style: TextStyle(
-          fontFamily: 'Cairo',
-          fontWeight: FontWeight.bold,
-        ),
+        style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.bold),
       ),
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
@@ -210,7 +212,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
   void _openChatRoom(ChatRoomModel room) async {
     final otherUserName = room.otherUserName(_currentUserId);
 
-    final currentUserName = FirebaseAuth.instance.currentUser?.displayName ?? '';
+    final currentUserName =
+        FirebaseAuth.instance.currentUser?.displayName ?? '';
 
     if (!mounted) return;
 
@@ -242,7 +245,11 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   color: AppColors.error.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.delete_outline_rounded, color: AppColors.error, size: 28),
+                child: const Icon(
+                  Icons.delete_outline_rounded,
+                  color: AppColors.error,
+                  size: 28,
+                ),
               ),
               const SizedBox(height: 16),
               Text(
@@ -292,7 +299,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pop(ctx);
-                        context.read<ChatCubit>().deleteChatRoom(roomId: room.id);
+                        context.read<ChatCubit>().deleteChatRoom(
+                          roomId: room.id,
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.error,

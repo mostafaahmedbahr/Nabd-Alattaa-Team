@@ -6,23 +6,43 @@ class DashboardManagementGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      (Icons.people_alt_outlined, 'الموظفين', AppColors.primary,
-      '/manage-employees'),
-      (Icons.report_problem_outlined, 'الشكاوى', AppColors.error,
-      '/manage-complaints'),
+      (
+        Icons.people_alt_outlined,
+        'الموظفين',
+        AppColors.primary,
+        '/manage-employees',
+      ),
+      (
+        Icons.report_problem_outlined,
+        'الشكاوى',
+        AppColors.error,
+        '/manage-complaints',
+      ),
       (Icons.lightbulb_outline, 'الأفكار', AppColors.accent, '/manage-ideas'),
-      (Icons.business_outlined, 'الأقسام', AppColors.info,
-      '/manage-departments'),
-      (Icons.restaurant_menu_outlined, 'الوجبات', AppColors.warning,
-      '/manage-meals'),
-      (Icons.campaign_outlined, 'الإعلانات', AppColors.primary,
-      '/announcements'),
+      (
+        Icons.business_outlined,
+        'الأقسام',
+        AppColors.info,
+        '/manage-departments',
+      ),
+      (
+        Icons.restaurant_menu_outlined,
+        'الوجبات',
+        AppColors.warning,
+        '/manage-meals',
+      ),
+      (
+        Icons.campaign_outlined,
+        'الإعلانات',
+        AppColors.primary,
+        '/announcements',
+      ),
     ];
     return GridView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 180,
+        maxCrossAxisExtent: 140,
         mainAxisSpacing: 12,
         crossAxisSpacing: 12,
         childAspectRatio: 1,
@@ -47,10 +67,10 @@ class DashboardManagementGrid extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(item.$1, color: item.$3, size: 28),
-                  SizedBox(height: 8.h),
+                SizedBox(height: 8.h),
                 Text(
                   item.$2,
-                  style:   TextStyle(
+                  style: TextStyle(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,

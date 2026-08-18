@@ -69,9 +69,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   void _initMessages() {
     context.read<ChatCubit>().loadMessages(roomId: _activeRoomId);
     context.read<ChatCubit>().markMessagesAsRead(
-          roomId: _activeRoomId,
-          currentUserId: widget.senderId,
-        );
+      roomId: _activeRoomId,
+      currentUserId: widget.senderId,
+    );
   }
 
   @override
@@ -104,9 +104,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     );
 
     context.read<ChatCubit>().sendMessage(
-          roomId: _activeRoomId,
-          message: message,
-        );
+      roomId: _activeRoomId,
+      message: message,
+    );
 
     _scrollToBottom();
   }
@@ -117,10 +117,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => MessageOptionsSheet(
-        message: message,
-        roomId: _activeRoomId,
-      ),
+      builder: (_) =>
+          MessageOptionsSheet(message: message, roomId: _activeRoomId),
     );
   }
 
@@ -139,42 +137,42 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         body: _isLoadingRoom
             ? const Center(child: CircularProgressIndicator())
             : AdaptiveContainer(
-                maxWidth: 900,
+                maxWidth: 760,
                 child: Column(
                   children: [
                     Expanded(
                       child: BlocConsumer<ChatCubit, ChatState>(
-                      listener: (context, state) {
-                        if (state is MessagesLoaded) {
-                          _scrollToBottom();
-                          context.read<ChatCubit>().markMessagesAsRead(
-                                roomId: _activeRoomId,
-                                currentUserId: widget.senderId,
-                              );
-                        } else if (state is ChatError) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(state.message),
-                              backgroundColor: AppColors.error,
-                            ),
+                        listener: (context, state) {
+                          if (state is MessagesLoaded) {
+                            _scrollToBottom();
+                            context.read<ChatCubit>().markMessagesAsRead(
+                              roomId: _activeRoomId,
+                              currentUserId: widget.senderId,
+                            );
+                          } else if (state is ChatError) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(state.message),
+                                backgroundColor: AppColors.error,
+                              ),
+                            );
+                          }
+                        },
+                        builder: (context, state) {
+                          return ChatMessagesContent(
+                            state: state,
+                            roomId: _activeRoomId,
+                            senderId: widget.senderId,
+                            roomName: widget.roomName,
+                            scrollController: _scrollController,
+                            onMessageLongPress: _showMessageOptions,
                           );
-                        }
-                      },
-                      builder: (context, state) {
-                        return ChatMessagesContent(
-                          state: state,
-                          roomId: _activeRoomId,
-                          senderId: widget.senderId,
-                          roomName: widget.roomName,
-                          scrollController: _scrollController,
-                          onMessageLongPress: _showMessageOptions,
-                        );
-                      },
+                        },
+                      ),
                     ),
-                  ),
-                  ChatMessageInput(onSend: _sendMessage),
-                ],
-              ),
+                    ChatMessageInput(onSend: _sendMessage),
+                  ],
+                ),
               ),
       ),
     );

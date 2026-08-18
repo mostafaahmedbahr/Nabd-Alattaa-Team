@@ -26,39 +26,45 @@ class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
       backgroundColor: AppColors.background,
       body: Directionality(
         textDirection: TextDirection.rtl,
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            const AnnouncementsScreenHeader(),
-            BlocBuilder<AnnouncementCubit, AnnouncementState>(
-              builder: (context, state) {
-                if (state is AnnouncementLoading) {
-                  return const SliverFillRemaining(
-                    child: Center(
-                      child: CircularProgressIndicator(color: AppColors.primary),
-                    ),
-                  );
-                }
-
-                if (state is AnnouncementError) {
-                  return AnnouncementsErrorState(
-                    message: state.message,
-                    onRetry: () =>
-                        context.read<AnnouncementCubit>().loadAnnouncements(),
-                  );
-                }
-
-                if (state is AnnouncementLoaded) {
-                  if (state.announcements.isEmpty) {
-                    return const AnnouncementsEmptyState();
+        child: AdaptiveContainer(
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              const AnnouncementsScreenHeader(),
+              BlocBuilder<AnnouncementCubit, AnnouncementState>(
+                builder: (context, state) {
+                  if (state is AnnouncementLoading) {
+                    return const SliverFillRemaining(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    );
                   }
-                  return AnnouncementsList(announcements: state.announcements);
-                }
 
-                return const SliverFillRemaining(child: SizedBox.shrink());
-              },
-            ),
-          ],
+                  if (state is AnnouncementError) {
+                    return AnnouncementsErrorState(
+                      message: state.message,
+                      onRetry: () =>
+                          context.read<AnnouncementCubit>().loadAnnouncements(),
+                    );
+                  }
+
+                  if (state is AnnouncementLoaded) {
+                    if (state.announcements.isEmpty) {
+                      return const AnnouncementsEmptyState();
+                    }
+                    return AnnouncementsList(
+                      announcements: state.announcements,
+                    );
+                  }
+
+                  return const SliverFillRemaining(child: SizedBox.shrink());
+                },
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(

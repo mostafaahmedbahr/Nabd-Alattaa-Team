@@ -37,24 +37,30 @@ class _TasksScreenState extends State<TasksScreen> {
 
           if (state is TaskLoaded) {
             totalTasks = state.tasks.length;
-            completedTasks = state.tasks.where((t) => t.status == 'مكتملة').length;
-            inProgressTasks = state.tasks.where((t) => t.status == 'جاري التنفيذ').length;
+            completedTasks = state.tasks
+                .where((t) => t.status == 'مكتملة')
+                .length;
+            inProgressTasks = state.tasks
+                .where((t) => t.status == 'جاري التنفيذ')
+                .length;
           }
 
-          return CustomScrollView(
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              TasksAppBarHeader(
-                totalTasks: totalTasks,
-                completedTasks: completedTasks,
-                inProgressTasks: inProgressTasks,
-              ),
-              TasksFilterSection(
-                statuses: cubit.statuses,
-                initialStatus: null,
-              ),
-              const TasksListItems(),
-            ],
+          return AdaptiveContainer(
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                TasksAppBarHeader(
+                  totalTasks: totalTasks,
+                  completedTasks: completedTasks,
+                  inProgressTasks: inProgressTasks,
+                ),
+                TasksFilterSection(
+                  statuses: cubit.statuses,
+                  initialStatus: null,
+                ),
+                const TasksListItems(),
+              ],
+            ),
           );
         },
       ),

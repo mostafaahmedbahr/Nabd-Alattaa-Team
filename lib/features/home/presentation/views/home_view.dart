@@ -23,13 +23,11 @@ class _HomeViewState extends State<HomeView> {
     context.read<NotificationCubit>().loadNotificationsData();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HomeAppBar(),
-      body: HomeViewBody(),
+      body: AdaptiveContainer(child: HomeViewBody()),
     );
   }
 }
