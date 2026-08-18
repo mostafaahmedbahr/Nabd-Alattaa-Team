@@ -78,7 +78,15 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
             return CustomScrollView(
               physics: const BouncingScrollPhysics(),
               slivers: [
-                TaskAppBarTitleAndDes(task: task),
+                TaskAppBarTitleAndDes(
+                  task: task,
+                  onDelete: () {
+                    context.read<TaskCubit>().deleteTask(widget.taskId);
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
                 SliverToBoxAdapter(
                   child: RefreshIndicator(
                     onRefresh: () async {
@@ -168,10 +176,18 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                                   );
                             },
                             onDelete: (subtaskId) {
-                              context.read<TaskCubit>().deleteSubtask(
-                                    widget.taskId,
-                                    subtaskId,
-                                  );
+                              final isLastSubtask = task.subtasks.length == 1;
+                              if (isLastSubtask) {
+                                context.read<TaskCubit>().deleteTask(widget.taskId);
+                                if (context.mounted) {
+                                  Navigator.pop(context);
+                                }
+                              } else {
+                                context.read<TaskCubit>().deleteSubtask(
+                                      widget.taskId,
+                                      subtaskId,
+                                    );
+                              }
                             },
                           ),
                           const SizedBox(height: 12),

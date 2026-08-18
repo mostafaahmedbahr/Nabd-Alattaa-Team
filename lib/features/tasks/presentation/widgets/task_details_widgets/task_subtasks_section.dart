@@ -92,33 +92,33 @@ class _TaskSubtasksSectionState extends State<TaskSubtasksSection> {
                     color: AppColors.textPrimary,
                   ),
                 ),
-                const Spacer(),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(20.r),
-                  ),
-                  child: Text(
-                    '$percent%',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14.sp,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ),
+                // const Spacer(),
+                // Container(
+                //   padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                //   decoration: BoxDecoration(
+                //     color: AppColors.primary.withValues(alpha: 0.1),
+                //     borderRadius: BorderRadius.circular(20.r),
+                //   ),
+                //   child: Text(
+                //     '$percent%',
+                //     style: TextStyle(
+                //       fontWeight: FontWeight.bold,
+                //       fontSize: 14.sp,
+                //       color: AppColors.primary,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
-            SizedBox(height: 12.h),
-            LinearProgressIndicator(
-              value: percent / 100,
-              minHeight: 6.h,
-              backgroundColor: AppColors.grey100,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                percent == 100 ? AppColors.success : AppColors.primary,
-              ),
-            ),
+            // SizedBox(height: 12.h),
+            // LinearProgressIndicator(
+            //   value: percent / 100,
+            //   minHeight: 6.h,
+            //   backgroundColor: AppColors.grey100,
+            //   valueColor: AlwaysStoppedAnimation<Color>(
+            //     percent == 100 ? AppColors.success : AppColors.primary,
+            //   ),
+            // ),
             SizedBox(height: 14.h),
             ...widget.subtasks.map((subtask) {
               return Container(
@@ -181,7 +181,110 @@ class _TaskSubtasksSectionState extends State<TaskSubtasksSection> {
                       IconButton(
                         icon: const Icon(Icons.delete_outline, size: 18),
                         color: AppColors.error,
-                        onPressed: () => widget.onDelete(subtask.id),
+                        onPressed: () {
+                          final isLast = widget.subtasks.length == 1;
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(24),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      width: 56,
+                                      height: 56,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.error.withValues(alpha: 0.1),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.delete_outline_rounded,
+                                        color: AppColors.error,
+                                        size: 28,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Text(
+                                      isLast ? 'حذف المهمة بالكامل' : 'حذف المهمة الفرعية',
+                                      style: const TextStyle(
+                                        fontFamily: 'Cairo',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.textPrimary,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      isLast
+                                          ? 'هذه المهمة الفرعية الوحيدة. حذفها سيؤدي لحذف المهمة بالكامل. هل أنت متأكد؟'
+                                          : 'هل أنت متأكد من حذف هذه المهمة الفرعية؟',
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontFamily: 'Cairo',
+                                        fontSize: 14,
+                                        color: AppColors.textSecondary,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 24),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextButton(
+                                            onPressed: () => Navigator.pop(ctx),
+                                            style: TextButton.styleFrom(
+                                              padding: const EdgeInsets.symmetric(vertical: 12),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                                side: const BorderSide(color: AppColors.grey300),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              'إلغاء',
+                                              style: TextStyle(
+                                                fontFamily: 'Cairo',
+                                                color: AppColors.textPrimary,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(ctx);
+                                              widget.onDelete(subtask.id);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: AppColors.error,
+                                              foregroundColor: Colors.white,
+                                              padding: const EdgeInsets.symmetric(vertical: 12),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                              elevation: 0,
+                                            ),
+                                            child: const Text(
+                                              'حذف',
+                                              style: TextStyle(
+                                                fontFamily: 'Cairo',
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

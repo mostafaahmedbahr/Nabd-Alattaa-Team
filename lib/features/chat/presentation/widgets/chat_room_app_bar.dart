@@ -52,14 +52,7 @@ class ChatRoomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                Text(
-                  'متصل الآن',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.white.withValues(alpha: 0.7),
-                    fontFamily: 'Cairo',
-                  ),
-                ),
+
               ],
             ),
           ),

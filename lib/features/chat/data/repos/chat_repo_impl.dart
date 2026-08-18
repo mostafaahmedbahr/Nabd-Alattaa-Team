@@ -492,44 +492,23 @@ class ChatRepositoryImpl implements ChatRepository {
   async {
     try {
       final roomRef = firestore.collection('chat_rooms').doc(roomId);
+      final messageRef = roomRef.collection('messages').doc(messageId);
 
-      final messageRef = roomRef
-          .collection('messages')
-          .doc(messageId);
+      await messageRef.update({
+        'content': AppStrings.deletedMessageLabel,
+        'isDeleted': true,
+        'isEdited': false,
+      });
 
-      final messageSnapshot = await messageRef.get();
-
-      if (!messageSnapshot.exists) {
-        throw Exception('Message not found.');
-      }
-
-      final oldContent = messageSnapshot.data()?['content']?.toString() ?? '';
-      final deletedContent = AppStrings.deletedMessageLabel;
-
-      // Soft delete the message. This is the critical write and is done
-      // without a transaction to avoid conflicts with read-marking writes.
-      await messageRef.update(
-        {
-          'content': deletedContent,
-          'isDeleted': true,
-          'isEdited': false,
-        },
-      );
-
-      // Best-effort refresh of the room's last-message preview (cosmetic).
-      // A failure here must not fail the whole delete.
-      try {
-        final roomSnapshot = await roomRef.get();
-
-        if (roomSnapshot.exists &&
-            roomSnapshot.data()?['lastMessage'] == oldContent) {
-          await roomRef.update(
-            {
-              'lastMessage': deletedContent,
-            },
-          );
+      // Fire-and-forget: update lastMessage preview
+      roomRef.get().then((roomSnapshot) {
+        if (roomSnapshot.exists) {
+          final lastMsg = roomSnapshot.data()?['lastMessage']?.toString() ?? '';
+          if (lastMsg != AppStrings.deletedMessageLabel) {
+            roomRef.update({'lastMessage': AppStrings.deletedMessageLabel});
+          }
         }
-      } catch (_) {}
+      }).catchError((_) {});
 
       return const Right(unit);
     } on FirebaseException catch (e) {
