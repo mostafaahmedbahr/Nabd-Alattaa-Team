@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/error_widget.dart';
 import '../../../../core/widgets/loading_widget.dart';
+import '../../../../core/widgets/adaptive_layout.dart';
 import '../../../users/data/models/user_model.dart';
 import '../../data/models/employee_stats_model.dart';
 import '../view_model/admin_cubit.dart';
@@ -101,7 +102,8 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
     final user = state.user;
     final stats = state.stats;
 
-    return RefreshIndicator(
+    return AdaptiveContainer(
+      child: RefreshIndicator(
       onRefresh: () => context.read<AdminCubit>().loadEmployeeStats(user),
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -120,13 +122,15 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            GridView.count(
-              crossAxisCount: 2,
+            GridView(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.4,
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 260,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childAspectRatio: 1.4,
+              ),
               children: [
                 StatCard(
                   title: 'إجمالي المهام',
@@ -212,6 +216,7 @@ class _EmployeeDetailsScreenState extends State<EmployeeDetailsScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

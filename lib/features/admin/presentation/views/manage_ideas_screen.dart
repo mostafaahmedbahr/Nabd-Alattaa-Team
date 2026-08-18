@@ -6,6 +6,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/firestore_constants.dart';
 import '../../../../core/widgets/error_widget.dart';
 import '../../../../core/widgets/loading_widget.dart';
+import '../../../../core/widgets/adaptive_layout.dart';
 import '../../../ideas/data/models/idea_model.dart';
 import '../view_model/admin_cubit.dart';
 import '../view_model/admin_state.dart';
@@ -91,7 +92,8 @@ class _ManageIdeasScreenState extends State<ManageIdeasScreen> {
               );
             }
 
-            return ListView.builder(
+            return AdaptiveContainer(
+              child: ListView.builder(
               padding: const EdgeInsets.symmetric(vertical: 8),
               itemCount: state.ideas.length,
               itemBuilder: (context, index) {
@@ -101,6 +103,7 @@ class _ManageIdeasScreenState extends State<ManageIdeasScreen> {
                   onTap: () => _showStatusSheet(context, idea),
                 );
               },
+            ),
             );
           }
 

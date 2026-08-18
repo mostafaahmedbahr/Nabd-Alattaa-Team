@@ -11,12 +11,14 @@ class CreateAnnouncementScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       body: Directionality(
         textDirection: TextDirection.rtl,
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            const CreateAnnouncementHeader(),
-            const SliverToBoxAdapter(child: CreateAnnouncementForm()),
-          ],
+        child: AdaptiveContainer(
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              const CreateAnnouncementHeader(),
+              const SliverToBoxAdapter(child: CreateAnnouncementForm()),
+            ],
+          ),
         ),
       ),
     );

@@ -138,10 +138,12 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         appBar: ChatRoomAppBar(roomName: widget.roomName),
         body: _isLoadingRoom
             ? const Center(child: CircularProgressIndicator())
-            : Column(
-                children: [
-                  Expanded(
-                    child: BlocConsumer<ChatCubit, ChatState>(
+            : AdaptiveContainer(
+                maxWidth: 900,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: BlocConsumer<ChatCubit, ChatState>(
                       listener: (context, state) {
                         if (state is MessagesLoaded) {
                           _scrollToBottom();
@@ -172,6 +174,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   ),
                   ChatMessageInput(onSend: _sendMessage),
                 ],
+              ),
               ),
       ),
     );

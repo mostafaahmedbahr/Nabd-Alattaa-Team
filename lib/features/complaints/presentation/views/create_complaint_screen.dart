@@ -38,11 +38,13 @@ class _CreateComplaintScreenState extends State<CreateComplaintScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: CustomScrollView(
-        slivers: [
-          const CreateComplaintHeader(),
-          CreateComplaintContent(fadeAnimation: _fadeAnimation),
-        ],
+      body: AdaptiveContainer(
+        child: CustomScrollView(
+          slivers: [
+            const CreateComplaintHeader(),
+            CreateComplaintContent(fadeAnimation: _fadeAnimation),
+          ],
+        ),
       ),
     );
   }

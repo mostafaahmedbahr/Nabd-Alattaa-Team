@@ -1,8 +1,8 @@
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:nabd_alattaa_team/features/admin/presentation/view_model/admin_cubit.dart';
 import 'package:nabd_alattaa_team/features/layout/presentation/view_model/layout_cubit.dart';
 import 'common_imports.dart';
+import 'core/utils/app_screenutil_init.dart';
 import 'core/utils/service_locator.dart' as di;
 import 'features/admin/data/repos/admin_repo_impl.dart';
 import 'features/chat/data/repos/chat_repo.dart';
@@ -40,7 +40,7 @@ class NabdAlattaaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
+    return AppScreenUtilInit(
       designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,

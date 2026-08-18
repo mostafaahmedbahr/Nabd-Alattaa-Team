@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/widgets/adaptive_layout.dart';
 import '../../../../core/widgets/error_widget.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../view_model/idea_cubit.dart';
@@ -43,7 +44,8 @@ class _IdeasScreenState extends State<IdeasScreen> {
       backgroundColor: AppColors.background,
       body: BlocBuilder<IdeaCubit, IdeaState>(
         builder: (context, state) {
-          return CustomScrollView(
+          return AdaptiveContainer(
+            child: CustomScrollView(
             slivers: [
               SliverAppBar(
                 expandedHeight: 160,
@@ -123,7 +125,8 @@ class _IdeasScreenState extends State<IdeasScreen> {
               ),
               _buildContent(state),
             ],
-          );
+          ),
+        );
         },
       ),
       floatingActionButton: FloatingActionButton.extended(

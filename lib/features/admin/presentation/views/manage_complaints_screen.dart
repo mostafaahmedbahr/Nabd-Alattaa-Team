@@ -6,6 +6,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/firestore_constants.dart';
 import '../../../../core/widgets/error_widget.dart';
 import '../../../../core/widgets/loading_widget.dart';
+import '../../../../core/widgets/adaptive_layout.dart';
 import '../../../complaints/data/models/complaint_model.dart';
 import '../view_model/admin_cubit.dart';
 import '../view_model/admin_state.dart';
@@ -92,7 +93,8 @@ class _ManageComplaintsScreenState extends State<ManageComplaintsScreen> {
               );
             }
 
-            return ListView.builder(
+            return AdaptiveContainer(
+              child: ListView.builder(
               padding: const EdgeInsets.symmetric(vertical: 8),
               itemCount: state.complaints.length,
               itemBuilder: (context, index) {
@@ -102,6 +104,7 @@ class _ManageComplaintsScreenState extends State<ManageComplaintsScreen> {
                   onTap: () => _showStatusSheet(context, complaint),
                 );
               },
+            ),
             );
           }
 

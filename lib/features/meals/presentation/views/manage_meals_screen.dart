@@ -119,7 +119,7 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
               return _buildEmptyState();
             }
 
-            return _buildGroupedList(cubit.menuItems);
+            return AdaptiveContainer(child: _buildGroupedList(cubit.menuItems));
           },
         ),
       ),

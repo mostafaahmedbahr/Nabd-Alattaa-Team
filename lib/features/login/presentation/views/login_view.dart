@@ -1,5 +1,4 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-
 import '../../../../common_imports.dart';
 import '../../../home/presentation/view_model/home_cubit.dart';
 import '../../../layout/presentation/view_model/layout_cubit.dart';
@@ -101,9 +100,12 @@ class _LoginViewState extends State<LoginView>
                           ),
                         ),
                         Center(
-                          child: FadeTransition(
-                            opacity: _fadeAnimation,
-                            child: const LoginHeader(),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: FadeTransition(
+                              opacity: _fadeAnimation,
+                              child: const LoginHeader(),
+                            ),
                           ),
                         ),
                       ],
@@ -120,14 +122,30 @@ class _LoginViewState extends State<LoginView>
                     child: FadeTransition(
                       opacity: _fadeAnimation,
                       child: SingleChildScrollView(
-                        padding: EdgeInsets.symmetric(horizontal: 24.w),
-                        child: Column(
-                          children: [
-                            const LoginForm(),
-                            SizedBox(height: 24.h),
-                            RegisterLink(),
-                            SizedBox(height: 32.h),
-                          ],
+                        padding: EdgeInsets.symmetric(
+                          horizontal:
+                              ResponsiveBreakpoints.of(context).isDesktop
+                                  ? 24
+                                  : 24.w,
+                        ),
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: ResponsiveBreakpoints.of(context)
+                                      .isDesktop
+                                  ? 460
+                                  : double.infinity,
+                            ),
+                            child: Column(
+                              children: [
+                                const LoginForm(),
+                                SizedBox(height: 24.h),
+                                RegisterLink(),
+                                SizedBox(height: 32.h),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),

@@ -40,13 +40,15 @@ class _CreateGoodDeedScreenState extends State<CreateGoodDeedScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: CustomScrollView(
-        slivers: [
-          CreateGoodDeedHeader(),
-          CreateGoodDeedContent(
-            fadeAnimation: _fadeAnimation,
-          ),
-        ],
+      body: AdaptiveContainer(
+        child: CustomScrollView(
+          slivers: [
+            CreateGoodDeedHeader(),
+            CreateGoodDeedContent(
+              fadeAnimation: _fadeAnimation,
+            ),
+          ],
+        ),
       ),
     );
   }

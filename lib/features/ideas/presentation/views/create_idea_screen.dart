@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/widgets/adaptive_layout.dart';
 import '../../data/models/idea_model.dart';
 import '../view_model/idea_cubit.dart';
 import '../../../profile/presentation/view_model/profile_cubit.dart';
@@ -59,7 +60,8 @@ class _CreateIdeaScreenState extends State<CreateIdeaScreen>
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: CustomScrollView(
+      body: AdaptiveContainer(
+        child: CustomScrollView(
         slivers: [
           SliverAppBar(
             expandedHeight: 200,
@@ -174,6 +176,7 @@ class _CreateIdeaScreenState extends State<CreateIdeaScreen>
             ),
           ),
         ],
+      ),
       ),
     );
   }

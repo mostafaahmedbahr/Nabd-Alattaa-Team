@@ -31,7 +31,9 @@ class _UsersListScreenState extends State<UsersListScreen> {
         foregroundColor: AppColors.textWhite,
         elevation: 0,
       ),
-      body: const UsersListScreenBody(),
+      body: AdaptiveContainer(
+        child: const UsersListScreenBody(),
+      ),
     );
   }
 }

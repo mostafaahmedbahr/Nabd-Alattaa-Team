@@ -59,7 +59,8 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
         builder: (context, state) {
           var taskCubit = context.read<TaskCubit>();
           final isLoading = state is TaskCreating;
-          return CustomScrollView(
+          return AdaptiveContainer(
+            child: CustomScrollView(
             physics: const BouncingScrollPhysics(),
             slivers: [
               CreateTaskAppBarHeader(),
@@ -163,7 +164,8 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                 ),
               ),
             ],
-          );
+          ),
+        );
         },
       ),
     );

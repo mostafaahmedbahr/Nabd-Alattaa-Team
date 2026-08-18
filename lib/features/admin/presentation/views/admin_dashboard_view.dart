@@ -22,7 +22,9 @@ class _AdminDashboardViewState extends State<AdminDashboardView> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AdminDashboardCustomAppBar(),
-      body: AdminDashboardViewBody(),
+      body: AdaptiveContainer(
+        child: AdminDashboardViewBody(),
+      ),
     );
   }
 

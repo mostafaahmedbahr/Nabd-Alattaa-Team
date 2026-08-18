@@ -30,13 +30,15 @@ class _ComplaintsViewState extends State<ComplaintsView> {
               context.read<ComplaintCubit>().refresh();
             },
             color: AppColors.primary,
-            child: CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                const ComplaintsHeader(),
-                const SliverToBoxAdapter(child: ComplaintFilterChips()),
-                ComplaintContent(state: state),
-              ],
+            child: AdaptiveContainer(
+              child: CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  const ComplaintsHeader(),
+                  const SliverToBoxAdapter(child: ComplaintFilterChips()),
+                  ComplaintContent(state: state),
+                ],
+              ),
             ),
           );
         },

@@ -30,7 +30,9 @@ class _ManageEmployeesViewState extends State<ManageEmployeesView> {
         ),
         centerTitle: true,
       ),
-      body: ManageEmployeesViewBody(),
+      body: AdaptiveContainer(
+        child: ManageEmployeesViewBody(),
+      ),
     );
   }
 

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart' as intl;
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/widgets/adaptive_layout.dart';
 import '../../../../core/widgets/error_widget.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../../data/models/notification_model.dart';
@@ -42,8 +43,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: AppColors.background,
-        body: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
+        body: AdaptiveContainer(
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
           slivers: [
             _buildSliverAppBar(context),
             BlocBuilder<NotificationCubit, NotificationState>(
@@ -90,6 +92,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               },
             ),
           ],
+          ),
         ),
       ),
     );

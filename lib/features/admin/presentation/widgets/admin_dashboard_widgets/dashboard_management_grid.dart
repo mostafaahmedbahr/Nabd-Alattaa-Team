@@ -18,13 +18,15 @@ class DashboardManagementGrid extends StatelessWidget {
       (Icons.campaign_outlined, 'الإعلانات', AppColors.primary,
       '/announcements'),
     ];
-    return GridView.count(
-      crossAxisCount: 3,
+    return GridView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 12,
-      crossAxisSpacing: 12,
-      childAspectRatio: 1,
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 180,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 1,
+      ),
       children: items.map((item) {
         return InkWell(
           onTap: () => context.push(item.$4),

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/firestore_constants.dart';
+import '../../../../core/widgets/adaptive_layout.dart';
 import '../../data/models/meal_item_model.dart';
 import '../view_model/meal_cubit.dart';
 import '../view_model/meal_state.dart';
@@ -58,9 +59,10 @@ class _MealsScreenState extends State<MealsScreen> {
             }
           },
           child: SafeArea(
-            child: Column(
-              children: [
-                _buildHeader(),
+            child: AdaptiveContainer(
+              child: Column(
+                children: [
+                  _buildHeader(),
                 _buildCategoryChips(),
                 Expanded(
                   child: BlocBuilder<MealCubit, MealState>(
@@ -87,6 +89,7 @@ class _MealsScreenState extends State<MealsScreen> {
                 ),
               ],
             ),
+          ),
           ),
         ),
         floatingActionButton: _buildCartFab(),

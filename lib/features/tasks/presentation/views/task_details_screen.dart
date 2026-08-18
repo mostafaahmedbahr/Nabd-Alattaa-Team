@@ -75,7 +75,8 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                 : task.status;
             final canForward = task.assigneeId == currentUserId;
 
-            return CustomScrollView(
+            return AdaptiveContainer(
+              child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
               slivers: [
                 TaskAppBarTitleAndDes(
@@ -206,7 +207,8 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                   ),
                 ),
               ],
-            );
+            ),
+          );
           }
 
           if (state is TaskError) {

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/widgets/adaptive_layout.dart';
 import '../view_model/library_cubit.dart';
 import '../view_model/library_state.dart';
 
@@ -74,7 +75,8 @@ class _CreateLibraryItemScreenState extends State<CreateLibraryItemScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: CustomScrollView(
+      body: AdaptiveContainer(
+        child: CustomScrollView(
         slivers: [
           SliverAppBar(
             expandedHeight: 200,
@@ -226,6 +228,7 @@ class _CreateLibraryItemScreenState extends State<CreateLibraryItemScreen>
             ),
           ),
         ],
+      ),
       ),
     );
   }

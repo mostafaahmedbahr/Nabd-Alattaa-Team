@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/widgets/adaptive_layout.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/widgets/error_widget.dart';
@@ -44,7 +45,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
       backgroundColor: AppColors.background,
       body: BlocBuilder<LibraryCubit, LibraryState>(
         builder: (context, state) {
-          return CustomScrollView(
+          return AdaptiveContainer(
+            child: CustomScrollView(
             slivers: [
               SliverAppBar(
                 expandedHeight: 160,
@@ -124,7 +126,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
               ),
               _buildContent(state),
             ],
-          );
+          ),
+        );
         },
       ),
       floatingActionButton: FloatingActionButton.extended(

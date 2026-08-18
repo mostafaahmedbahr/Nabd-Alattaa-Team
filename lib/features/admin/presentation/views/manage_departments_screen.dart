@@ -7,6 +7,7 @@ import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../../../../core/widgets/error_widget.dart';
+import '../../../../core/widgets/adaptive_layout.dart';
 import '../view_model/admin_cubit.dart';
 import '../view_model/admin_state.dart';
 import '../../data/models/department_model.dart';
@@ -74,13 +75,15 @@ class _ManageDepartmentsScreenState extends State<ManageDepartmentsScreen> {
               );
             }
 
-            return ListView.builder(
+            return AdaptiveContainer(
+              child: ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: state.departments.length,
               itemBuilder: (context, index) {
                 final dept = state.departments[index];
                 return _buildDepartmentCard(dept);
               },
+            ),
             );
           }
 

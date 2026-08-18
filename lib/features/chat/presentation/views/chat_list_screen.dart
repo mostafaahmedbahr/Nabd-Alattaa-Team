@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/widgets/adaptive_layout.dart';
 import '../../../../core/widgets/error_widget.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../view_model/chat_cubit.dart';
@@ -44,7 +45,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: AppColors.background,
-        body: CustomScrollView(
+        body: AdaptiveContainer(
+          child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
             _buildSliverAppBar(),
@@ -80,6 +82,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
               ),
             ),
           ],
+        ),
         ),
         floatingActionButton: Container(
           decoration: BoxDecoration(

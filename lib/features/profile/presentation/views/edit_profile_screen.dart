@@ -7,6 +7,7 @@ import '../../../../core/constants/firestore_constants.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../core/widgets/loading_widget.dart';
+import '../../../../core/widgets/adaptive_layout.dart';
 import '../view_model/profile_cubit.dart';
 import '../view_model/profile_state.dart';
 
@@ -94,7 +95,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             return const LoadingWidget(message: AppStrings.loading);
           }
 
-          return SingleChildScrollView(
+          return AdaptiveFormContainer(
+            child: SingleChildScrollView(
             padding: const EdgeInsets.all(24),
             child: Form(
               key: _formKey,
@@ -169,7 +171,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ],
               ),
             ),
-          );
+          ),
+        );
         },
       ),
     );

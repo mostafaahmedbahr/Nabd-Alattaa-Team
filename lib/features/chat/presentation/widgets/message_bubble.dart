@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -35,7 +37,7 @@ class MessageBubble extends StatelessWidget {
         alignment: isMe ? Alignment.centerLeft : Alignment.centerRight,
         child: Container(
           constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width * 0.75,
+            maxWidth: math.min(MediaQuery.of(context).size.width * 0.75, 520),
           ),
           margin: EdgeInsets.only(
             left: isMe ? 16 : 48,

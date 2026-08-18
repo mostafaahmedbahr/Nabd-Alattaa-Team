@@ -31,12 +31,14 @@ class _GoodDeedsScreenState extends State<GoodDeedsScreen> {
               context.read<GoodDeedCubit>().loadGoodDeeds();
             },
             color: AppColors.secondary,
-            child: CustomScrollView(
-              slivers: [
-                Header(),
-                GoodDeedContent(
-                  state: state,)
-              ],
+            child: AdaptiveContainer(
+              child: CustomScrollView(
+                slivers: [
+                  Header(),
+                  GoodDeedContent(
+                    state: state,)
+                ],
+              ),
             ),
           );
         },

@@ -30,9 +30,11 @@ class RegisterView extends StatelessWidget {
                     padding: const EdgeInsets.all(20),
                     child: Form(
                       key: context.read<RegisterCubit>().formKey,
-                      child: cubit.currentStep == 0
-                          ? _buildPersonalInfoStep(context)
-                          : _buildAccountInfoStep(context),
+                      child: AdaptiveFormContainer(
+                        child: cubit.currentStep == 0
+                            ? _buildPersonalInfoStep(context)
+                            : _buildAccountInfoStep(context),
+                      ),
                     ),
                   ),
                 ),
