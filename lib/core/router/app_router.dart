@@ -14,6 +14,7 @@ import 'package:nabd_alattaa_team/core/utils/service_locator.dart';
 import 'package:nabd_alattaa_team/features/layout/presentation/views/layout_view.dart';
 import 'package:nabd_alattaa_team/features/tasks/presentation/views/tasks_screen.dart';
 import '../../features/chat/presentation/views/chat_room_screen.dart';
+import '../../features/meals/presentation/views/manage_meals_view.dart';
 import '../../features/users/presentation/views/users_list_view.dart';
 import 'app_routes.dart';
 import '../../features/register/presentation/views/register_view.dart';
@@ -32,7 +33,6 @@ import '../../features/notifications/presentation/views/notifications_screen.dar
 import '../../features/good_deeds/presentation/views/good_deeds_screen.dart';
 import '../../features/good_deeds/presentation/views/create_good_deed_screen.dart';
 import '../../features/meals/presentation/views/meals_screen.dart';
-import '../../features/meals/presentation/views/manage_meals_screen.dart';
 import '../../features/profile/presentation/views/edit_profile_screen.dart';
 import '../../features/announcements/presentation/views/announcements_screen.dart';
 import '../../features/announcements/presentation/views/create_announcement_screen.dart';
@@ -112,7 +112,7 @@ class AppRouter {
       ),
       GoRoute(
         path: Routes.manageMeals,
-        builder: (_, _) => const ManageMealsScreen(),
+        builder: (_, _) => const ManageMealsView(),
       ),
       GoRoute(
         path: Routes.notifications,

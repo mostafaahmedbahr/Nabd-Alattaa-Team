@@ -159,7 +159,7 @@ class CartBottomSheet extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${item.price.toStringAsFixed(0)} ر.س',
+                        '${item.price} ر.س',
                         style: const TextStyle(
                           fontFamily: 'Cairo',
                           fontSize: 13,

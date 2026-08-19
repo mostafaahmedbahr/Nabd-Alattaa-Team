@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../../../core/constants/app_colors.dart';
+import '../../../../common_imports.dart';
 import '../../data/models/meal_item_model.dart';
 import 'meal_category_style.dart';
 
@@ -23,47 +21,47 @@ class MealItemCard extends StatelessWidget {
     final color = mealCategoryColor(item.category);
 
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+      margin:   EdgeInsets.symmetric(vertical: 6.h, horizontal: 4.w),
       elevation: 1.5,
       shadowColor: Colors.black.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         side: BorderSide(color: AppColors.grey100),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding:   EdgeInsets.all(12.r),
         child: Row(
           children: [
             _buildIcon(color),
-            const SizedBox(width: 12),
+              SizedBox(width: 12.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     item.name,
-                    style: const TextStyle(
+                    style:   TextStyle(
                       fontFamily: 'Cairo',
-                      fontSize: 15,
+                      fontSize: 15.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                    SizedBox(height: 6.h),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 3,
+                    padding:   EdgeInsets.symmetric(
+                      horizontal: 8.w,
+                      vertical: 3.h,
                     ),
                     decoration: BoxDecoration(
                       color: color.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(6.r),
                     ),
                     child: Text(
-                      '${item.price.toStringAsFixed(0)} ر.س',
+                      '${item.price} ر.س',
                       style: TextStyle(
                         fontFamily: 'Cairo',
-                        fontSize: 13,
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.bold,
                         color: color,
                       ),
@@ -81,16 +79,16 @@ class MealItemCard extends StatelessWidget {
 
   Widget _buildIcon(Color color) {
     return Container(
-      width: 52,
-      height: 52,
+      width: 52.w,
+      height: 52.h,
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(14.r),
       ),
       child: Icon(
         mealCategoryIcon(item.category),
         color: color,
-        size: 28,
+        size: 28.sp,
       ),
     );
   }
@@ -99,7 +97,7 @@ class MealItemCard extends StatelessWidget {
     if (quantity == 0) {
       return FilledButton.icon(
         onPressed: onAdd,
-        icon: const Icon(Icons.add, size: 18),
+        icon:   Icon(Icons.add, size: 18.sp),
         label: const Text(
           'أضف',
           style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.bold),
@@ -107,9 +105,9 @@ class MealItemCard extends StatelessWidget {
         style: FilledButton.styleFrom(
           backgroundColor: color,
           foregroundColor: AppColors.textWhite,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding:   EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
           ),
           visualDensity: VisualDensity.compact,
         ),
@@ -119,9 +117,9 @@ class MealItemCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(14.r),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+      padding:   EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -131,12 +129,12 @@ class MealItemCard extends StatelessWidget {
             onTap: onAdd,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding:   EdgeInsets.symmetric(horizontal: 10.w),
             child: Text(
               '$quantity',
-              style: const TextStyle(
+              style:   TextStyle(
                 fontFamily: 'Cairo',
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
                 color: AppColors.textPrimary,
               ),
@@ -159,15 +157,15 @@ class MealItemCard extends StatelessWidget {
   }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(10.r),
       child: Container(
-        width: 28,
-        height: 28,
+        width: 28.w,
+        height: 28.h,
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
         ),
-        child: Icon(icon, size: 16, color: AppColors.textWhite),
+        child: Icon(icon, size: 16.sp, color: AppColors.textWhite),
       ),
     );
   }
