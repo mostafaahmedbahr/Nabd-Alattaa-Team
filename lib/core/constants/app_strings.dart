@@ -166,7 +166,6 @@ class AppStrings {
   static const String inactive = 'غير نشط';
 
 
-
   /// storage
   static const String onboardingComplete = 'onboarding_complete';
 }

@@ -11,15 +11,17 @@ import '../view_model/meal_state.dart';
 import '../widgets/cart_bottom_sheet.dart';
 import '../widgets/meal_category_style.dart';
 import '../widgets/meal_item_card.dart';
+import '../widgets/meals_widgets/cart_bottom_sheet.dart';
+import '../widgets/meals_widgets/meals_header.dart';
 
-class MealsScreen extends StatefulWidget {
-  const MealsScreen({super.key});
+class MealsView extends StatefulWidget {
+  const MealsView({super.key});
 
   @override
-  State<MealsScreen> createState() => _MealsScreenState();
+  State<MealsView> createState() => _MealsViewState();
 }
 
-class _MealsScreenState extends State<MealsScreen> {
+class _MealsViewState extends State<MealsView> {
   List<String> _categories = MealCategory.all;
   int _selectedIndex = 0;
 
@@ -62,7 +64,7 @@ class _MealsScreenState extends State<MealsScreen> {
             child: AdaptiveContainer(
               child: Column(
                 children: [
-                  _buildHeader(),
+                  MealsHeader(),
                 _buildCategoryChips(),
                 Expanded(
                   child: BlocBuilder<MealCubit, MealState>(
@@ -97,104 +99,7 @@ class _MealsScreenState extends State<MealsScreen> {
     );
   }
 
-  Widget _buildHeader() {
-    return Container(
-      width: double.infinity,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [AppColors.primaryDark, AppColors.primary, AppColors.primaryLight],
-        ),
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
-        child: Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: const Icon(
-                Icons.restaurant_menu_outlined,
-                color: AppColors.textWhite,
-                size: 26,
-              ),
-            ),
-            const SizedBox(width: 12),
-            const Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    AppStrings.meals,
-                    style: TextStyle(
-                      fontFamily: 'Cairo',
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textWhite,
-                    ),
-                  ),
-                  SizedBox(height: 2),
-                  Text(
-                    'اطلب واختار اللي يعجبك',
-                    style: TextStyle(
-                      fontFamily: 'Cairo',
-                      fontSize: 13,
-                      color: AppColors.textWhite,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            BlocBuilder<MealCubit, MealState>(
-              builder: (context, state) {
-                final count = context.read<MealCubit>().cartItems.length;
-                return IconButton(
-                  onPressed: () => _showCartBottomSheet(context),
-                  icon: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      const Icon(
-                        Icons.shopping_cart_outlined,
-                        color: AppColors.textWhite,
-                        size: 26,
-                      ),
-                      if (count > 0)
-                        Positioned(
-                          left: -6,
-                          bottom: -2,
-                          child: Container(
-                            padding: const EdgeInsets.all(5),
-                            decoration: const BoxDecoration(
-                              color: AppColors.secondary,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Text(
-                              '$count',
-                              style: const TextStyle(
-                                fontFamily: 'Cairo',
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textWhite,
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+
 
   Widget _buildCategoryChips() {
     return Container(
@@ -381,7 +286,7 @@ class _MealsScreenState extends State<MealsScreen> {
         return Padding(
           padding: const EdgeInsets.only(bottom: 8),
           child: FloatingActionButton.extended(
-            onPressed: () => _showCartBottomSheet(context),
+            onPressed: () => showCartBottomSheet(context),
             backgroundColor: AppColors.secondary,
             foregroundColor: AppColors.textWhite,
             elevation: 4,
@@ -400,12 +305,5 @@ class _MealsScreenState extends State<MealsScreen> {
     );
   }
 
-  void _showCartBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => const CartBottomSheet(),
-    );
-  }
+
 }
