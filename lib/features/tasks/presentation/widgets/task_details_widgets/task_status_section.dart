@@ -1,40 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/constants/app_colors.dart';
-import '../../view_model/task_cubit.dart';
 import 'section_title.dart';
 
 class TaskStatusSection extends StatelessWidget {
   final String currentStatus;
-  final String taskId;
-  final int completionPercentage;
+  final void Function(String status, int percentage) onStatusSelected;
 
   const TaskStatusSection({
     super.key,
     required this.currentStatus,
-    required this.taskId,
-    required this.completionPercentage,
+    required this.onStatusSelected,
   });
+
+  int _percentageFor(String status) {
+    switch (status) {
+      case "جاري التنفيذ":
+        return 50;
+      case "مكتملة":
+        return 100;
+      default:
+        return 0;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final statuses = [
-      (
-        "لم تبدأ",
-        Icons.hourglass_empty_rounded,
-        AppColors.taskNotStarted,
-      ),
+      ("لم تبدأ", Icons.hourglass_empty_rounded, AppColors.taskNotStarted),
       (
         "جاري التنفيذ",
         Icons.play_circle_fill_rounded,
         AppColors.taskInProgress,
       ),
-      (
-        "مكتملة",
-        Icons.check_circle_rounded,
-        AppColors.taskCompleted,
-      ),
+      ("مكتملة", Icons.check_circle_rounded, AppColors.taskCompleted),
     ];
 
     return Card(
@@ -65,11 +64,7 @@ class TaskStatusSection extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: GestureDetector(
                       onTap: () {
-                        context.read<TaskCubit>().updateTaskStatus(
-                              taskId,
-                              status.$1,
-                              completionPercentage,
-                            );
+                        onStatusSelected(status.$1, _percentageFor(status.$1));
                       },
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
@@ -91,7 +86,9 @@ class TaskStatusSection extends StatelessWidget {
                             Icon(
                               status.$2,
                               size: 24,
-                              color: isSelected ? statusColor : AppColors.grey400,
+                              color: isSelected
+                                  ? statusColor
+                                  : AppColors.grey400,
                             ),
                             const SizedBox(height: 8),
                             Text(
@@ -99,9 +96,12 @@ class TaskStatusSection extends StatelessWidget {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 12,
-                                fontWeight:
-                                    isSelected ? FontWeight.bold : FontWeight.w500,
-                                color: isSelected ? statusColor : AppColors.grey500,
+                                fontWeight: isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.w500,
+                                color: isSelected
+                                    ? statusColor
+                                    : AppColors.grey500,
                               ),
                             ),
                           ],

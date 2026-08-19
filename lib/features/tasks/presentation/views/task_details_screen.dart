@@ -16,10 +16,7 @@ import '../widgets/task_details_widgets/forward_task_sheet.dart';
 class TaskDetailsScreen extends StatefulWidget {
   final String taskId;
 
-  const TaskDetailsScreen({
-    super.key,
-    required this.taskId,
-  });
+  const TaskDetailsScreen({super.key, required this.taskId});
 
   @override
   State<TaskDetailsScreen> createState() => _TaskDetailsScreenState();
@@ -69,7 +66,8 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
               orElse: () => loaded.tasks.first,
             );
 
-            _completionPercentage = task.effectiveCompletionPercentage.toDouble();
+            _completionPercentage = task.effectiveCompletionPercentage
+                .toDouble();
             final displayStatus = task.hasChecklist
                 ? task.derivedStatus
                 : task.status;
@@ -77,138 +75,166 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
 
             return AdaptiveContainer(
               child: CustomScrollView(
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                TaskAppBarTitleAndDes(
-                  task: task,
-                  onDelete: () {
-                    context.read<TaskCubit>().deleteTask(widget.taskId);
-                    if (context.mounted) {
-                      Navigator.pop(context);
-                    }
-                  },
-                ),
-                SliverToBoxAdapter(
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      context.read<TaskCubit>().loadTasks();
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  TaskAppBarTitleAndDes(
+                    task: task,
+                    onDelete: () {
+                      context.read<TaskCubit>().deleteTask(widget.taskId);
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                      }
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          if (task.isForwarded &&
-                              task.forwardedFromUserName != null)
-                            _ForwardedBanner(name: task.forwardedFromUserName!),
-                          if (canForward) _ForwardButton(task: task),
-                          if (task.entryType == 'multiple')
-                            Container(
-                              width: double.infinity,
-                              margin: const EdgeInsets.only(bottom: 12),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                                vertical: 10,
+                  ),
+                  SliverToBoxAdapter(
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        context.read<TaskCubit>().loadTasks();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            if (task.isForwarded &&
+                                task.forwardedFromUserName != null)
+                              _ForwardedBanner(
+                                name: task.forwardedFromUserName!,
                               ),
-                              decoration: BoxDecoration(
-                                color: AppColors.info.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: AppColors.info.withValues(alpha: 0.3),
+                            if (canForward) _ForwardButton(task: task),
+                            if (task.entryType == 'multiple')
+                              Container(
+                                width: double.infinity,
+                                margin: const EdgeInsets.only(bottom: 12),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                  vertical: 10,
                                 ),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.playlist_add_check_rounded,
-                                      color: AppColors.info, size: 18),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      'مهمة متعددة - تحتوي على ${task.subtasks.length} عنصر',
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.info,
-                                      ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.info.withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: AppColors.info.withValues(
+                                      alpha: 0.3,
                                     ),
                                   ),
-                                ],
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.playlist_add_check_rounded,
+                                      color: AppColors.info,
+                                      size: 18,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        'مهمة متعددة - تحتوي على ${task.subtasks.length} عنصر',
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColors.info,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          TaskDescriptionCard(task: task),
-                          const SizedBox(height: 12),
-                          TaskInfoCard(task: task),
-                          const SizedBox(height: 12),
-                          TaskProgressCard(
-                            percentage: _completionPercentage,
-                            enabled: !task.hasChecklist,
-                            onChanged: (value) {
-                              setState(() {
-                                _completionPercentage = value;
-                              });
-                            },
-                            onChangeEnd: (value) {
-                              context.read<TaskCubit>().updateTaskStatus(
-                                    widget.taskId,
-                                    task.status,
-                                    value.round(),
-                                  );
-                            },
-                          ),
-                          const SizedBox(height: 12),
-                          TaskSubtasksSection(
-                            subtasks: task.subtasks,
-                            currentUserId: currentUserId,
-                            onToggle: (subtaskId, isCompleted) {
-                              context.read<TaskCubit>().toggleSubtask(
-                                    taskId: widget.taskId,
-                                    subtaskId: subtaskId,
-                                    isCompleted: isCompleted,
-                                    userId: currentUserId,
-                                  );
-                            },
-                            onUpdate: (subtaskId, title) {
-                              final subtask = task.subtasks.firstWhere(
-                                (s) => s.id == subtaskId,
-                                orElse: () => TaskSubtask(id: subtaskId, title: title),
-                              );
-                              context.read<TaskCubit>().updateSubtask(
-                                    widget.taskId,
-                                    subtask.copyWith(title: title),
-                                  );
-                            },
-                            onDelete: (subtaskId) {
-                              final isLastSubtask = task.subtasks.length == 1;
-                              if (isLastSubtask) {
-                                context.read<TaskCubit>().deleteTask(widget.taskId);
-                                if (context.mounted) {
-                                  Navigator.pop(context);
+                            TaskDescriptionCard(task: task),
+                            const SizedBox(height: 12),
+                            TaskInfoCard(task: task),
+                            const SizedBox(height: 12),
+                            TaskProgressCard(
+                              percentage: _completionPercentage,
+                              enabled: !task.hasChecklist,
+                              onChanged: (value) {
+                                setState(() {
+                                  _completionPercentage = value;
+                                });
+                              },
+                              onChangeEnd: (value) {
+                                final percentage = value.round();
+                                final String status;
+                                if (percentage >= 100) {
+                                  status = 'مكتملة';
+                                } else if (percentage > 0) {
+                                  status = 'جاري التنفيذ';
+                                } else {
+                                  status = 'لم تبدأ';
                                 }
-                              } else {
-                                context.read<TaskCubit>().deleteSubtask(
-                                      widget.taskId,
-                                      subtaskId,
-                                    );
-                              }
-                            },
-                          ),
-                          const SizedBox(height: 12),
-                          if (task.hasChecklist)
-                            _DerivedStatusChip(status: displayStatus)
-                          else
-                            TaskStatusSection(
-                              currentStatus: task.status,
-                              taskId: widget.taskId,
-                              completionPercentage: _completionPercentage.round(),
+                                context.read<TaskCubit>().updateTaskStatus(
+                                  widget.taskId,
+                                  status,
+                                  percentage,
+                                );
+                              },
                             ),
-                          const SizedBox(height: 24),
-                        ],
+                            const SizedBox(height: 12),
+                            TaskSubtasksSection(
+                              subtasks: task.subtasks,
+                              currentUserId: currentUserId,
+                              onToggle: (subtaskId, isCompleted) {
+                                context.read<TaskCubit>().toggleSubtask(
+                                  taskId: widget.taskId,
+                                  subtaskId: subtaskId,
+                                  isCompleted: isCompleted,
+                                  userId: currentUserId,
+                                );
+                              },
+                              onUpdate: (subtaskId, title) {
+                                final subtask = task.subtasks.firstWhere(
+                                  (s) => s.id == subtaskId,
+                                  orElse: () =>
+                                      TaskSubtask(id: subtaskId, title: title),
+                                );
+                                context.read<TaskCubit>().updateSubtask(
+                                  widget.taskId,
+                                  subtask.copyWith(title: title),
+                                );
+                              },
+                              onDelete: (subtaskId) {
+                                final isLastSubtask = task.subtasks.length == 1;
+                                if (isLastSubtask) {
+                                  context.read<TaskCubit>().deleteTask(
+                                    widget.taskId,
+                                  );
+                                  if (context.mounted) {
+                                    Navigator.pop(context);
+                                  }
+                                } else {
+                                  context.read<TaskCubit>().deleteSubtask(
+                                    widget.taskId,
+                                    subtaskId,
+                                  );
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 12),
+                            if (task.hasChecklist)
+                              _DerivedStatusChip(status: displayStatus)
+                            else
+                              TaskStatusSection(
+                                currentStatus: task.status,
+                                onStatusSelected: (status, percentage) {
+                                  setState(() {
+                                    _completionPercentage = percentage
+                                        .toDouble();
+                                  });
+                                  context.read<TaskCubit>().updateTaskStatus(
+                                    widget.taskId,
+                                    status,
+                                    percentage,
+                                  );
+                                },
+                              ),
+                            const SizedBox(height: 24),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
+                ],
+              ),
+            );
           }
 
           if (state is TaskError) {
@@ -245,8 +271,11 @@ class _ForwardedBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(Icons.forward_to_inbox_rounded,
-              color: AppColors.warning, size: 18),
+          const Icon(
+            Icons.forward_to_inbox_rounded,
+            color: AppColors.warning,
+            size: 18,
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -353,10 +382,7 @@ class _DerivedStatusChip extends StatelessWidget {
                   const SizedBox(width: 10),
                   Text(
                     status,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: color,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: color),
                   ),
                   const Spacer(),
                   const Text(
