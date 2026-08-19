@@ -94,9 +94,13 @@ class MealCubit extends Cubit<MealState> {
 
     final user = FirebaseAuth.instance.currentUser;
     final userId = user?.uid ?? '';
-    final userName = user?.displayName?.isNotEmpty == true
-        ? user!.displayName!
-        : 'مستخدم';
+    if (userId.isEmpty) {
+      emit(const MealError('لم يتم تسجيل الدخول'));
+      return;
+    }
+
+    final meta = await _userMeta(userId);
+    final userName = meta.name.isNotEmpty ? meta.name : 'مستخدم';
 
     final order = MealOrderModel(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -105,7 +109,7 @@ class MealCubit extends Cubit<MealState> {
       items: cartOrderItems,
       total: cartTotal,
       isPaid: false,
-      isBreakFast: await _isBreakFastUser(userId),
+      isBreakFast: meta.isBreakFast,
       date: DateTime.now(),
       createdAt: DateTime.now(),
     );
@@ -117,15 +121,19 @@ class MealCubit extends Cubit<MealState> {
     });
   }
 
-  Future<bool> _isBreakFastUser(String userId) async {
+  Future<({String name, bool isBreakFast})> _userMeta(String userId) async {
     try {
       final doc = await _firestore
           .collection(FirestoreConstants.users)
           .doc(userId)
           .get();
-      return doc.data()?[FirestoreConstants.isBreakFast] == true;
+      final data = doc.data();
+      return (
+        name: (data?[FirestoreConstants.userName] as String?) ?? '',
+        isBreakFast: data?[FirestoreConstants.isBreakFast] == true,
+      );
     } catch (_) {
-      return true;
+      return (name: '', isBreakFast: true);
     }
   }
 
