@@ -16,10 +16,18 @@ class CategoryList extends StatelessWidget {
             .where((item) => item.category == category && item.isAvailable)
             .toList();
 
+        debugPrint('--- Category: $category (${items.length} items) ---');
+        for (final item in items) {
+          debugPrint(
+            '  Item: id=${item.id} | name=${item.name} | '
+            'price=${item.price} | available=${item.isAvailable}',
+          );
+        }
+
         if (items.isEmpty) {
           return SliverFillRemaining(
             hasScrollBody: false,
-            child: EmptyCategory(category : category),
+            child: EmptyCategory(category: category),
           );
         }
 

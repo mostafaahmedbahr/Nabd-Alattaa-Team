@@ -16,6 +16,7 @@ import 'package:nabd_alattaa_team/features/tasks/presentation/views/tasks_screen
 import '../../features/chat/presentation/views/chat_room_screen.dart';
 import '../../features/meals/presentation/views/manage_meals_view.dart';
 import '../../features/meals/presentation/views/meals_view.dart';
+import '../../features/meals/presentation/views/meal_orders_view.dart';
 import '../../features/users/presentation/views/users_list_view.dart';
 import 'app_routes.dart';
 import '../../features/register/presentation/views/register_view.dart';
@@ -33,7 +34,7 @@ import '../../features/ideas/presentation/views/create_idea_screen.dart';
 import '../../features/notifications/presentation/views/notifications_screen.dart';
 import '../../features/good_deeds/presentation/views/good_deeds_screen.dart';
 import '../../features/good_deeds/presentation/views/create_good_deed_screen.dart';
- import '../../features/profile/presentation/views/edit_profile_screen.dart';
+import '../../features/profile/presentation/views/edit_profile_screen.dart';
 import '../../features/announcements/presentation/views/announcements_screen.dart';
 import '../../features/announcements/presentation/views/create_announcement_screen.dart';
 
@@ -58,61 +59,44 @@ class AppRouter {
 
       if (isSplash || isOnboarding) return null;
       if (user == null && !isAuth) return Routes.login;
-       if (user != null && isAuth) return Routes.layoutView;
+      if (user != null && isAuth) return Routes.layoutView;
 
       return null;
     },
 
     routes: [
-      GoRoute(
-        path: Routes.splash,
-        builder: (_, _) => const SplashView(),
-      ),
+      GoRoute(path: Routes.splash, builder: (_, _) => const SplashView()),
       GoRoute(
         path: Routes.onboarding,
         builder: (_, _) => const OnboardingView(),
       ),
-      GoRoute(
-        path: Routes.login,
-        builder: (_, _) => const LoginView(),
-      ),
-      GoRoute(
-        path: Routes.register,
-        builder: (_, _) => const RegisterView(),
-      ),
+      GoRoute(path: Routes.login, builder: (_, _) => const LoginView()),
+      GoRoute(path: Routes.register, builder: (_, _) => const RegisterView()),
 
-      GoRoute(
-        path: Routes.layoutView,
-        builder: (_, _) => const LayoutView(),
-      ),
+      GoRoute(path: Routes.layoutView, builder: (_, _) => const LayoutView()),
 
       GoRoute(
         path: Routes.complaints,
         builder: (_, _) => const ComplaintsView(),
       ),
-      GoRoute(
-        path: Routes.library,
-        builder: (_, _) => const LibraryScreen(),
-      ),
+      GoRoute(path: Routes.library, builder: (_, _) => const LibraryScreen()),
       GoRoute(
         path: Routes.createLibraryItem,
         builder: (_, _) => const CreateLibraryItemScreen(),
       ),
-      GoRoute(
-        path: Routes.ideas,
-        builder: (_, _) => const IdeasScreen(),
-      ),
+      GoRoute(path: Routes.ideas, builder: (_, _) => const IdeasScreen()),
       GoRoute(
         path: Routes.goodDeeds,
         builder: (_, _) => const GoodDeedsScreen(),
       ),
-      GoRoute(
-        path: Routes.meals,
-        builder: (_, _) => const MealsView(),
-      ),
+      GoRoute(path: Routes.meals, builder: (_, _) => const MealsView()),
       GoRoute(
         path: Routes.manageMeals,
         builder: (_, _) => const ManageMealsView(),
+      ),
+      GoRoute(
+        path: Routes.mealOrders,
+        builder: (_, _) => const MealOrdersView(),
       ),
       GoRoute(
         path: Routes.notifications,
@@ -190,19 +174,15 @@ class AppRouter {
         builder: (_, _) => const UsersListScreen(),
       ),
 
-      GoRoute(
-        path: Routes.tasks,
-        builder: (_, _) => const TasksScreen(),
-      ),
+      GoRoute(path: Routes.tasks, builder: (_, _) => const TasksScreen()),
       GoRoute(
         path: Routes.createTask,
         builder: (_, _) => const CreateTaskScreen(),
       ),
       GoRoute(
         path: '${Routes.taskDetails}/:taskId',
-        builder: (context, state) => TaskDetailsScreen(
-          taskId: state.pathParameters['taskId']!,
-        ),
+        builder: (context, state) =>
+            TaskDetailsScreen(taskId: state.pathParameters['taskId']!),
       ),
       GoRoute(
         path: Routes.createComplaint,

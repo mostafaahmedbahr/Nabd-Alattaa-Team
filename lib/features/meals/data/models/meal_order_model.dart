@@ -44,6 +44,7 @@ class MealOrderModel extends Equatable {
   final List<MealOrderItem> items;
   final double total;
   final bool isPaid;
+  final bool isBreakFast;
   final DateTime date;
   final DateTime createdAt;
 
@@ -54,6 +55,7 @@ class MealOrderModel extends Equatable {
     required this.items,
     required this.total,
     required this.isPaid,
+    this.isBreakFast = false,
     required this.date,
     required this.createdAt,
   });
@@ -63,12 +65,14 @@ class MealOrderModel extends Equatable {
       id: map['id'] ?? '',
       userId: map['userId'] ?? '',
       userName: map['userName'] ?? '',
-      items: (map['items'] as List<dynamic>?)
+      items:
+          (map['items'] as List<dynamic>?)
               ?.map((e) => MealOrderItem.fromMap(e as Map<String, dynamic>))
               .toList() ??
           [],
       total: (map['total'] ?? 0).toDouble(),
       isPaid: map['isPaid'] ?? false,
+      isBreakFast: map['is_breakfast'] ?? false,
       date: DateTime.fromMillisecondsSinceEpoch(map['date'] ?? 0),
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] ?? 0),
     );
@@ -82,12 +86,22 @@ class MealOrderModel extends Equatable {
       'items': items.map((e) => e.toMap()).toList(),
       'total': total,
       'isPaid': isPaid,
+      'is_breakfast': isBreakFast,
       'date': date.millisecondsSinceEpoch,
       'createdAt': createdAt.millisecondsSinceEpoch,
     };
   }
 
   @override
-  List<Object?> get props =>
-      [id, userId, userName, items, total, isPaid, date, createdAt];
+  List<Object?> get props => [
+    id,
+    userId,
+    userName,
+    items,
+    total,
+    isPaid,
+    isBreakFast,
+    date,
+    createdAt,
+  ];
 }

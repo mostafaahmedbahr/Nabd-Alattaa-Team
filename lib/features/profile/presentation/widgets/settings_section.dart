@@ -7,43 +7,68 @@ class SettingsSection extends StatelessWidget {
   final bool isAdmin;
   final bool isBreakFast;
 
-  const SettingsSection({super.key,required this.isAdmin  ,required this.isBreakFast});
+  const SettingsSection({
+    super.key,
+    required this.isAdmin,
+    required this.isBreakFast,
+  });
 
   @override
   Widget build(BuildContext context) {
-    print(isBreakFast);
-    print("ssddddaaaavvvcccc");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Card(
         elevation: 1,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
         child: Column(
           children: [
             ListTile(
-              leading: const Icon(Icons.edit_outlined, color: AppColors.primary),
+              leading: const Icon(
+                Icons.edit_outlined,
+                color: AppColors.primary,
+              ),
               title: const Text(AppStrings.editProfile),
-              trailing:   Icon(Icons.arrow_forward_ios, size: 16.sp),
+              trailing: Icon(Icons.arrow_forward_ios, size: 16.sp),
               onTap: () {
                 context.push('/edit-profile');
               },
             ),
-              Divider(height: 1.h),
+            Divider(height: 1.h),
             if (isBreakFast) ...[
               ListTile(
-                leading: const Icon(Icons.restaurant_menu_outlined, color: AppColors.primary),
+                leading: const Icon(
+                  Icons.receipt_long_outlined,
+                  color: AppColors.primary,
+                ),
+                title: const Text('طلبات اليوم (تجميع الطلبات)'),
+                trailing: Icon(Icons.arrow_forward_ios, size: 16.sp),
+                onTap: () {
+                  context.push('/meal-orders');
+                },
+              ),
+              Divider(height: 1.h),
+              ListTile(
+                leading: const Icon(
+                  Icons.restaurant_menu_outlined,
+                  color: AppColors.primary,
+                ),
                 title: const Text('إدارة قائمة الطعام'),
-                trailing:   Icon(Icons.arrow_forward_ios, size: 16.sp),
+                trailing: Icon(Icons.arrow_forward_ios, size: 16.sp),
                 onTap: () {
                   context.push('/manage-meals');
                 },
               ),
-              if(isAdmin)...[
+              if (isAdmin) ...[
                 Divider(height: 1.h),
                 ListTile(
-                  leading: const Icon(Icons.admin_panel_settings, color: AppColors.primary),
+                  leading: const Icon(
+                    Icons.admin_panel_settings,
+                    color: AppColors.primary,
+                  ),
                   title: const Text('لوحة التحكم'),
-                  trailing:   Icon(Icons.arrow_forward_ios, size: 16.sp),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 16.sp),
                   onTap: () {
                     context.push(Routes.admin);
                   },
@@ -55,7 +80,7 @@ class SettingsSection extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.lock_outline, color: AppColors.primary),
               title: const Text('تغيير كلمة المرور'),
-              trailing:   Icon(Icons.arrow_forward_ios, size: 16.sp),
+              trailing: Icon(Icons.arrow_forward_ios, size: 16.sp),
               onTap: () {
                 _showChangePasswordDialog(context);
               },
@@ -76,6 +101,7 @@ class SettingsSection extends StatelessWidget {
       ),
     );
   }
+
   void _showChangePasswordDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -92,10 +118,9 @@ class SettingsSection extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 32,
-                  backgroundColor: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withValues(alpha: .12),
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.primary.withValues(alpha: .12),
                   child: Icon(
                     Icons.lock_reset_rounded,
                     size: 34,
@@ -107,9 +132,9 @@ class SettingsSection extends StatelessWidget {
 
                 Text(
                   'تغيير كلمة المرور',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
 
                 const SizedBox(height: 12),
@@ -181,6 +206,7 @@ class SettingsSection extends StatelessWidget {
       },
     );
   }
+
   void _showLogoutDialog(BuildContext context) {
     showGeneralDialog(
       context: context,
@@ -190,15 +216,14 @@ class SettingsSection extends StatelessWidget {
       transitionBuilder: (context, anim1, anim2, child) {
         return ScaleTransition(
           scale: CurvedAnimation(parent: anim1, curve: Curves.easeOutBack),
-          child: FadeTransition(
-            opacity: anim1,
-            child: child,
-          ),
+          child: FadeTransition(opacity: anim1, child: child),
         );
       },
       pageBuilder: (context, anim1, anim2) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
@@ -282,9 +307,7 @@ class SettingsSection extends StatelessWidget {
                         ),
                         child: const Text(
                           AppStrings.yes,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: TextStyle(fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
@@ -298,4 +321,3 @@ class SettingsSection extends StatelessWidget {
     );
   }
 }
-

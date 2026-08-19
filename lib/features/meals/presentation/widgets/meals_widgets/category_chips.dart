@@ -6,10 +6,12 @@ class CategoryChips extends StatefulWidget {
     super.key,
     required this.categories,
     this.selectedIndex = 0,
+    this.onChanged,
   });
 
   final List<String> categories;
   final int selectedIndex;
+  final ValueChanged<int>? onChanged;
 
   @override
   State<CategoryChips> createState() => _CategoryChipsState();
@@ -22,6 +24,14 @@ class _CategoryChipsState extends State<CategoryChips> {
   void initState() {
     super.initState();
     selectedIndex = widget.selectedIndex;
+  }
+
+  @override
+  void didUpdateWidget(covariant CategoryChips oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selectedIndex != oldWidget.selectedIndex) {
+      selectedIndex = widget.selectedIndex;
+    }
   }
 
   @override
@@ -50,18 +60,16 @@ class _CategoryChipsState extends State<CategoryChips> {
                 color: isSelected ? color : AppColors.surface,
                 borderRadius: BorderRadius.circular(19.r),
                 border: Border.all(
-                  color: isSelected
-                      ? color
-                      : AppColors.grey300,
+                  color: isSelected ? color : AppColors.grey300,
                 ),
                 boxShadow: isSelected
                     ? [
-                  BoxShadow(
-                    color: color.withValues(alpha: 0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
+                        BoxShadow(
+                          color: color.withValues(alpha: 0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ]
                     : null,
               ),
               child: Material(
@@ -72,19 +80,16 @@ class _CategoryChipsState extends State<CategoryChips> {
                     setState(() {
                       selectedIndex = index;
                     });
+                    widget.onChanged?.call(index);
                   },
                   child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: Row(
                       children: [
                         Icon(
                           mealCategoryIcon(category),
                           size: 16.sp,
-                          color: isSelected
-                              ? AppColors.textWhite
-                              : color,
+                          color: isSelected ? AppColors.textWhite : color,
                         ),
                         SizedBox(width: 6.w),
                         Text(

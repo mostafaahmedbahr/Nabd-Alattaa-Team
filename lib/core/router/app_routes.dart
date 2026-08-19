@@ -33,6 +33,7 @@ class Routes {
 
   static const meals = '/meals';
   static const manageMeals = '/manage-meals';
+  static const mealOrders = '/meal-orders';
 
   static const profile = '/profile';
   static const editProfile = '/edit-profile';

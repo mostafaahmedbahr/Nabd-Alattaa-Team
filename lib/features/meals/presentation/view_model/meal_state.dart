@@ -27,10 +27,7 @@ class MealCartUpdated extends MealState {
   final Map<String, int> cartItems;
   final double total;
 
-  const MealCartUpdated({
-    required this.cartItems,
-    required this.total,
-  });
+  const MealCartUpdated({required this.cartItems, required this.total});
 
   @override
   List<Object?> get props => [cartItems, total];
@@ -38,7 +35,14 @@ class MealCartUpdated extends MealState {
 
 class MealOrderSubmitting extends MealState {}
 
-class MealOrderSubmitted extends MealState {}
+class MealOrderSubmitted extends MealState {
+  final MealOrderModel order;
+
+  const MealOrderSubmitted(this.order);
+
+  @override
+  List<Object?> get props => [order];
+}
 
 class MealItemSaved extends MealState {}
 

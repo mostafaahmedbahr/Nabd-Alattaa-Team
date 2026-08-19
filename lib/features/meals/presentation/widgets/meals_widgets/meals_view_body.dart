@@ -33,6 +33,14 @@ class _MealsViewBodyState extends State<MealsViewBody> {
       }
     }
 
+    debugPrint('--- Meals menu loaded (${items.length} item) ---');
+    for (final item in items) {
+      debugPrint(
+        'Item: id=${item.id} | name=${item.name} | price=${item.price} | '
+        'category=${item.category} | available=${item.isAvailable}',
+      );
+    }
+
     setState(() {
       _categories = categories;
       if (_selectedIndex >= _categories.length) {
@@ -40,6 +48,7 @@ class _MealsViewBodyState extends State<MealsViewBody> {
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<MealCubit, MealState>(
@@ -55,13 +64,23 @@ class _MealsViewBodyState extends State<MealsViewBody> {
             const MealsHeader(),
             SliverPersistentHeader(
               pinned: true,
-              delegate: ChipsHeaderDelegate(child: CategoryChips(
-                categories: _categories,
-                selectedIndex: _selectedIndex,
-              )),
+              delegate: ChipsHeaderDelegate(
+                child: CategoryChips(
+                  categories: _categories,
+                  selectedIndex: _selectedIndex,
+                  onChanged: (index) {
+                    debugPrint(
+                      'Selected category index=$index: ${_categories[index]}',
+                    );
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                  },
+                ),
+              ),
             ),
             SliverPadding(
-              padding:   EdgeInsets.only(bottom: 96.h),
+              padding: EdgeInsets.only(bottom: 96.h),
               sliver: BlocBuilder<MealCubit, MealState>(
                 builder: (context, state) {
                   if (state is MealLoading &&
@@ -79,16 +98,16 @@ class _MealsViewBodyState extends State<MealsViewBody> {
                   if (state is MealError && state.message.contains('فشل')) {
                     return SliverFillRemaining(
                       hasScrollBody: false,
-                      child: CustomErrorWidget(message: state.message,),
+                      child: CustomErrorWidget(message: state.message),
                     );
                   }
 
                   final category =
-                  _categories[_selectedIndex.clamp(
-                    0,
-                    _categories.length - 1,
-                  )];
-                  return CategoryList(category:category);
+                      _categories[_selectedIndex.clamp(
+                        0,
+                        _categories.length - 1,
+                      )];
+                  return CategoryList(category: category);
                 },
               ),
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../data/models/meal_order_model.dart';
 import '../view_model/meal_cubit.dart';
 import '../view_model/meal_state.dart';
 
@@ -12,46 +13,54 @@ class CartBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: DraggableScrollableSheet(
-        initialChildSize: 0.65,
-        minChildSize: 0.35,
-        maxChildSize: 0.92,
-        expand: false,
-        builder: (context, scrollController) {
-          return Container(
-            decoration: const BoxDecoration(
-              color: AppColors.background,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-            ),
-            child: Column(
-              children: [
-                const SizedBox(height: 8),
-                Container(
-                  width: 44,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: AppColors.grey300,
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                ),
-                _buildHeader(context),
-                const Divider(height: 1, color: AppColors.grey200),
-                Expanded(
-                  child: BlocBuilder<MealCubit, MealState>(
-                    builder: (context, state) {
-                      final cubit = context.read<MealCubit>();
-                      if (cubit.cartOrderItems.isEmpty) {
-                        return _buildEmptyCart();
-                      }
-                      return _buildCartList(cubit, scrollController);
-                    },
-                  ),
-                ),
-                _buildTotalAndOrderButton(context),
-              ],
-            ),
-          );
+      child: BlocListener<MealCubit, MealState>(
+        listener: (context, state) {
+          if (state is MealOrderSubmitted) {
+            Navigator.of(context).pop();
+            _showOrderKeyDialog(context, state.order);
+          }
         },
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.65,
+          minChildSize: 0.35,
+          maxChildSize: 0.92,
+          expand: false,
+          builder: (context, scrollController) {
+            return Container(
+              decoration: const BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 8),
+                  Container(
+                    width: 44,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      color: AppColors.grey300,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
+                  _buildHeader(context),
+                  const Divider(height: 1, color: AppColors.grey200),
+                  Expanded(
+                    child: BlocBuilder<MealCubit, MealState>(
+                      builder: (context, state) {
+                        final cubit = context.read<MealCubit>();
+                        if (cubit.cartOrderItems.isEmpty) {
+                          return _buildEmptyCart();
+                        }
+                        return _buildCartList(cubit, scrollController);
+                      },
+                    ),
+                  ),
+                  _buildTotalAndOrderButton(context),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -124,10 +133,7 @@ class CartBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildCartList(
-    MealCubit cubit,
-    ScrollController scrollController,
-  ) {
+  Widget _buildCartList(MealCubit cubit, ScrollController scrollController) {
     return ListView.builder(
       controller: scrollController,
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -221,10 +227,7 @@ class CartBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _miniStepper({
-    required IconData icon,
-    required VoidCallback onTap,
-  }) {
+  Widget _miniStepper({required IconData icon, required VoidCallback onTap}) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
@@ -245,7 +248,12 @@ class CartBottomSheet extends StatelessWidget {
       builder: (context, state) {
         final cubit = context.read<MealCubit>();
         return Container(
-          padding: EdgeInsets.fromLTRB(16, 12, 16, 16 + MediaQuery.of(context).padding.bottom),
+          padding: EdgeInsets.fromLTRB(
+            16,
+            12,
+            16,
+            16 + MediaQuery.of(context).padding.bottom,
+          ),
           decoration: const BoxDecoration(
             color: AppColors.surface,
             boxShadow: [
@@ -327,11 +335,55 @@ class CartBottomSheet extends StatelessWidget {
 
   void _submitOrder(BuildContext context, MealCubit cubit) {
     cubit.submitOrder();
-    Navigator.of(context).pop();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('تم تأكيد الطلب بنجاح'),
-        backgroundColor: AppColors.success,
+  }
+
+  void _showOrderKeyDialog(BuildContext context, MealOrderModel order) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text(
+          'تم تأكيد الطلب 🎉',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.check_circle_rounded,
+              color: AppColors.success,
+              size: 56,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'رقم طلبك (المرجع):',
+              style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+            ),
+            const SizedBox(height: 6),
+            SelectableText(
+              order.id,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary,
+              ),
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              'احتفظ بهذا الرقم لاستلام طلبك من قسم الإفطار',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('حسناً'),
+          ),
+        ],
       ),
     );
   }

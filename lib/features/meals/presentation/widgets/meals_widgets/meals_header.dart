@@ -71,7 +71,7 @@ class MealsHeader extends StatelessWidget {
                 ),
               ),
               Positioned(
-                bottom: 18.h,
+                bottom: 45.h,
                 left: 24.w,
                 child: Text(
                   'اطلب واختار اللي يعجبك',
