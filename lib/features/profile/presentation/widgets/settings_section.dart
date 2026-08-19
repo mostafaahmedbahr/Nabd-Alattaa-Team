@@ -12,6 +12,7 @@ class SettingsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(isBreakFast);
+    print("ssddddaaaavvvcccc");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Card(

@@ -19,7 +19,9 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
   @override
   void initState() {
     super.initState();
-    _checkAccess();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _checkAccess();
+    });
     context.read<MealCubit>().loadMenu();
   }
 
@@ -38,7 +40,7 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
     if (!mounted) return;
 
     final state = cubit.state;
-    if (state is ProfileLoaded && state.profile.isAdmin) {
+    if (state is ProfileLoaded && state.profile.isBreakFast) {
       return;
     }
 
@@ -61,9 +63,7 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('إدارة قائمة الطعام'),
-        ),
+        appBar: AppBar(title: const Text('إدارة قائمة الطعام')),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => _showItemDialog(context),
           backgroundColor: AppColors.primary,
@@ -149,16 +149,16 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
               style: TextStyle(color: AppColors.textSecondary),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
-              onPressed: () => _showItemDialog(context),
-              icon: const Icon(Icons.add_rounded),
-              label: const Text('إضافة أكلة'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.textWhite,
-              ),
-            ),
+            // const SizedBox(height: 24),
+            // ElevatedButton.icon(
+            //   onPressed: () => _showItemDialog(context),
+            //   icon: const Icon(Icons.add_rounded),
+            //   label: const Text('إضافة أكلة'),
+            //   style: ElevatedButton.styleFrom(
+            //     backgroundColor: AppColors.primary,
+            //     foregroundColor: AppColors.textWhite,
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -203,8 +203,7 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
               ],
             ),
           ),
-          for (final item in grouped[category]!)
-            _buildItemCard(item),
+          for (final item in grouped[category]!) _buildItemCard(item),
         ],
       ],
     );
@@ -489,11 +488,8 @@ class _ManageMealsScreenState extends State<ManageMealsScreen> {
   }
 
   void _showSnackBar(BuildContext context, String message, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: color,
-      ),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
   }
 }
